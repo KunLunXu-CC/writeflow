@@ -1,10 +1,11 @@
 'use client';
+import { ReactNode } from 'react';
 import { HeroUIProvider } from '@heroui/react';
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return <HeroUIProvider>{children}</HeroUIProvider>;
 }

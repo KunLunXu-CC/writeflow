@@ -23,6 +23,12 @@
     "editor.formatOnSave": true, // 保存的时候自动格式化
   },
   "cSpell.words": [
-    "clsx"
+    "clsx",
+    "heroui",
+    "inputrules",
+    "keymap",
+    "prosemirror",
+    "Yahei"
   ],
+  "stylelint.validate": ["css", "scss", "sass", "less"], // 插件 styleint 需要检测的文件
 }
