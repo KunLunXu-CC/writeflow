@@ -120,9 +120,6 @@ importers:
       stylelint:
         specifier: ^16.20.0
         version: 16.20.0(typescript@5.8.3)
-      stylelint-config-standard:
-        specifier: ^38.0.0
-        version: 38.0.0(stylelint@16.20.0(typescript@5.8.3))
       stylelint-config-standard-scss:
         specifier: ^15.0.1
         version: 15.0.1(postcss@8.5.4)(stylelint@16.20.0(typescript@5.8.3))
