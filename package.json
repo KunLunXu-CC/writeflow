@@ -14,16 +14,10 @@
     "release:001": "standard-version patch"
   },
   "dependencies": {
-    "@heroui/image": "^2.2.12",
-    "@heroui/input": "^2.4.19",
     "@heroui/react": "2.7.8",
-    "@heroui/skeleton": "^2.2.12",
-    "@heroui/system": "^2.4.15",
     "@heroui/theme": "^2.4.15",
     "clsx": "^2.1.1",
-    "framer-motion": "^11.0.6",
     "next": "14.1.0",
-    "openai": "^4.103.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
