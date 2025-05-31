@@ -1,0 +1,53 @@
+{
+  "name": "next-play",
+  "version": "0.1.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint",
+    "prepare": "husky",
+    "cz": "czg",
+    "release:100": "standard-version major",
+    "release:010": "standard-version minor",
+    "release:001": "standard-version patch"
+  },
+  "dependencies": {
+    "@heroui/image": "^2.2.12",
+    "@heroui/input": "^2.4.19",
+    "@heroui/react": "2.7.8",
+    "@heroui/skeleton": "^2.2.12",
+    "@heroui/system": "^2.4.15",
+    "@heroui/theme": "^2.4.15",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.0.6",
+    "next": "14.1.0",
+    "openai": "^4.103.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "autoprefixer": "^10.0.1",
+    "czg": "^1.9.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "eslint-plugin-tailwindcss": "^3.15.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "postcss": "^8",
+    "prettier": "^3.2.5",
+    "standard-version": "^9.5.0",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard": "^36.0.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
