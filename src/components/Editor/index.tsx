@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 import { DOMParser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { EditorState } from 'prosemirror-state';
-import getPlugins from '@/components/Editor/plugins';
-import nodeViews from '@/components/Editor/nodeViews';
+import { codeBlockNodeView } from '@/components/Editor/codeBlock';
 import mySchema from '@/components/Editor/schema';
+import getPlugins from '@/components/Editor/plugins';
 import '@/components/Editor/theme';
 
 export default function Editor() {
@@ -14,13 +14,13 @@ export default function Editor() {
   useEffect(() => {
     if (editorRef.current) return;
 
-    const doc = DOMParser.fromSchema(mySchema).parse(document.createElement('div'));
-
     editorRef.current = new EditorView(editorDom.current, {
-      nodeViews,
+      nodeViews: {
+        code_block: codeBlockNodeView,
+      },
       state: EditorState.create({
-        doc,
         plugins: getPlugins(mySchema),
+        doc: DOMParser.fromSchema(mySchema).parse(document.createElement('div')),
       }),
     });
   }, []);

@@ -15,7 +15,7 @@ import { Command } from 'prosemirror-state';
 import { keymap } from 'prosemirror-keymap';
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
-import { arrowHandlers } from '@/components/Editor/nodeViews/codeBlock';
+import { arrowHandlers } from '@/components/Editor/codeBlock';
 import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
 
 const mac = typeof navigator != 'undefined' ? /Mac|iP(hone|[oa]d)/.test(navigator.platform) : false;
