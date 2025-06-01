@@ -1,25 +1,9 @@
-import { nodes } from 'prosemirror-schema-basic';
-import { orderedList, bulletList, listItem } from 'prosemirror-schema-list';
+import { NodeSpec } from 'prosemirror-model';
 import { tableNodes } from 'prosemirror-tables';
+import { nodes } from 'prosemirror-schema-basic';
+import { bulletList, listItem, orderedList } from 'prosemirror-schema-list';
 
-const listNodes = {
-  ordered_list: {
-    ...orderedList,
-    content: 'list_item+',
-    group: 'block',
-  },
-  bullet_list: {
-    ...bulletList,
-    content: 'list_item+',
-    group: 'block',
-  },
-  list_item: {
-    ...listItem,
-    content: 'paragraph block*',
-  },
-};
-
-function getStylesFromElement(elem: HTMLElement) {
+const getStylesFromElement = (elem: HTMLElement) => {
   const tr = elem.parentElement;
   const tbody = tr?.parentElement;
   const table = tbody?.parentElement;
@@ -40,9 +24,26 @@ function getStylesFromElement(elem: HTMLElement) {
     definitions[name.trim()] = value.trim();
   });
   return definitions;
-}
+};
 
-const customNodes = {
+const listNodes = {
+  ordered_list: {
+    ...orderedList,
+    content: 'list_item+',
+    group: 'block',
+  },
+  bullet_list: {
+    ...bulletList,
+    content: 'list_item+',
+    group: 'block',
+  },
+  list_item: {
+    ...listItem,
+    content: 'paragraph block*',
+  },
+};
+
+const schemaNodes: Record<string, NodeSpec> = {
   ...nodes,
   ...listNodes,
   ...tableNodes({
@@ -65,4 +66,4 @@ const customNodes = {
   }),
 };
 
-export default customNodes;
+export default schemaNodes;
