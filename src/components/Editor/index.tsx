@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { useEffect, useRef } from 'react';
 import { EditorView } from 'prosemirror-view';
 import { EditorState } from 'prosemirror-state';

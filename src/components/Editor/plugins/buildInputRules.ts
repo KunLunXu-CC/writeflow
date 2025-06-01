@@ -41,9 +41,9 @@ const headingRule = (nodeType: NodeType, maxLevel: number) => {
 };
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。
-export default (schema: Schema) => {
-  let rules = smartQuotes.concat(ellipsis, emDash),
-    type;
+const buildInputRules = (schema: Schema) => {
+  const rules = smartQuotes.concat(ellipsis, emDash);
+  let type;
   if ((type = schema.nodes.heading)) rules.push(headingRule(type, 6));
   if ((type = schema.nodes.code_block)) rules.push(codeBlockRule(type));
   if ((type = schema.nodes.blockquote)) rules.push(blockQuoteRule(type));
@@ -51,3 +51,5 @@ export default (schema: Schema) => {
   if ((type = schema.nodes.ordered_list)) rules.push(orderedListRule(type));
   return inputRules({ rules });
 };
+
+export default buildInputRules;

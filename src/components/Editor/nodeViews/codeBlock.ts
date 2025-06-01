@@ -1,48 +1,83 @@
-import { EditorView as CodeMirror, keymap as cmKeymap, drawSelection } from '@codemirror/view';
-import { javascript } from '@codemirror/lang-javascript';
-import { defaultKeymap } from '@codemirror/commands';
-import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
-
+import { Text } from '@codemirror/state';
+import { Node } from 'prosemirror-model';
+import { EditorView } from 'prosemirror-view';
 import { exitCode } from 'prosemirror-commands';
 import { undo, redo } from 'prosemirror-history';
+import { defaultKeymap } from '@codemirror/commands';
+import { javascript } from '@codemirror/lang-javascript';
+import { NodeView, NodeViewConstructor } from 'prosemirror-view';
+import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
+import { Selection, TextSelection, EditorState, Transaction, Command } from 'prosemirror-state';
+import { EditorView as CodeMirrorView, keymap as cmKeymap, drawSelection, ViewUpdate } from '@codemirror/view';
 
-export class CodeBlockView {
-  constructor(node, view, getPos) {
-    // Store for later
+type KeyBinding = {
+  key: string;
+  mac?: string;
+  run: () => boolean;
+};
+
+interface CodeBlockView extends NodeView {
+  node: Node;
+  view: EditorView;
+  dom: HTMLElement;
+  updating: boolean;
+  cm: CodeMirrorView;
+  selectNode(): void;
+  stopEvent(): boolean;
+  update(node: Node): boolean;
+  getPos: () => number | undefined;
+  codeMirrorKeymap(): KeyBinding[];
+  forwardUpdate(update: ViewUpdate): void;
+  maybeEscape(unit: string, dir: number): boolean;
+  setSelection(anchor: number, head: number): void;
+}
+
+class CodeBlockViewImpl implements CodeBlockView {
+  node: Node;
+  view: EditorView;
+  dom: HTMLElement;
+  updating: boolean;
+  cm: CodeMirrorView;
+  getPos: () => number | undefined;
+
+  constructor(node: Node, view: EditorView, getPos: () => number | undefined) {
+    // 存储初始值用于后续操作
     this.node = node;
     this.view = view;
     this.getPos = getPos;
 
-    // Create a CodeMirror instance
-    this.cm = new CodeMirror({
+    // 创建 CodeMirror 实例
+    this.cm = new CodeMirrorView({
       doc: this.node.textContent,
       extensions: [
-        cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
+        javascript(),
         drawSelection(),
         syntaxHighlighting(defaultHighlightStyle),
-        javascript(),
-        CodeMirror.updateListener.of((update) => this.forwardUpdate(update)),
+        cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
+        CodeMirrorView.updateListener.of((update) => this.forwardUpdate(update)),
       ],
     });
 
-    // The editor's outer node is our DOM representation
-    this.dom = this.cm.dom;
-
-    // This flag is used to avoid an update loop between the outer and
-    // inner editor
-    this.updating = false;
+    this.dom = this.cm.dom; // 节点的 DOM 节点设置为 CodeMirror 的 DOM 节点
+    this.updating = false; // 状态值: 用于避免外层和内层编辑器之间的更新循环
   }
-  forwardUpdate(update) {
+
+  forwardUpdate(update: ViewUpdate): void {
     if (this.updating || !this.cm.hasFocus) return;
-    let offset = this.getPos() + 1,
-      { main } = update.state.selection;
-    let selFrom = offset + main.from,
-      selTo = offset + main.to;
-    let pmSel = this.view.state.selection;
-    if (update.docChanged || pmSel.from != selFrom || pmSel.to != selTo) {
-      let tr = this.view.state.tr;
-      update.changes.iterChanges((fromA, toA, fromB, toB, text) => {
-        if (text.length) tr.replaceWith(offset + fromA, offset + toA, schema.text(text.toString()));
+    const pos = this.getPos();
+    if (pos === undefined) return;
+    let offset = pos + 1;
+
+    const { main } = update.state.selection;
+    const selFrom = offset + main.from;
+    const selTo = offset + main.to;
+
+    const pmSel = this.view.state.selection;
+    if (update.docChanged || pmSel.from !== selFrom || pmSel.to !== selTo) {
+      const tr = this.view.state.tr;
+      update.changes.iterChanges((fromA: number, toA: number, fromB: number, toB: number, inserted: Text) => {
+        if (inserted.length)
+          tr.replaceWith(offset + fromA, offset + toA, this.view.state.schema.text(inserted.toString()));
         else tr.delete(offset + fromA, offset + toA);
         offset += toB - fromB - (toA - fromA);
       });
@@ -50,14 +85,15 @@ export class CodeBlockView {
       this.view.dispatch(tr);
     }
   }
-  setSelection(anchor, head) {
+
+  setSelection(anchor: number, head: number): void {
     this.cm.focus();
     this.updating = true;
     this.cm.dispatch({ selection: { anchor, head } });
     this.updating = false;
   }
-  codeMirrorKeymap() {
-    let view = this.view;
+
+  codeMirrorKeymap(): KeyBinding[] {
     return [
       { key: 'ArrowUp', run: () => this.maybeEscape('line', -1) },
       { key: 'ArrowLeft', run: () => this.maybeEscape('char', -1) },
@@ -66,39 +102,48 @@ export class CodeBlockView {
       {
         key: 'Ctrl-Enter',
         run: () => {
-          if (!exitCode(view.state, view.dispatch)) return false;
-          view.focus();
+          if (!exitCode(this.view.state, this.view.dispatch)) return false;
+          this.view.focus();
           return true;
         },
       },
-      { key: 'Ctrl-z', mac: 'Cmd-z', run: () => undo(view.state, view.dispatch) },
-      { key: 'Shift-Ctrl-z', mac: 'Shift-Cmd-z', run: () => redo(view.state, view.dispatch) },
-      { key: 'Ctrl-y', mac: 'Cmd-y', run: () => redo(view.state, view.dispatch) },
+      { key: 'Ctrl-z', mac: 'Cmd-z', run: () => undo(this.view.state, this.view.dispatch) },
+      { key: 'Shift-Ctrl-z', mac: 'Shift-Cmd-z', run: () => redo(this.view.state, this.view.dispatch) },
+      { key: 'Ctrl-y', mac: 'Cmd-y', run: () => redo(this.view.state, this.view.dispatch) },
     ];
   }
 
-  maybeEscape(unit, dir) {
-    let { state } = this.cm,
-      { main } = state.selection;
+  maybeEscape(unit: string, dir: number): boolean {
+    const { state } = this.cm;
+    const { main } = state.selection;
     if (!main.empty) return false;
-    if (unit == 'line') main = state.doc.lineAt(main.head);
-    if (dir < 0 ? main.from > 0 : main.to < state.doc.length) return false;
-    let targetPos = this.getPos() + (dir < 0 ? 0 : this.node.nodeSize);
-    let selection = Selection.near(this.view.state.doc.resolve(targetPos), dir);
-    let tr = this.view.state.tr.setSelection(selection).scrollIntoView();
+    if (unit == 'line') {
+      const line = state.doc.lineAt(main.head);
+      if (dir < 0 ? line.from > 0 : line.to < state.doc.length) return false;
+    } else {
+      if (dir < 0 ? main.from > 0 : main.to < state.doc.length) return false;
+    }
+    const pos = this.getPos();
+    if (pos === undefined) return false;
+    const targetPos = pos + (dir < 0 ? 0 : this.node.nodeSize);
+    const selection = Selection.near(this.view.state.doc.resolve(targetPos), dir);
+    const tr = this.view.state.tr.setSelection(selection).scrollIntoView();
+
     this.view.dispatch(tr);
     this.view.focus();
+    return true;
   }
-  update(node) {
+
+  update(node: Node): boolean {
     if (node.type != this.node.type) return false;
     this.node = node;
     if (this.updating) return true;
-    let newText = node.textContent,
-      curText = this.cm.state.doc.toString();
+    const newText = node.textContent;
+    const curText = this.cm.state.doc.toString();
     if (newText != curText) {
-      let start = 0,
-        curEnd = curText.length,
-        newEnd = newText.length;
+      let start = 0;
+      let curEnd = curText.length;
+      let newEnd = newText.length;
       while (start < curEnd && curText.charCodeAt(start) == newText.charCodeAt(start)) {
         ++start;
       }
@@ -119,22 +164,23 @@ export class CodeBlockView {
     return true;
   }
 
-  selectNode() {
+  selectNode(): void {
     this.cm.focus();
   }
-  stopEvent() {
+
+  stopEvent(): boolean {
     return true;
   }
 }
 
-export const arrowHandler = (dir: any) => {
-  return (state, dispatch, view) => {
-    if (state.selection.empty && view.endOfTextblock(dir)) {
-      let side = dir == 'left' || dir == 'up' ? -1 : 1;
-      let $head = state.selection.$head;
-      let nextPos = Selection.near(state.doc.resolve(side > 0 ? $head.after() : $head.before()), side);
+const arrowHandler = (dir: 'left' | 'right' | 'up' | 'down'): Command => {
+  return (state: EditorState, dispatch?: (tr: Transaction) => void, view?: EditorView): boolean => {
+    if (state.selection.empty && view?.endOfTextblock(dir)) {
+      const side = dir == 'left' || dir == 'up' ? -1 : 1;
+      const $head = state.selection.$head;
+      const nextPos = Selection.near(state.doc.resolve(side > 0 ? $head.after() : $head.before()), side);
       if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
-        dispatch(state.tr.setSelection(nextPos));
+        dispatch?.(state.tr.setSelection(nextPos));
         return true;
       }
     }
@@ -142,7 +188,13 @@ export const arrowHandler = (dir: any) => {
   };
 };
 
-export const arrowHandlers = {
+export const codeBlockNodeView: NodeViewConstructor = (
+  node: Node,
+  view: EditorView,
+  getPos: () => number | undefined,
+) => new CodeBlockViewImpl(node, view, getPos);
+
+export const arrowHandlers: { [key: string]: Command } = {
   ArrowLeft: arrowHandler('left'),
   ArrowRight: arrowHandler('right'),
   ArrowUp: arrowHandler('up'),

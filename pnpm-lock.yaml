@@ -17,6 +17,9 @@ importers:
       '@codemirror/language':
         specifier: ^6.11.0
         version: 6.11.0
+      '@codemirror/state':
+        specifier: ^6.5.2
+        version: 6.5.2
       '@codemirror/view':
         specifier: ^6.37.1
         version: 6.37.1
@@ -75,6 +78,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3.3.1
         version: 3.3.1
+      '@next/eslint-plugin-next':
+        specifier: ^15.3.3
+        version: 15.3.3
       '@types/node':
         specifier: ^22
         version: 22.15.29
@@ -99,6 +105,9 @@ importers:
       eslint-config-prettier:
         specifier: ^10.1.5
         version: 10.1.5(eslint@9.28.0(jiti@2.4.2))
+      eslint-plugin-react-hooks:
+        specifier: ^5.2.0
+        version: 5.2.0(eslint@9.28.0(jiti@2.4.2))
       husky:
         specifier: ^9.1.7
         version: 9.1.7

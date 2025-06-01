@@ -1,7 +1,8 @@
-import { CodeBlockView } from '@/components/Editor/nodeViews/codeBlock';
+import { NodeViewConstructor } from 'prosemirror-view';
+import { codeBlockNodeView } from '@/components/Editor/nodeViews/codeBlock';
 
-const nodeViews = {
-  code_block: (node, view, getPos) => new CodeBlockView(node, view, getPos),
+const nodeViews: { [node: string]: NodeViewConstructor } = {
+  code_block: codeBlockNodeView,
 };
 
 export default nodeViews;
