@@ -1,19 +1,24 @@
-import { Command } from 'prosemirror-state';
+import {
+  sinkListItem,
+  liftListItem,
+  splitListItem,
+} from 'prosemirror-schema-list';
 import { keymap } from 'prosemirror-keymap';
-import { baseKeymap } from 'prosemirror-commands';
-import { splitListItem } from 'prosemirror-schema-list';
 import { arrowHandlers } from '@/components/Editor/codeBlock';
+import { baseKeymap, chainCommands } from 'prosemirror-commands';
+
 import mySchema from '@/components/Editor/schema';
 
-const customKeymap: { [key: string]: Command } = {
-  Enter: splitListItem(mySchema.nodes.list_item), // 在列表中按回车键, 会创建一个新的列表项(默认是不会的)
-};
+const customKeymap = keymap({
+  ...baseKeymap,
+  ...arrowHandlers,
+  Enter: chainCommands(
+    splitListItem(mySchema.nodes.list_item),
+    baseKeymap.Enter,
+  ),
 
-const buildKeymap = () =>
-  keymap({
-    ...baseKeymap,
-    ...customKeymap,
-    ...arrowHandlers,
-  });
+  Tab: sinkListItem(mySchema.nodes.list_item), // 列表: 按 tab 键, 会下沉列表项
+  'Shift-Tab': liftListItem(mySchema.nodes.list_item), // 列表: 按 shift + tab 键, 会上移列表项
+});
 
-export default buildKeymap;
+export default customKeymap;
