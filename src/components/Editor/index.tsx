@@ -20,7 +20,9 @@ export default function Editor() {
       },
       state: EditorState.create({
         plugins: getPlugins(mySchema),
-        doc: DOMParser.fromSchema(mySchema).parse(document.createElement('div')),
+        doc: DOMParser.fromSchema(mySchema).parse(
+          document.createElement('div'),
+        ),
       }),
     });
   }, []);
@@ -39,7 +41,9 @@ export default function Editor() {
   //     rows.push(mySchema.nodes.table_row.createAndFill(null, cells) as Node);
   //   }
   //   const table = mySchema.nodes.table.createAndFill(null, rows) as Node;
-  //   editorRef.current?.dispatch(editorRef.current?.state.tr.replaceSelectionWith(table));
+  //   editorRef.current?.dispatch(
+  //     editorRef.current?.state.tr.replaceSelectionWith(table),
+  //   );
   // };
 
   return (

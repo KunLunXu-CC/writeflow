@@ -1,7 +1,14 @@
 import { NodeSpec } from 'prosemirror-model';
-import { tableNodes as tableNodesOriginal } from 'prosemirror-tables';
+import { TextSelection } from 'prosemirror-state';
+import { InputRule } from 'prosemirror-inputrules';
 import { columnResizing, tableEditing } from 'prosemirror-tables';
+import { tableNodes as tableNodesOriginal } from 'prosemirror-tables';
+import mySchema from '@/components/Editor/schema';
 
+const ROW_COUNT_INPUT_RULE = 2;
+const COL_COUNT_INPUT_RULE = 3;
+
+// 表格插件
 export const tablePlugins = [columnResizing(), tableEditing()];
 
 const getStylesFromElement = (elem: HTMLElement) => {
@@ -27,6 +34,30 @@ const getStylesFromElement = (elem: HTMLElement) => {
   return definitions;
 };
 
+// 表格输入规则, 将一个以 |- 开头的文本块转换为表格
+export const tableInputRule = new InputRule(
+  /^\|-\s$/,
+  (state, match, start, end) => {
+    const cellNodes = Array.from(
+      { length: COL_COUNT_INPUT_RULE },
+      () => mySchema.nodes.table_cell.createAndFill()!,
+    );
+
+    const rowNodes = Array.from(
+      { length: ROW_COUNT_INPUT_RULE },
+      () => mySchema.nodes.table_row.createAndFill(null, cellNodes)!,
+    );
+
+    const tableNode = mySchema.nodes.table.createAndFill(null, rowNodes)!;
+
+    return state.tr
+      .delete(start, end)
+      .replaceSelectionWith(tableNode)
+      .setSelection(TextSelection.create(state.tr.doc, start));
+  },
+);
+
+// 表格节点
 export const tableNodes: Record<string, NodeSpec> = tableNodesOriginal({
   tableGroup: 'block',
   cellContent: 'block+',
@@ -50,18 +81,3 @@ export const tableNodes: Record<string, NodeSpec> = tableNodesOriginal({
     },
   },
 });
-
-// let schema = new Schema({
-//   nodes: markdownSchema.spec.nodes.append(tableNodes({
-//     tableGroup: "block",
-//     cellContent: "block+",
-//     cellAttributes: {
-//       background: {
-//         default: null,
-//         getFromDOM(dom) { return dom.style.backgroundColor || null },
-//         setDOMAttr(value, attrs) { if (value) attrs.style = (attrs.style || "") + `background-color: ${value};` }
-//       }
-//     }
-//   })),
-//   marks: markdownSchema.spec.marks
-// })

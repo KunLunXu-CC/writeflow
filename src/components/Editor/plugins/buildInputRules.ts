@@ -11,19 +11,16 @@ import {
   textblockTypeInputRule,
   // smartQuotes,
 } from 'prosemirror-inputrules';
+import { tableInputRule } from '@/components/Editor/tableBlock';
 import mySchema from '@/components/Editor/schema';
-console.log(
-  '%c [ mySchema ]-15',
-  'font-size:13px; background:pink; color:#bf2c9f;',
-  mySchema,
-);
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。
 const customInputRules = inputRules({
   rules: [
-    // ...smartQuotes, // " 和 ' 的智能转换, 比如 "hello" 转换为 ”hello”, 或者 'hello' 转换为 ‘hello’
+    // ...smartQuotes, // " 和 ' 的智能转换, 比如 "hello" 转换为 "hello", 或者 'hello' 转换为 'hello'
     ellipsis, // 将三个点转换为省略号, 比如 ... 转换为 …
     emDash, // 将双破折号转换为长破折号, 比如 -- 转换为 —
+    tableInputRule, // 表格, 将一个以 |- 开头的文本块转换为表格
     // 块引用, 将一个以 > 开头的文本块转换为块引用。
     wrappingInputRule(/^\s*>\s$/, mySchema.nodes.blockquote),
     // 有序列表, 将一个以数字后跟一个点开头的文本块转换为有序列表。
@@ -41,10 +38,10 @@ const customInputRules = inputRules({
     textblockTypeInputRule(
       new RegExp('^(#{1,6})\\s$'),
       mySchema.nodes.heading,
-      (match) => ({ level: match[1].length }),
+      (match) => ({
+        level: match[1].length,
+      }),
     ),
-    // 表格, 将一个以 | 开头的文本块转换为表格
-    // textblockTypeInputRule(/^\|\-\s$/, mySchema.nodes.table),
   ],
 });
 
