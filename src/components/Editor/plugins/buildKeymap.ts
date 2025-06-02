@@ -10,124 +10,100 @@ import {
   chainCommands,
   selectParentNode,
 } from 'prosemirror-commands';
-import { Schema } from 'prosemirror-model';
 import { Command } from 'prosemirror-state';
 import { keymap } from 'prosemirror-keymap';
 import { undo, redo } from 'prosemirror-history';
 import { undoInputRule } from 'prosemirror-inputrules';
 import { arrowHandlers } from '@/components/Editor/codeBlock';
-import { wrapInList, splitListItem, liftListItem, sinkListItem } from 'prosemirror-schema-list';
+import {
+  wrapInList,
+  splitListItem,
+  liftListItem,
+  sinkListItem,
+} from 'prosemirror-schema-list';
+import mySchema from '@/components/Editor/schema';
 
-const mac = typeof navigator != 'undefined' ? /Mac|iP(hone|[oa]d)/.test(navigator.platform) : false;
+// const mac =
+//   typeof navigator != 'undefined'
+//     ? /Mac|iP(hone|[oa]d)/.test(navigator.platform)
+//     : false;
 
-/// Inspect the given schema looking for marks and nodes from the
-/// basic schema, and if found, add key bindings related to them.
-/// This will add:
-///
-/// * **Mod-b** for toggling [strong](#schema-basic.StrongMark)
-/// * **Mod-i** for toggling [emphasis](#schema-basic.EmMark)
-/// * **Mod-`** for toggling [code font](#schema-basic.CodeMark)
-/// * **Ctrl-Shift-0** for making the current textblock a paragraph
-/// * **Ctrl-Shift-1** to **Ctrl-Shift-Digit6** for making the current
-///   textblock a heading of the corresponding level
-/// * **Ctrl-Shift-Backslash** to make the current textblock a code block
-/// * **Ctrl-Shift-8** to wrap the selection in an ordered list
-/// * **Ctrl-Shift-9** to wrap the selection in a bullet list
-/// * **Ctrl->** to wrap the selection in a block quote
-/// * **Enter** to split a non-empty textblock in a list item while at
-///   the same time splitting the list item
-/// * **Mod-Enter** to insert a hard break
-/// * **Mod-_** to insert a horizontal rule
-/// * **Backspace** to undo an input rule
-/// * **Alt-ArrowUp** to `joinUp`
-/// * **Alt-ArrowDown** to `joinDown`
-/// * **Mod-BracketLeft** to `lift`
-/// * **Escape** to `selectParentNode`
-///
-/// You can suppress or map these bindings by passing a `mapKeys`
-/// argument, which maps key names (say `"Mod-B"` to either `false`, to
-/// remove the binding, or a new key name string.
-const customKeymap = (schema: Schema) => {
-  const keys: { [key: string]: Command } = {};
-  let type;
+const createNewLine = chainCommands(exitCode, (state, dispatch) => {
+  if (dispatch) {
+    dispatch(
+      state.tr
+        .replaceSelectionWith(mySchema.nodes.paragraph.create())
+        .scrollIntoView(),
+    );
+  }
+  return true;
+});
 
-  function bind(key: string, cmd: Command) {
-    keys[key] = cmd;
-  }
+const customKeymap: { [key: string]: Command } = {
+  'Mod-z': undo,
+  'Shift-Mod-z': redo,
 
-  bind('Mod-z', undo);
-  bind('Shift-Mod-z', redo);
-  bind('Backspace', undoInputRule);
-  if (!mac) bind('Mod-y', redo);
+  Backspace: undoInputRule,
 
-  bind('Alt-ArrowUp', joinUp);
-  bind('Alt-ArrowDown', joinDown);
-  bind('Mod-BracketLeft', lift);
-  bind('Escape', selectParentNode);
+  'Alt-ArrowUp': joinUp,
+  'Alt-ArrowDown': joinDown,
+  'Mod-BracketLeft': lift,
+  Escape: selectParentNode,
 
-  if ((type = schema.marks.strong)) {
-    bind('Mod-b', toggleMark(type));
-    bind('Mod-B', toggleMark(type));
-  }
-  if ((type = schema.marks.em)) {
-    bind('Mod-i', toggleMark(type));
-    bind('Mod-I', toggleMark(type));
-  }
-  if ((type = schema.marks.code)) {
-    bind('Mod-`', toggleMark(type));
-  }
+  'Mod-b': toggleMark(mySchema.marks.strong),
+  'Mod-B': toggleMark(mySchema.marks.strong),
+  'Mod-i': toggleMark(mySchema.marks.em),
+  'Mod-I': toggleMark(mySchema.marks.em),
+  'Mod-`': toggleMark(mySchema.marks.code),
 
-  if ((type = schema.nodes.bullet_list)) {
-    bind('Shift-Ctrl-8', wrapInList(type));
-  }
-  if ((type = schema.nodes.ordered_list)) {
-    bind('Shift-Ctrl-9', wrapInList(type));
-  }
-  if ((type = schema.nodes.blockquote)) {
-    bind('Ctrl->', wrapIn(type));
-  }
-  if ((type = schema.nodes.hard_break)) {
-    const br = type;
-    const cmd = chainCommands(exitCode, (state, dispatch) => {
-      if (dispatch) {
-        dispatch(state.tr.replaceSelectionWith(br.create()).scrollIntoView());
-      }
-      return true;
-    });
-    bind('Mod-Enter', cmd);
-    bind('Shift-Enter', cmd);
-    if (mac) bind('Ctrl-Enter', cmd);
-  }
-  if ((type = schema.nodes.list_item)) {
-    bind('Enter', splitListItem(type));
-    bind('Mod-[', liftListItem(type));
-    bind('Mod-]', sinkListItem(type));
-  }
-  if ((type = schema.nodes.paragraph)) {
-    bind('Shift-Ctrl-0', setBlockType(type));
-  }
-  if ((type = schema.nodes.code_block)) {
-    bind('Shift-Ctrl-\\', setBlockType(type));
-  }
-  if ((type = schema.nodes.heading)) {
-    for (let i = 1; i <= 6; i++) {
-      bind('Shift-Ctrl-' + i, setBlockType(type, { level: i }));
-    }
-  }
-  if ((type = schema.nodes.horizontal_rule)) {
-    const hr = type;
-    bind('Mod-_', (state, dispatch) => {
-      if (dispatch) dispatch(state.tr.replaceSelectionWith(hr.create()).scrollIntoView());
-      return true;
-    });
-  }
+  'Shift-Ctrl-8': wrapInList(mySchema.nodes.bullet_list),
+  'Shift-Ctrl-9': wrapInList(mySchema.nodes.ordered_list),
+  'Ctrl->': wrapIn(mySchema.nodes.blockquote),
 
-  return keys;
+  'Shift-Ctrl-0': setBlockType(mySchema.nodes.paragraph),
+  'Shift-Ctrl-\\': setBlockType(mySchema.nodes.code_block),
+
+  'Mod-Enter': createNewLine,
+  'Shift-Enter': createNewLine,
+
+  Enter: splitListItem(mySchema.nodes.list_item),
+  'Mod-[': liftListItem(mySchema.nodes.list_item),
+  'Mod-]': sinkListItem(mySchema.nodes.list_item),
+
+  'Shift-Ctrl-1': setBlockType(mySchema.nodes.heading, { level: 1 }),
+  'Shift-Ctrl-2': setBlockType(mySchema.nodes.heading, { level: 2 }),
+  'Shift-Ctrl-3': setBlockType(mySchema.nodes.heading, { level: 3 }),
+  'Shift-Ctrl-4': setBlockType(mySchema.nodes.heading, { level: 4 }),
+  'Shift-Ctrl-5': setBlockType(mySchema.nodes.heading, { level: 5 }),
+  'Shift-Ctrl-6': setBlockType(mySchema.nodes.heading, { level: 6 }),
+
+  'Mod-_': setBlockType(mySchema.nodes.horizontal_rule),
+  'Shift-Ctrl-_': setBlockType(mySchema.nodes.horizontal_rule),
 };
 
-const buildKeymap = (schema: Schema) => {
+//  = (schema: Schema) => {
+//   const keys
+
+// const macKeys: { [key: string]: Command } = {
+//   'Mod-y': redo,
+//   'Ctrl-Enter': createNewLine,
+// };
+
+// let type;
+
+// if ((type = schema.nodes.horizontal_rule)) {
+//   const hr = type;
+//   bind('Mod-_', (state, dispatch) => {
+//     if (dispatch)
+//       dispatch(state.tr.replaceSelectionWith(hr.create()).scrollIntoView());
+//     return true;
+//   });
+// }
+// };
+
+const buildKeymap = () => {
   // 这边 baseKeymap 的优先级更高，所以需要把 baseKeymap 放在后面,
-  return [keymap(customKeymap(schema)), keymap(baseKeymap), keymap(arrowHandlers)];
+  return [keymap(customKeymap), keymap(baseKeymap), keymap(arrowHandlers)];
 };
 
 export default buildKeymap;

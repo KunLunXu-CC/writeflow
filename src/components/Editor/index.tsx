@@ -19,7 +19,7 @@ export default function Editor() {
         code_block: codeBlockNodeView,
       },
       state: EditorState.create({
-        plugins: getPlugins(mySchema),
+        plugins: getPlugins(),
         doc: DOMParser.fromSchema(mySchema).parse(
           document.createElement('div'),
         ),
