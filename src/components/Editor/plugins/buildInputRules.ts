@@ -1,55 +1,51 @@
+/**
+ * 基于 prosemirror-inputrules 模块进行扩展, 最终导出的是一个插件
+ * 目的是为了将「输入规则」附加到编辑器, 编辑器可以对用户输入的文本做出反应或进行转换
+ * 参考文档: https://prosemirror.net/docs/ref/#inputrules
+ */
 import {
   emDash,
   ellipsis,
   inputRules,
-  smartQuotes,
   wrappingInputRule,
   textblockTypeInputRule,
+  // smartQuotes,
 } from 'prosemirror-inputrules';
-import { NodeType, Schema } from 'prosemirror-model';
-
-/// 引用: 给定一个块引用节点类型，创建一个输入规则，将一个以 `"> "` 开头的文本块转换为块引用。
-const blockQuoteRule = (nodeType: NodeType) => {
-  return wrappingInputRule(/^\s*>\s$/, nodeType);
-};
-
-// 有序列表: 给定一个列表节点类型，创建一个输入规则，将一个以数字后跟一个点开头的文本块转换为有序列表。
-const orderedListRule = (nodeType: NodeType) => {
-  return wrappingInputRule(
-    /^(\d+)\.\s$/,
-    nodeType,
-    (match) => ({ order: +match[1] }),
-    (match, node) => node.childCount + node.attrs.order == +match[1],
-  );
-};
-
-// 无序列表: 给定一个列表节点类型，创建一个输入规则，将一个以破折号、加号或星号开头的文本块转换为无序列表。
-const bulletListRule = (nodeType: NodeType) => {
-  return wrappingInputRule(/^\s*([-+*])\s$/, nodeType);
-};
-
-// 代码块: 给定一个代码块节点类型，创建一个输入规则，将一个以三个反引号开头的文本块转换为代码块。
-const codeBlockRule = (nodeType: NodeType) => {
-  return textblockTypeInputRule(/^```$/, nodeType);
-};
-
-// 标题: 给定一个节点类型和最大级别，创建一个输入规则，将最多为该数量的 `#` 字符后跟一个空格的文本块转换为对应级别的标题。
-const headingRule = (nodeType: NodeType, maxLevel: number) => {
-  return textblockTypeInputRule(new RegExp('^(#{1,' + maxLevel + '})\\s$'), nodeType, (match) => ({
-    level: match[1].length,
-  }));
-};
+import mySchema from '@/components/Editor/schema';
+console.log(
+  '%c [ mySchema ]-15',
+  'font-size:13px; background:pink; color:#bf2c9f;',
+  mySchema,
+);
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。
-const buildInputRules = (schema: Schema) => {
-  const rules = smartQuotes.concat(ellipsis, emDash);
-  let type;
-  if ((type = schema.nodes.heading)) rules.push(headingRule(type, 6));
-  if ((type = schema.nodes.code_block)) rules.push(codeBlockRule(type));
-  if ((type = schema.nodes.blockquote)) rules.push(blockQuoteRule(type));
-  if ((type = schema.nodes.bullet_list)) rules.push(bulletListRule(type));
-  if ((type = schema.nodes.ordered_list)) rules.push(orderedListRule(type));
-  return inputRules({ rules });
-};
+const customInputRules = inputRules({
+  rules: [
+    // ...smartQuotes, // " 和 ' 的智能转换, 比如 "hello" 转换为 ”hello”, 或者 'hello' 转换为 ‘hello’
+    ellipsis, // 将三个点转换为省略号, 比如 ... 转换为 …
+    emDash, // 将双破折号转换为长破折号, 比如 -- 转换为 —
+    // 块引用, 将一个以 > 开头的文本块转换为块引用。
+    wrappingInputRule(/^\s*>\s$/, mySchema.nodes.blockquote),
+    // 有序列表, 将一个以数字后跟一个点开头的文本块转换为有序列表。
+    wrappingInputRule(
+      /^(\d+)\.\s$/,
+      mySchema.nodes.ordered_list,
+      (match) => ({ order: +match[1] }),
+      (match, node) => node.childCount + node.attrs.order == +match[1],
+    ),
+    // 无序列表, 将一个以破折号、加号或星号开头的文本块转换为无序列表。
+    wrappingInputRule(/^\s*([-+*])\s$/, mySchema.nodes.bullet_list),
+    // 代码块, 将一个以三个反引号开头的文本块转换为代码块。
+    textblockTypeInputRule(/^```$/, mySchema.nodes.code_block),
+    // 标题, 将一个以最多为 6 个 `#` 字符后跟一个空格的文本块转换为对应级别的标题。
+    textblockTypeInputRule(
+      new RegExp('^(#{1,6})\\s$'),
+      mySchema.nodes.heading,
+      (match) => ({ level: match[1].length }),
+    ),
+    // 表格, 将一个以 | 开头的文本块转换为表格
+    // textblockTypeInputRule(/^\|\-\s$/, mySchema.nodes.table),
+  ],
+});
 
-export default buildInputRules;
+export default customInputRules;

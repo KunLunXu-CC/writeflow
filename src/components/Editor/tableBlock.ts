@@ -35,7 +35,12 @@ export const tableNodes: Record<string, NodeSpec> = tableNodesOriginal({
       default: null,
       getFromDOM(dom) {
         const style = getStylesFromElement(dom);
-        return style.background || style.backgroundColor || dom.style.backgroundColor || null;
+        return (
+          style.background ||
+          style.backgroundColor ||
+          dom.style.backgroundColor ||
+          null
+        );
       },
       setDOMAttr(value, attrs) {
         if (value) {
@@ -45,3 +50,18 @@ export const tableNodes: Record<string, NodeSpec> = tableNodesOriginal({
     },
   },
 });
+
+// let schema = new Schema({
+//   nodes: markdownSchema.spec.nodes.append(tableNodes({
+//     tableGroup: "block",
+//     cellContent: "block+",
+//     cellAttributes: {
+//       background: {
+//         default: null,
+//         getFromDOM(dom) { return dom.style.backgroundColor || null },
+//         setDOMAttr(value, attrs) { if (value) attrs.style = (attrs.style || "") + `background-color: ${value};` }
+//       }
+//     }
+//   })),
+//   marks: markdownSchema.spec.marks
+// })
