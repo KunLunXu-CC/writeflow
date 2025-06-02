@@ -4,7 +4,7 @@ import buildKeymap from '@/components/Editor/plugins/buildKeymap';
 import customInputRules from '@/components/Editor/plugins/buildInputRules';
 
 const buildPlugins = () => {
-  return [history(), customInputRules, ...buildKeymap(), ...tablePlugins];
+  return [history(), customInputRules, buildKeymap(), ...tablePlugins];
 };
 
 export default buildPlugins;
