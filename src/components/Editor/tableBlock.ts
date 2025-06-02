@@ -49,11 +49,8 @@ export const tableInputRule = new InputRule(
     );
 
     const tableNode = mySchema.nodes.table.createAndFill(null, rowNodes)!;
-
-    return state.tr
-      .delete(start, end)
-      .replaceSelectionWith(tableNode)
-      .setSelection(TextSelection.create(state.tr.doc, start));
+    const tr = state.tr.delete(start, end).replaceSelectionWith(tableNode);
+    return tr.setSelection(TextSelection.create(tr.doc, start));
   },
 );
 
