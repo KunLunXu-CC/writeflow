@@ -12,6 +12,7 @@ import {
   // smartQuotes,
 } from 'prosemirror-inputrules';
 import { tableInputRule } from '@/components/Editor/tableBlock';
+import { taskListInputRule } from '@/components/Editor/taskList';
 import mySchema from '@/components/Editor/schema';
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。
@@ -21,6 +22,7 @@ const customInputRules = inputRules({
     ellipsis, // 将三个点转换为省略号, 比如 ... 转换为 …
     emDash, // 将双破折号转换为长破折号, 比如 -- 转换为 —
     tableInputRule, // 表格, 将一个以 |- 开头的文本块转换为表格
+    taskListInputRule, // 任务列表, 将一个以 [ ] 开头的文本块转换为任务列表。
     // 块引用, 将一个以 > 开头的文本块转换为块引用。
     wrappingInputRule(/^\s*>\s$/, mySchema.nodes.blockquote),
     // 有序列表, 将一个以数字后跟一个点开头的文本块转换为有序列表。

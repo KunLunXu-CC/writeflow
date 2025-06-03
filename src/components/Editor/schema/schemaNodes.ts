@@ -1,6 +1,7 @@
 import { NodeSpec } from 'prosemirror-model';
 import { nodes } from 'prosemirror-schema-basic';
 import { tableNodes } from '@/components/Editor/tableBlock';
+import { taskListNodes } from '@/components/Editor/taskList';
 import { bulletList, listItem, orderedList } from 'prosemirror-schema-list';
 
 const listNodes = {
@@ -24,6 +25,7 @@ const schemaNodes: Record<string, NodeSpec> = {
   ...nodes,
   ...listNodes,
   ...tableNodes,
+  ...taskListNodes,
 };
 
 export default schemaNodes;
