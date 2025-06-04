@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { DOMParser } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 import { EditorState } from 'prosemirror-state';
-import { codeBlockNodeView } from '@/components/Editor/codeBlock';
+import { codeBlockNodeView } from '@/components/Editor/extension/codeBlock';
 import mySchema from '@/components/Editor/schema';
 import plugins from '@/components/Editor/plugins';
 import '@/components/Editor/theme';

@@ -39,7 +39,6 @@
   // 段落 
   p {
     font-size: 1em;
-    margin: 1.375em 0;
   }
 
   ul {
@@ -72,6 +71,23 @@
     }
   }
 
+  // 任务列表
+  li[data-type='todo_item'] {
+    gap: 0.5em;
+    width: 100%;
+    display: flex;
+
+    > div {
+      flex: 1;
+    }
+
+    > p {
+      overflow-x: hidden;
+      word-break:break-all;
+    }
+  }
+
+
   // 图片设置 
   img {
     max-width: 100%;
@@ -85,10 +101,6 @@
     color: #666;
     border-left: 0.25em solid #ff7a45;
     background: rgb(217 217 217 / 20%);
-
-    > p {
-      margin: 0.65em 0;
-    }
 
     summary {
       color: #666;

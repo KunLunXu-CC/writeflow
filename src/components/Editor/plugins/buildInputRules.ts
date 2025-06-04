@@ -11,8 +11,8 @@ import {
   textblockTypeInputRule,
   // smartQuotes,
 } from 'prosemirror-inputrules';
-import { tableInputRule } from '@/components/Editor/tableBlock';
-import { taskListInputRule } from '@/components/Editor/taskList';
+import { tableInputRule } from '@/components/Editor/extension/tableBlock';
+import { taskListInputRule } from '@/components/Editor/extension/list';
 import mySchema from '@/components/Editor/schema';
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。
