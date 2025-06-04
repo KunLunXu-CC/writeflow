@@ -3,11 +3,6 @@ import { tablePlugins } from '@/components/Editor/extension/tableBlock';
 import buildKeymap from '@/components/Editor/plugins/buildKeymap';
 import customInputRules from '@/components/Editor/plugins/buildInputRules';
 
-const buildPlugins = [
-  history(),
-  buildKeymap,
-  customInputRules,
-  ...tablePlugins,
-];
+const plugins = [...buildKeymap, ...tablePlugins, history(), customInputRules];
 
-export default buildPlugins;
+export default plugins;

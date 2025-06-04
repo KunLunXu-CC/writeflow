@@ -1,7 +1,16 @@
+import {
+  listItem,
+  bulletList,
+  orderedList,
+  sinkListItem,
+  liftListItem,
+  splitListItem,
+} from 'prosemirror-schema-list';
+import { Command } from 'prosemirror-state';
 import { NodeSpec } from 'prosemirror-model';
-import { bulletList, listItem, orderedList } from 'prosemirror-schema-list';
-import mySchema from '@/components/Editor/schema';
 import { InputRule } from 'prosemirror-inputrules';
+import { chainCommands } from 'prosemirror-commands';
+import mySchema from '@/components/Editor/schema';
 
 export const listNodes: Record<string, NodeSpec> = {
   ordered_list: {
@@ -67,29 +76,23 @@ export const taskListInputRule = new InputRule(
     const taskItem = mySchema.nodes.task_item.createAndFill(attrs);
     const taskList = mySchema.nodes.task_list.createAndFill(null, taskItem)!;
     return state.tr.delete(start, end).replaceSelectionWith(taskList);
-
-    // tr.insert(start, tableItem);
-    // return tr;
-    // return tr.setSelection(TextSelection.create(tr.doc, start));
-
-    // const $from = state.selection.$from;
-    // // const listItemPos = $from.before(-1);
-    // const attrs = { checked: match[1] === 'x' };
-    // return state.tr
-    //   .delete(start, end)
-    //   .insert(start, mySchema.nodes.todo_item.create(attrs));
-    // if (
-    //   $from.depth >= 3 &&
-    //   $from.node(-1).type.name === 'todo_item' &&
-    //   $from.node(-2).type.name === 'todo_list' &&
-    //   $from.index(-1) === 0 // The cursor is at the first child (paragraph) of this list item.
-    // ) {
-    //   const attrs = { checked: match[1] === 'x' };
-    //   const listItemPos = $from.before(-1);
-    //   return state.tr
-    //     .delete(start, end)
-    //     .insert(listItemPos + 1, mySchema.nodes.todo_item.create(attrs));
-    // }
-    // return null;
   },
 );
+
+export const getListKeymap = (): Record<string, Command> => ({
+  // 列表: 按 enter 键, 会拆分列表项
+  Enter: chainCommands(
+    splitListItem(mySchema.nodes.list_item),
+    splitListItem(mySchema.nodes.task_item),
+  ),
+  // 列表: 按 tab 键, 会下沉列表项
+  Tab: chainCommands(
+    sinkListItem(mySchema.nodes.list_item),
+    sinkListItem(mySchema.nodes.task_item),
+  ),
+  // 列表: 按 shift + tab 键, 会上移列表项
+  'Shift-Tab': chainCommands(
+    liftListItem(mySchema.nodes.list_item),
+    liftListItem(mySchema.nodes.task_item),
+  ),
+});

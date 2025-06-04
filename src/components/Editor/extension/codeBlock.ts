@@ -6,9 +6,23 @@ import { undo, redo } from 'prosemirror-history';
 import { defaultKeymap } from '@codemirror/commands';
 import { javascript } from '@codemirror/lang-javascript';
 import { NodeView, NodeViewConstructor } from 'prosemirror-view';
-import { syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
-import { Selection, TextSelection, EditorState, Transaction, Command } from 'prosemirror-state';
-import { EditorView as CodeMirrorView, keymap as cmKeymap, drawSelection, ViewUpdate } from '@codemirror/view';
+import {
+  syntaxHighlighting,
+  defaultHighlightStyle,
+} from '@codemirror/language';
+import {
+  Selection,
+  TextSelection,
+  EditorState,
+  Transaction,
+  Command,
+} from 'prosemirror-state';
+import {
+  EditorView as CodeMirrorView,
+  keymap as cmKeymap,
+  drawSelection,
+  ViewUpdate,
+} from '@codemirror/view';
 
 type KeyBinding = {
   key: string;
@@ -54,7 +68,9 @@ class CodeBlockViewImpl implements CodeBlockView {
         drawSelection(),
         syntaxHighlighting(defaultHighlightStyle),
         cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
-        CodeMirrorView.updateListener.of((update) => this.forwardUpdate(update)),
+        CodeMirrorView.updateListener.of((update) =>
+          this.forwardUpdate(update),
+        ),
       ],
     });
 
@@ -75,12 +91,24 @@ class CodeBlockViewImpl implements CodeBlockView {
     const pmSel = this.view.state.selection;
     if (update.docChanged || pmSel.from !== selFrom || pmSel.to !== selTo) {
       const tr = this.view.state.tr;
-      update.changes.iterChanges((fromA: number, toA: number, fromB: number, toB: number, inserted: Text) => {
-        if (inserted.length)
-          tr.replaceWith(offset + fromA, offset + toA, this.view.state.schema.text(inserted.toString()));
-        else tr.delete(offset + fromA, offset + toA);
-        offset += toB - fromB - (toA - fromA);
-      });
+      update.changes.iterChanges(
+        (
+          fromA: number,
+          toA: number,
+          fromB: number,
+          toB: number,
+          inserted: Text,
+        ) => {
+          if (inserted.length)
+            tr.replaceWith(
+              offset + fromA,
+              offset + toA,
+              this.view.state.schema.text(inserted.toString()),
+            );
+          else tr.delete(offset + fromA, offset + toA);
+          offset += toB - fromB - (toA - fromA);
+        },
+      );
       tr.setSelection(TextSelection.create(tr.doc, selFrom, selTo));
       this.view.dispatch(tr);
     }
@@ -107,9 +135,21 @@ class CodeBlockViewImpl implements CodeBlockView {
           return true;
         },
       },
-      { key: 'Ctrl-z', mac: 'Cmd-z', run: () => undo(this.view.state, this.view.dispatch) },
-      { key: 'Shift-Ctrl-z', mac: 'Shift-Cmd-z', run: () => redo(this.view.state, this.view.dispatch) },
-      { key: 'Ctrl-y', mac: 'Cmd-y', run: () => redo(this.view.state, this.view.dispatch) },
+      {
+        key: 'Ctrl-z',
+        mac: 'Cmd-z',
+        run: () => undo(this.view.state, this.view.dispatch),
+      },
+      {
+        key: 'Shift-Ctrl-z',
+        mac: 'Shift-Cmd-z',
+        run: () => redo(this.view.state, this.view.dispatch),
+      },
+      {
+        key: 'Ctrl-y',
+        mac: 'Cmd-y',
+        run: () => redo(this.view.state, this.view.dispatch),
+      },
     ];
   }
 
@@ -126,7 +166,10 @@ class CodeBlockViewImpl implements CodeBlockView {
     const pos = this.getPos();
     if (pos === undefined) return false;
     const targetPos = pos + (dir < 0 ? 0 : this.node.nodeSize);
-    const selection = Selection.near(this.view.state.doc.resolve(targetPos), dir);
+    const selection = Selection.near(
+      this.view.state.doc.resolve(targetPos),
+      dir,
+    );
     const tr = this.view.state.tr.setSelection(selection).scrollIntoView();
 
     this.view.dispatch(tr);
@@ -144,10 +187,17 @@ class CodeBlockViewImpl implements CodeBlockView {
       let start = 0;
       let curEnd = curText.length;
       let newEnd = newText.length;
-      while (start < curEnd && curText.charCodeAt(start) == newText.charCodeAt(start)) {
+      while (
+        start < curEnd &&
+        curText.charCodeAt(start) == newText.charCodeAt(start)
+      ) {
         ++start;
       }
-      while (curEnd > start && newEnd > start && curText.charCodeAt(curEnd - 1) == newText.charCodeAt(newEnd - 1)) {
+      while (
+        curEnd > start &&
+        newEnd > start &&
+        curText.charCodeAt(curEnd - 1) == newText.charCodeAt(newEnd - 1)
+      ) {
         curEnd--;
         newEnd--;
       }
@@ -174,11 +224,18 @@ class CodeBlockViewImpl implements CodeBlockView {
 }
 
 const arrowHandler = (dir: 'left' | 'right' | 'up' | 'down'): Command => {
-  return (state: EditorState, dispatch?: (tr: Transaction) => void, view?: EditorView): boolean => {
+  return (
+    state: EditorState,
+    dispatch?: (tr: Transaction) => void,
+    view?: EditorView,
+  ): boolean => {
     if (state.selection.empty && view?.endOfTextblock(dir)) {
       const side = dir == 'left' || dir == 'up' ? -1 : 1;
       const $head = state.selection.$head;
-      const nextPos = Selection.near(state.doc.resolve(side > 0 ? $head.after() : $head.before()), side);
+      const nextPos = Selection.near(
+        state.doc.resolve(side > 0 ? $head.after() : $head.before()),
+        side,
+      );
       if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
         dispatch?.(state.tr.setSelection(nextPos));
         return true;
