@@ -120,6 +120,13 @@
   }
 
   // 代码块部分 
+  .cm-editor {
+    border-radius: 4px;
+    padding: 8px;
+    outline: none !important;
+    background-color: #1f1f1f;
+  }
+
   .brick-markdown-preview-code {
     padding: 0;
     margin: 1.25em 0;

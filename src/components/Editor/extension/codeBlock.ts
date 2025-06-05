@@ -1,28 +1,28 @@
-import { Text } from '@codemirror/state';
-import { Node } from 'prosemirror-model';
-import { EditorView } from 'prosemirror-view';
-import { exitCode } from 'prosemirror-commands';
-import { undo, redo } from 'prosemirror-history';
-import { defaultKeymap } from '@codemirror/commands';
-import { javascript } from '@codemirror/lang-javascript';
-import { NodeView, NodeViewConstructor } from 'prosemirror-view';
 import {
   syntaxHighlighting,
   defaultHighlightStyle,
 } from '@codemirror/language';
 import {
+  Command,
   Selection,
-  TextSelection,
   EditorState,
   Transaction,
-  Command,
+  TextSelection,
 } from 'prosemirror-state';
 import {
-  EditorView as CodeMirrorView,
-  keymap as cmKeymap,
-  drawSelection,
   ViewUpdate,
+  drawSelection,
+  keymap as cmKeymap,
+  EditorView as CodeMirrorView,
 } from '@codemirror/view';
+import { Text } from '@codemirror/state';
+import { Node } from 'prosemirror-model';
+import { exitCode } from 'prosemirror-commands';
+import { undo, redo } from 'prosemirror-history';
+import { defaultKeymap } from '@codemirror/commands';
+import { dracula } from '@uiw/codemirror-theme-dracula';
+import { javascript } from '@codemirror/lang-javascript';
+import { EditorView, NodeView, NodeViewConstructor } from 'prosemirror-view';
 
 type KeyBinding = {
   key: string;
@@ -64,6 +64,7 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.cm = new CodeMirrorView({
       doc: this.node.textContent,
       extensions: [
+        dracula,
         javascript(),
         drawSelection(),
         syntaxHighlighting(defaultHighlightStyle),

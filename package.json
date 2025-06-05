@@ -22,6 +22,7 @@
     "@codemirror/view": "^6.37.1",
     "@heroui/react": "2.7.8",
     "@heroui/theme": "^2.4.15",
+    "@uiw/codemirror-theme-dracula": "^4.23.12",
     "clsx": "^2.1.1",
     "next": "15.3.3",
     "prosemirror-commands": "^1.7.1",
