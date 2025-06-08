@@ -35,7 +35,11 @@ const customInputRules = inputRules({
     // 无序列表, 将一个以破折号、加号或星号开头的文本块转换为无序列表。
     wrappingInputRule(/^\s*([-+*])\s$/, mySchema.nodes.bullet_list),
     // 代码块, 将一个以三个反引号开头的文本块转换为代码块。
-    textblockTypeInputRule(/^```$/, mySchema.nodes.code_block),
+    textblockTypeInputRule(
+      /^```(\w+)\s$/,
+      mySchema.nodes.code_block,
+      (match) => ({ language: match[1] }),
+    ),
     // 标题, 将一个以最多为 6 个 `#` 字符后跟一个空格的文本块转换为对应级别的标题。
     textblockTypeInputRule(
       new RegExp('^(#{1,6})\\s$'),

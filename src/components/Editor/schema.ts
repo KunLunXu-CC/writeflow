@@ -9,6 +9,12 @@ const mySchema = new Schema({
     ...nodes,
     ...listNodes,
     ...tableNodes,
+    code_block: {
+      ...nodes.code_block,
+      attrs: {
+        language: { default: null },
+      },
+    },
   },
   marks: schema.spec.marks,
 });

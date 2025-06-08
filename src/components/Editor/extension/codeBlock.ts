@@ -1,6 +1,7 @@
 import {
-  syntaxHighlighting,
   defaultHighlightStyle,
+  StreamLanguage,
+  syntaxHighlighting,
 } from '@codemirror/language';
 import {
   Command,
@@ -17,12 +18,42 @@ import {
 } from '@codemirror/view';
 import { Text } from '@codemirror/state';
 import { Node } from 'prosemirror-model';
+import { css } from '@codemirror/lang-css';
+import { json } from '@codemirror/lang-json';
+import { html } from '@codemirror/lang-html';
+import { Extension } from '@codemirror/state';
 import { exitCode } from 'prosemirror-commands';
 import { undo, redo } from 'prosemirror-history';
 import { defaultKeymap } from '@codemirror/commands';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { javascript } from '@codemirror/lang-javascript';
+import { diff } from '@codemirror/legacy-modes/mode/diff';
 import { EditorView, NodeView, NodeViewConstructor } from 'prosemirror-view';
+
+// 语言支持映射
+const LANGUAGE_MAP: { [key: string]: () => Extension } = {
+  css,
+  html,
+  json,
+  javascript,
+  js: javascript,
+  ts: () => javascript({ typescript: true }),
+  typescript: () => javascript({ typescript: true }),
+  jsx: () => javascript({ jsx: true }),
+  tsx: () => javascript({ jsx: true, typescript: true }),
+
+  diff: () => StreamLanguage.define(diff),
+};
+
+// 获取语言扩展
+const getLanguageExtension = (language: string) => {
+  if (!language) {
+    return syntaxHighlighting(defaultHighlightStyle);
+  }
+
+  const lang = LANGUAGE_MAP[language.toLowerCase()];
+  return lang ? lang() : syntaxHighlighting(defaultHighlightStyle);
+};
 
 type KeyBinding = {
   key: string;
@@ -60,14 +91,17 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.view = view;
     this.getPos = getPos;
 
+    // 获取语言扩展
+    const language = node.attrs.language;
+    const languageExtension = getLanguageExtension(language);
+
     // 创建 CodeMirror 实例
     this.cm = new CodeMirrorView({
       doc: this.node.textContent,
       extensions: [
         dracula,
-        javascript(),
         drawSelection(),
-        syntaxHighlighting(defaultHighlightStyle),
+        languageExtension,
         cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
         CodeMirrorView.updateListener.of((update) =>
           this.forwardUpdate(update),
