@@ -79,7 +79,7 @@ export const taskListInputRule = new InputRule(
   },
 );
 
-export const getListKeymap = (): Record<string, Command> => ({
+export const listKeymap: Record<string, Command> = {
   // 列表: 按 enter 键, 会拆分列表项
   Enter: chainCommands(
     splitListItem(mySchema.nodes.list_item),
@@ -95,4 +95,4 @@ export const getListKeymap = (): Record<string, Command> => ({
     liftListItem(mySchema.nodes.list_item),
     liftListItem(mySchema.nodes.task_item),
   ),
-});
+};

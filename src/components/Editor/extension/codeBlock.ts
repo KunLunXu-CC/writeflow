@@ -5,12 +5,6 @@ import {
   syntaxHighlighting,
 } from '@codemirror/language';
 import {
-  EditorState,
-  Selection,
-  TextSelection,
-  Transaction,
-} from 'prosemirror-state';
-import {
   ViewUpdate,
   drawSelection,
   keymap as cmKeymap,
@@ -22,14 +16,15 @@ import { css } from '@codemirror/lang-css';
 import { json } from '@codemirror/lang-json';
 import { html } from '@codemirror/lang-html';
 import { Extension } from '@codemirror/state';
+import { exitCode } from 'prosemirror-commands';
+import { redo, undo } from 'prosemirror-history';
 import { defaultKeymap } from '@codemirror/commands';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { javascript } from '@codemirror/lang-javascript';
 import { diff } from '@codemirror/legacy-modes/mode/diff';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
+import { Command, Selection, TextSelection } from 'prosemirror-state';
 import { EditorView, NodeView, NodeViewConstructor } from 'prosemirror-view';
-import { exitCode } from 'prosemirror-commands';
-import { redo, undo } from 'prosemirror-history';
 
 interface CodeBlockView extends NodeView {
   node: Node;
@@ -268,14 +263,10 @@ class CodeBlockViewImpl implements CodeBlockView {
     return true;
   }
 }
-
-export const arrowHandler = (dir: 'left' | 'right' | 'up' | 'down') => {
-  return (
-    state: EditorState,
-    dispatch: (tr: Transaction) => void,
-    view: EditorView,
-  ) => {
-    if (state.selection.empty && view.endOfTextblock(dir)) {
+const arrowHandler =
+  (dir: 'left' | 'right' | 'up' | 'down'): Command =>
+  (state, dispatch, view) => {
+    if (state?.selection.empty && view?.endOfTextblock(dir)) {
       const side = dir == 'left' || dir == 'up' ? -1 : 1;
       const $head = state.selection.$head;
       const nextPos = Selection.near(
@@ -283,15 +274,14 @@ export const arrowHandler = (dir: 'left' | 'right' | 'up' | 'down') => {
         side,
       );
       if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
-        dispatch(state.tr.setSelection(nextPos));
+        dispatch?.(state.tr.setSelection(nextPos));
         return true;
       }
     }
     return false;
   };
-};
 
-export const arrowHandlers = {
+export const codeBlockKeymap: Record<string, Command> = {
   ArrowLeft: arrowHandler('left'),
   ArrowRight: arrowHandler('right'),
   ArrowUp: arrowHandler('up'),
