@@ -4,10 +4,16 @@ import {
   StreamLanguage,
   syntaxHighlighting,
 } from '@codemirror/language';
-import { Selection, TextSelection } from 'prosemirror-state';
+import {
+  EditorState,
+  Selection,
+  TextSelection,
+  Transaction,
+} from 'prosemirror-state';
 import {
   ViewUpdate,
   drawSelection,
+  keymap as cmKeymap,
   EditorView as CodeMirrorView,
 } from '@codemirror/view';
 import { Text } from '@codemirror/state';
@@ -16,11 +22,14 @@ import { css } from '@codemirror/lang-css';
 import { json } from '@codemirror/lang-json';
 import { html } from '@codemirror/lang-html';
 import { Extension } from '@codemirror/state';
+import { defaultKeymap } from '@codemirror/commands';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { javascript } from '@codemirror/lang-javascript';
 import { diff } from '@codemirror/legacy-modes/mode/diff';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { EditorView, NodeView, NodeViewConstructor } from 'prosemirror-view';
+import { exitCode } from 'prosemirror-commands';
+import { redo, undo } from 'prosemirror-history';
 
 interface CodeBlockView extends NodeView {
   node: Node;
@@ -85,9 +94,11 @@ class CodeBlockViewImpl implements CodeBlockView {
     // 创建 CodeMirror 实例
     this.cm = new CodeMirrorView({
       doc: this.node.textContent,
+
       extensions: [
         dracula,
         drawSelection(),
+        cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
         languageExtension,
         CodeMirrorView.updateListener.of((update) =>
           this.forwardUpdate(update),
@@ -220,10 +231,72 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.cm.focus();
   }
 
+  codeMirrorKeymap() {
+    const view = this.view;
+    return [
+      { key: 'ArrowUp', run: () => this.maybeEscape('line', -1) },
+      { key: 'ArrowLeft', run: () => this.maybeEscape('char', -1) },
+      { key: 'ArrowDown', run: () => this.maybeEscape('line', 1) },
+      { key: 'ArrowRight', run: () => this.maybeEscape('char', 1) },
+      {
+        key: 'Ctrl-Enter',
+        run: () => {
+          if (!exitCode(view.state, view.dispatch)) return false;
+          view.focus();
+          return true;
+        },
+      },
+      {
+        key: 'Ctrl-z',
+        mac: 'Cmd-z',
+        run: () => undo(view.state, view.dispatch),
+      },
+      {
+        key: 'Shift-Ctrl-z',
+        mac: 'Shift-Cmd-z',
+        run: () => redo(view.state, view.dispatch),
+      },
+      {
+        key: 'Ctrl-y',
+        mac: 'Cmd-y',
+        run: () => redo(view.state, view.dispatch),
+      },
+    ];
+  }
+
   stopEvent(): boolean {
     return true;
   }
 }
+
+export const arrowHandler = (dir: 'left' | 'right' | 'up' | 'down') => {
+  return (
+    state: EditorState,
+    dispatch: (tr: Transaction) => void,
+    view: EditorView,
+  ) => {
+    if (state.selection.empty && view.endOfTextblock(dir)) {
+      const side = dir == 'left' || dir == 'up' ? -1 : 1;
+      const $head = state.selection.$head;
+      const nextPos = Selection.near(
+        state.doc.resolve(side > 0 ? $head.after() : $head.before()),
+        side,
+      );
+      if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
+        dispatch(state.tr.setSelection(nextPos));
+        return true;
+      }
+    }
+    return false;
+  };
+};
+
+export const arrowHandlers = {
+  ArrowLeft: arrowHandler('left'),
+  ArrowRight: arrowHandler('right'),
+  ArrowUp: arrowHandler('up'),
+  ArrowDown: arrowHandler('down'),
+};
 
 export const codeBlockNodeView: NodeViewConstructor = (
   node: Node,
