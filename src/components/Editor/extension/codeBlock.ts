@@ -17,7 +17,6 @@ import { json } from '@codemirror/lang-json';
 import { html } from '@codemirror/lang-html';
 import { Extension } from '@codemirror/state';
 import { exitCode } from 'prosemirror-commands';
-import { redo, undo } from 'prosemirror-history';
 import { defaultKeymap } from '@codemirror/commands';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { javascript } from '@codemirror/lang-javascript';
@@ -161,30 +160,6 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.updating = false;
   }
 
-  maybeEscape(unit: string, dir: number): boolean {
-    const { state } = this.cm;
-    const { main } = state.selection;
-    if (!main.empty) return false;
-    if (unit == 'line') {
-      const line = state.doc.lineAt(main.head);
-      if (dir < 0 ? line.from > 0 : line.to < state.doc.length) return false;
-    } else {
-      if (dir < 0 ? main.from > 0 : main.to < state.doc.length) return false;
-    }
-    const pos = this.getPos();
-    if (pos === undefined) return false;
-    const targetPos = pos + (dir < 0 ? 0 : this.node.nodeSize);
-    const selection = Selection.near(
-      this.view.state.doc.resolve(targetPos),
-      dir,
-    );
-    const tr = this.view.state.tr.setSelection(selection).scrollIntoView();
-
-    this.view.dispatch(tr);
-    this.view.focus();
-    return true;
-  }
-
   update(node: Node): boolean {
     if (node.type != this.node.type) return false;
     this.node = node;
@@ -226,13 +201,41 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.cm.focus();
   }
 
+  // 按上下左右键时, 如果光标在代码块的末尾或开头, 则移出代码块
+  maybeEscape(unit: string, dir: number): boolean {
+    const { state } = this.cm;
+    const { main } = state.selection;
+    if (!main.empty) return false;
+    if (unit == 'line') {
+      const line = state.doc.lineAt(main.head);
+      if (dir < 0 ? line.from > 0 : line.to < state.doc.length) return false;
+    } else {
+      if (dir < 0 ? main.from > 0 : main.to < state.doc.length) return false;
+    }
+    const pos = this.getPos();
+    if (pos === undefined) return false;
+    const targetPos = pos + (dir < 0 ? 0 : this.node.nodeSize);
+    const selection = Selection.near(
+      this.view.state.doc.resolve(targetPos),
+      dir,
+    );
+    const tr = this.view.state.tr.setSelection(selection).scrollIntoView();
+
+    this.view.dispatch(tr);
+    this.view.focus();
+    return true;
+  }
+
   codeMirrorKeymap() {
     const view = this.view;
     return [
+      // 按上下左右键时, 如果光标在代码块的末尾或开头, 则移出代码块
       { key: 'ArrowUp', run: () => this.maybeEscape('line', -1) },
       { key: 'ArrowLeft', run: () => this.maybeEscape('char', -1) },
       { key: 'ArrowDown', run: () => this.maybeEscape('line', 1) },
       { key: 'ArrowRight', run: () => this.maybeEscape('char', 1) },
+
+      // 按 Ctrl + Enter 键, 退出代码块, 并聚焦到下一个节点
       {
         key: 'Ctrl-Enter',
         run: () => {
@@ -241,21 +244,6 @@ class CodeBlockViewImpl implements CodeBlockView {
           return true;
         },
       },
-      {
-        key: 'Ctrl-z',
-        mac: 'Cmd-z',
-        run: () => undo(view.state, view.dispatch),
-      },
-      {
-        key: 'Shift-Ctrl-z',
-        mac: 'Shift-Cmd-z',
-        run: () => redo(view.state, view.dispatch),
-      },
-      {
-        key: 'Ctrl-y',
-        mac: 'Cmd-y',
-        run: () => redo(view.state, view.dispatch),
-      },
     ];
   }
 
@@ -263,30 +251,8 @@ class CodeBlockViewImpl implements CodeBlockView {
     return true;
   }
 }
-const arrowHandler =
-  (dir: 'left' | 'right' | 'up' | 'down'): Command =>
-  (state, dispatch, view) => {
-    if (state?.selection.empty && view?.endOfTextblock(dir)) {
-      const side = dir == 'left' || dir == 'up' ? -1 : 1;
-      const $head = state.selection.$head;
-      const nextPos = Selection.near(
-        state.doc.resolve(side > 0 ? $head.after() : $head.before()),
-        side,
-      );
-      if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
-        dispatch?.(state.tr.setSelection(nextPos));
-        return true;
-      }
-    }
-    return false;
-  };
 
-export const codeBlockKeymap: Record<string, Command> = {
-  ArrowLeft: arrowHandler('left'),
-  ArrowRight: arrowHandler('right'),
-  ArrowUp: arrowHandler('up'),
-  ArrowDown: arrowHandler('down'),
-};
+export const codeBlockKeymap: Record<string, Command> = {};
 
 export const codeBlockNodeView: NodeViewConstructor = (
   node: Node,
