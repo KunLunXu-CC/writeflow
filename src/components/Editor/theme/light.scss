@@ -119,111 +119,56 @@
     background-color: rgb(231 100 50 / 8%);
   }
 
-  // 代码块部分 
-  .cm-editor {
+  // 代码块部分
+  .writerflow-code-block {
     border-radius: 4px;
-    padding: 8px;
-    outline: none !important;
-    background-color: #1f1f1f;
-  }
-
-  .brick-markdown-preview-code {
-    padding: 0;
-    margin: 1.25em 0;
     overflow: hidden;
-    font-size: 0.8133em;
-    border-radius: 0.5em;
-    background: #282c34;
-
-    // 滚动条宽高 
-    ::-webkit-scrollbar {
-      height: 0.625em;
-      width: 0.625em;
-    }
-
-    // 滚动条的滑轨背景颜色 
-    ::-webkit-scrollbar-track {
-      background-color: transparent;
-    }
-
-    // 滑块 
-    ::-webkit-scrollbar-thumb {
-      border-radius: 0.25em;
-      background-color: rgba(#424853, 0.8);
-    }
-
-    pre {
-      margin: 0;
-    }
+    background: #25262e;
 
     &-header {
-      height: 2.25em;
+      height: 30px;
       display: flex;
       align-items: center;
-      background: #21252b;
-      padding: {
-        left: 0.625em;
-      };
+      background: #1f2126;
+      position: relative;
 
-      %dot {
-        width: 0.75em;
-        height: 0.75em;
-        margin: 0 0.25em;
-        border-radius: 50%;
-      }
+      .writerflow-code-block-point {
+        $gap: 16px;
 
-      &-red {
-        @extend %dot;
+        @mixin point($color, $left) {
+          left: $left;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: $color;
+        }
 
-        background: #fc625d;
-      }
+        top: 50%;
+        transform: translateY(-50%);
+        
+        @include point(#fc625d, 12px);
 
-      &-yellow {
-        @extend %dot;
+        &::after,
+        &::before {
+          content: '';
+          display: block;
+        }
 
-        background: #fdbc40;
-      }
+        &::after {
+          @include point(#fdbc40, $gap);
+        }
 
-      &-green {
-        @extend %dot;
-
-        background: #35cd4b;
-      }
-
-      &-lang {
-        flex: 1;
-        opacity: 0;
-        font-weight: 500;
-        font-size: 0.875em;
-        transition: all 0.4s;
-        color: rgba($color: #fff, $alpha: 80%);
-        padding: {
-          left: 1.5em;
-        };
-      }
-
-      &-copy {
-        opacity: 0;
-        margin: 0 0.625em;
-        cursor: pointer;
-        transition: all 0.4s;
-        color: rgba($color: #fff, $alpha: 80%);
-      }
-
-      &-copy:hover {
-        color: rgba($color: #fff, $alpha: 50%);
+        &::before {
+          @include point(#35cd4b, $gap * 2);
+        }
       }
     }
 
-    // 鼠标 hover 显示 lang copy
-    &-header:hover {
-      .brick-markdown-preview-code-header-lang {
-        opacity: 1 !important;
-      }
-
-      .brick-markdown-preview-code-header-copy {
-        opacity: 1 !important;
-      }
+    .cm-editor {
+      padding: 12px;
+      outline: none !important;
+      background-color: transparent;
     }
   }
 

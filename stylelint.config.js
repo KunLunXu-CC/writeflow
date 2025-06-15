@@ -1,12 +1,20 @@
 /** @type {import('stylelint').Config} */
-export default {
+const config = {
   extends: 'stylelint-config-standard-scss',
   rules: {
-    'scss/at-rule-no-unknown': [
+    'at-rule-no-deprecated': [
       true,
       {
-        ignoreAtRules: ['tailwind', 'apply', 'variants', 'responsive', 'screen'],
+        ignoreAtRules: [
+          'tailwind',
+          'apply',
+          'variants',
+          'responsive',
+          'screen',
+        ],
       },
     ],
   },
 };
+
+export default config;

@@ -29,6 +29,7 @@
     "keymap",
     "prosemirror",
     "textblock",
+    "writerflow",
     "Yahei"
   ],
   "stylelint.validate": ["css", "scss", "sass", "less"], // 插件 styleint 需要检测的文件

@@ -1,19 +1,13 @@
+// 参考: https://prosemirror.net/examples/codemirror/
 import {
   defaultHighlightStyle,
   StreamLanguage,
   syntaxHighlighting,
 } from '@codemirror/language';
-import {
-  Command,
-  Selection,
-  EditorState,
-  Transaction,
-  TextSelection,
-} from 'prosemirror-state';
+import { Selection, TextSelection } from 'prosemirror-state';
 import {
   ViewUpdate,
   drawSelection,
-  keymap as cmKeymap,
   EditorView as CodeMirrorView,
 } from '@codemirror/view';
 import { Text } from '@codemirror/state';
@@ -22,44 +16,11 @@ import { css } from '@codemirror/lang-css';
 import { json } from '@codemirror/lang-json';
 import { html } from '@codemirror/lang-html';
 import { Extension } from '@codemirror/state';
-import { exitCode } from 'prosemirror-commands';
-import { undo, redo } from 'prosemirror-history';
-import { defaultKeymap } from '@codemirror/commands';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { javascript } from '@codemirror/lang-javascript';
 import { diff } from '@codemirror/legacy-modes/mode/diff';
+import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { EditorView, NodeView, NodeViewConstructor } from 'prosemirror-view';
-
-// 语言支持映射
-const LANGUAGE_MAP: { [key: string]: () => Extension } = {
-  css,
-  html,
-  json,
-  javascript,
-  js: javascript,
-  ts: () => javascript({ typescript: true }),
-  typescript: () => javascript({ typescript: true }),
-  jsx: () => javascript({ jsx: true }),
-  tsx: () => javascript({ jsx: true, typescript: true }),
-
-  diff: () => StreamLanguage.define(diff),
-};
-
-// 获取语言扩展
-const getLanguageExtension = (language: string) => {
-  if (!language) {
-    return syntaxHighlighting(defaultHighlightStyle);
-  }
-
-  const lang = LANGUAGE_MAP[language.toLowerCase()];
-  return lang ? lang() : syntaxHighlighting(defaultHighlightStyle);
-};
-
-type KeyBinding = {
-  key: string;
-  mac?: string;
-  run: () => boolean;
-};
 
 interface CodeBlockView extends NodeView {
   node: Node;
@@ -71,11 +32,37 @@ interface CodeBlockView extends NodeView {
   stopEvent(): boolean;
   update(node: Node): boolean;
   getPos: () => number | undefined;
-  codeMirrorKeymap(): KeyBinding[];
   forwardUpdate(update: ViewUpdate): void;
   maybeEscape(unit: string, dir: number): boolean;
   setSelection(anchor: number, head: number): void;
 }
+
+// 语言支持映射
+const LANGUAGE_MAP: { [key: string]: () => Extension } = {
+  // '正则': 语言
+  '^css': css,
+  '^html': html,
+  '^json': json,
+  '^diff': () => StreamLanguage.define(diff),
+  '^(shell|sh|bash)': () => StreamLanguage.define(shell),
+  '^(javascript|js|typescript|ts)': () => javascript({ typescript: true }),
+  '^(jsx|tsx)': () => javascript({ jsx: true, typescript: true }),
+};
+
+// 获取语言扩展
+const getLanguageExtension = (language: string) => {
+  if (!language) {
+    return syntaxHighlighting(defaultHighlightStyle);
+  }
+
+  for (const key in LANGUAGE_MAP) {
+    if (new RegExp(key, 'i').test(language)) {
+      return LANGUAGE_MAP[key]();
+    }
+  }
+
+  return syntaxHighlighting(defaultHighlightStyle);
+};
 
 class CodeBlockViewImpl implements CodeBlockView {
   node: Node;
@@ -102,15 +89,27 @@ class CodeBlockViewImpl implements CodeBlockView {
         dracula,
         drawSelection(),
         languageExtension,
-        cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
         CodeMirrorView.updateListener.of((update) =>
           this.forwardUpdate(update),
         ),
       ],
     });
 
-    this.dom = this.cm.dom; // 节点的 DOM 节点设置为 CodeMirror 的 DOM 节点
     this.updating = false; // 状态值: 用于避免外层和内层编辑器之间的更新循环
+    this.dom = this.createDom(); // 节点的 DOM 节点设置为 CodeMirror 的 DOM 节点
+  }
+
+  createDom(): HTMLElement {
+    const wrap = document.createElement('div');
+    wrap.className = 'writerflow-code-block';
+
+    const header = document.createElement('div');
+    header.className = 'writerflow-code-block-header';
+    header.innerHTML = `<div class="writerflow-code-block-point"/>`;
+
+    wrap.appendChild(header);
+    wrap.appendChild(this.cm.dom);
+    return wrap;
   }
 
   forwardUpdate(update: ViewUpdate): void {
@@ -154,38 +153,6 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.updating = true;
     this.cm.dispatch({ selection: { anchor, head } });
     this.updating = false;
-  }
-
-  codeMirrorKeymap(): KeyBinding[] {
-    return [
-      { key: 'ArrowUp', run: () => this.maybeEscape('line', -1) },
-      { key: 'ArrowLeft', run: () => this.maybeEscape('char', -1) },
-      { key: 'ArrowDown', run: () => this.maybeEscape('line', 1) },
-      { key: 'ArrowRight', run: () => this.maybeEscape('char', 1) },
-      {
-        key: 'Ctrl-Enter',
-        run: () => {
-          if (!exitCode(this.view.state, this.view.dispatch)) return false;
-          this.view.focus();
-          return true;
-        },
-      },
-      {
-        key: 'Ctrl-z',
-        mac: 'Cmd-z',
-        run: () => undo(this.view.state, this.view.dispatch),
-      },
-      {
-        key: 'Shift-Ctrl-z',
-        mac: 'Shift-Cmd-z',
-        run: () => redo(this.view.state, this.view.dispatch),
-      },
-      {
-        key: 'Ctrl-y',
-        mac: 'Cmd-y',
-        run: () => redo(this.view.state, this.view.dispatch),
-      },
-    ];
   }
 
   maybeEscape(unit: string, dir: number): boolean {
@@ -258,37 +225,8 @@ class CodeBlockViewImpl implements CodeBlockView {
   }
 }
 
-const arrowHandler = (dir: 'left' | 'right' | 'up' | 'down'): Command => {
-  return (
-    state: EditorState,
-    dispatch?: (tr: Transaction) => void,
-    view?: EditorView,
-  ): boolean => {
-    if (state.selection.empty && view?.endOfTextblock(dir)) {
-      const side = dir == 'left' || dir == 'up' ? -1 : 1;
-      const $head = state.selection.$head;
-      const nextPos = Selection.near(
-        state.doc.resolve(side > 0 ? $head.after() : $head.before()),
-        side,
-      );
-      if (nextPos.$head && nextPos.$head.parent.type.name == 'code_block') {
-        dispatch?.(state.tr.setSelection(nextPos));
-        return true;
-      }
-    }
-    return false;
-  };
-};
-
 export const codeBlockNodeView: NodeViewConstructor = (
   node: Node,
   view: EditorView,
   getPos: () => number | undefined,
 ) => new CodeBlockViewImpl(node, view, getPos);
-
-export const arrowHandlers: { [key: string]: Command } = {
-  ArrowLeft: arrowHandler('left'),
-  ArrowRight: arrowHandler('right'),
-  ArrowUp: arrowHandler('up'),
-  ArrowDown: arrowHandler('down'),
-};
