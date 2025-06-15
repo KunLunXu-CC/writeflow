@@ -79,7 +79,8 @@ export const taskListInputRule = new InputRule(
   },
 );
 
-export const listKeymap: Record<string, Command> = {
+// 这里不能直接返回 Record<string, Command> 类型, 否则会报错(循环引用问题)
+export const listKeymap = (): Record<string, Command> => ({
   // 列表: 按 enter 键, 会拆分列表项
   Enter: chainCommands(
     splitListItem(mySchema.nodes.list_item),
@@ -95,4 +96,4 @@ export const listKeymap: Record<string, Command> = {
     liftListItem(mySchema.nodes.list_item),
     liftListItem(mySchema.nodes.task_item),
   ),
-};
+});

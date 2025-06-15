@@ -5,7 +5,7 @@ import { codeBlockKeymap } from '@/components/Editor/extension/codeBlock';
 
 const customKeymap = [
   keymap(codeBlockKeymap),
-  keymap(listKeymap),
+  keymap(listKeymap()),
   keymap(baseKeymap),
 ];
 
