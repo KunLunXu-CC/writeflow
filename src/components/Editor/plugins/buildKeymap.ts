@@ -5,20 +5,14 @@ import { baseKeymap } from 'prosemirror-commands';
 import { listKeymap } from '@/components/Editor/extension/list';
 import { codeBlockKeymap } from '@/components/Editor/extension/codeBlock';
 
-const isMac = window.navigator.userAgent.includes('Mac');
+const isMac = globalThis.navigator?.userAgent.includes('Mac');
 const modKey = isMac ? 'Mod-' : 'Ctrl-';
 
 const customKeymap: Record<string, Command> = {
   // 撤销
-  [`${modKey}z`]: (state, dispatch) => {
-    undo(state, dispatch);
-    return true;
-  },
+  [`${modKey}z`]: undo,
   // 重做
-  [`${modKey}Shift-z`]: (state, dispatch) => {
-    redo(state, dispatch);
-    return true;
-  },
+  [`${modKey}Shift-z`]: redo,
 };
 
 const myKeymap = [

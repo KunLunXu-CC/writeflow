@@ -24,6 +24,7 @@ import { diff } from '@codemirror/legacy-modes/mode/diff';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { Command, Selection, TextSelection } from 'prosemirror-state';
 import { EditorView, NodeView, NodeViewConstructor } from 'prosemirror-view';
+import { redo, undo } from 'prosemirror-history';
 
 interface CodeBlockView extends NodeView {
   node: Node;
@@ -234,7 +235,6 @@ class CodeBlockViewImpl implements CodeBlockView {
       { key: 'ArrowLeft', run: () => this.maybeEscape('char', -1) },
       { key: 'ArrowDown', run: () => this.maybeEscape('line', 1) },
       { key: 'ArrowRight', run: () => this.maybeEscape('char', 1) },
-
       // 按 Ctrl + Enter 键, 退出代码块, 并聚焦到下一个节点
       {
         key: 'Ctrl-Enter',
@@ -243,6 +243,17 @@ class CodeBlockViewImpl implements CodeBlockView {
           view.focus();
           return true;
         },
+      },
+      // 按 Ctrl + z 键, 撤销
+      {
+        key: 'Ctrl-z',
+        mac: 'Cmd-z',
+        run: () => undo(view.state, view.dispatch),
+      },
+      {
+        key: 'Shift-Ctrl-z',
+        mac: 'Shift-Cmd-z',
+        run: () => redo(view.state, view.dispatch),
       },
     ];
   }
