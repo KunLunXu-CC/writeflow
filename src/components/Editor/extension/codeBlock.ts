@@ -17,14 +17,16 @@ import { json } from '@codemirror/lang-json';
 import { html } from '@codemirror/lang-html';
 import { Extension } from '@codemirror/state';
 import { exitCode } from 'prosemirror-commands';
+import { redo, undo } from 'prosemirror-history';
 import { defaultKeymap } from '@codemirror/commands';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import { javascript } from '@codemirror/lang-javascript';
 import { diff } from '@codemirror/legacy-modes/mode/diff';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
+import { textblockTypeInputRule } from 'prosemirror-inputrules';
 import { Command, Selection, TextSelection } from 'prosemirror-state';
 import { EditorView, NodeView, NodeViewConstructor } from 'prosemirror-view';
-import { redo, undo } from 'prosemirror-history';
+import mySchema from '@/components/Editor/schema';
 
 interface CodeBlockView extends NodeView {
   node: Node;
@@ -270,3 +272,9 @@ export const codeBlockNodeView: NodeViewConstructor = (
   view: EditorView,
   getPos: () => number | undefined,
 ) => new CodeBlockViewImpl(node, view, getPos);
+
+export const codeBlockInputRule = textblockTypeInputRule(
+  /^```(\w+)?\s$/,
+  mySchema.nodes.code_block,
+  (match) => ({ language: match[1] }),
+);

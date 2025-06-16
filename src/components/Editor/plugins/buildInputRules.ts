@@ -11,8 +11,9 @@ import {
   textblockTypeInputRule,
   // smartQuotes,
 } from 'prosemirror-inputrules';
-import { tableInputRule } from '@/components/Editor/extension/tableBlock';
 import { taskListInputRule } from '@/components/Editor/extension/list';
+import { tableInputRule } from '@/components/Editor/extension/tableBlock';
+import { codeBlockInputRule } from '@/components/Editor/extension/codeBlock';
 import mySchema from '@/components/Editor/schema';
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。
@@ -23,6 +24,7 @@ const customInputRules = inputRules({
     emDash, // 将双破折号转换为长破折号, 比如 -- 转换为 —
     tableInputRule, // 表格, 将一个以 |- 开头的文本块转换为表格
     taskListInputRule, // 任务列表, 将一个以 [ ] 开头的文本块转换为任务列表。
+    codeBlockInputRule, // 代码块, 将一个以三个反引号开头的文本块转换为代码块。
     // 块引用, 将一个以 > 开头的文本块转换为块引用。
     wrappingInputRule(/^\s*>\s$/, mySchema.nodes.blockquote),
     // 有序列表, 将一个以数字后跟一个点开头的文本块转换为有序列表。
@@ -34,12 +36,7 @@ const customInputRules = inputRules({
     ),
     // 无序列表, 将一个以破折号、加号或星号开头的文本块转换为无序列表。
     wrappingInputRule(/^\s*([-+*])\s$/, mySchema.nodes.bullet_list),
-    // 代码块, 将一个以三个反引号开头的文本块转换为代码块。
-    textblockTypeInputRule(
-      /^```(\w+)\s$/,
-      mySchema.nodes.code_block,
-      (match) => ({ language: match[1] }),
-    ),
+
     // 标题, 将一个以最多为 6 个 `#` 字符后跟一个空格的文本块转换为对应级别的标题。
     textblockTypeInputRule(
       new RegExp('^(#{1,6})\\s$'),
