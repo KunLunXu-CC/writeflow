@@ -95,6 +95,7 @@ class CodeBlockViewImpl implements CodeBlockView {
       extensions: [
         dracula,
         drawSelection(),
+        // 当多个命令绑定到同一个快捷键时, 会按照它们在数组中的顺序执行, 并且一旦某个命令返回 true 后续的命令就不会执行了
         cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
         languageExtension,
         CodeMirrorView.updateListener.of((update) =>
@@ -204,17 +205,19 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.cm.focus();
   }
 
-  // 按上下左右键时, 如果光标在代码块的末尾或开头, 则移出代码块
+  // 按上下左右键时, 如果光标在代码块的末尾或开头或行首或行尾, 则关闭移出代码块
   maybeEscape(unit: string, dir: number): boolean {
     const { state } = this.cm;
     const { main } = state.selection;
     if (!main.empty) return false;
+
     if (unit == 'line') {
       const line = state.doc.lineAt(main.head);
       if (dir < 0 ? line.from > 0 : line.to < state.doc.length) return false;
     } else {
       if (dir < 0 ? main.from > 0 : main.to < state.doc.length) return false;
     }
+
     const pos = this.getPos();
     if (pos === undefined) return false;
     const targetPos = pos + (dir < 0 ? 0 : this.node.nodeSize);
@@ -229,10 +232,34 @@ class CodeBlockViewImpl implements CodeBlockView {
     return true;
   }
 
+  // 光标在代码块开始位置, 「删除键」删除整个代码块
+  deleteCodeBlock() {
+    const isNotEmpty = this.cm.state.doc.length !== 0; // 代码块内容不为空
+
+    // 1. 如果代码块内容不为空, 不删除代码块, 返回 false(继续执行默认的 Backspace 行为)
+    if (isNotEmpty) {
+      return false;
+    }
+
+    // 2. 如果代码块内容为空, 删除整个代码块
+    const pos = this.getPos();
+    if (pos === undefined) {
+      return false;
+    }
+
+    // 3. 创建事务来删除整个代码块
+    const tr = this.view.state.tr.delete(pos, pos + this.node.nodeSize);
+    this.view.dispatch(tr);
+    this.view.focus();
+    return true;
+  }
+
   codeMirrorKeymap() {
     const view = this.view;
     return [
-      // 按上下左右键时, 如果光标在代码块的末尾或开头, 则移出代码块
+      // 在最前面删除, 希望可以删除代码块
+      { key: 'Backspace', run: () => this.deleteCodeBlock() },
+      // 按上下左右键时, 如果光标在代码块的末尾或开头或行首或行尾, 则关闭移出代码块
       { key: 'ArrowUp', run: () => this.maybeEscape('line', -1) },
       { key: 'ArrowLeft', run: () => this.maybeEscape('char', -1) },
       { key: 'ArrowDown', run: () => this.maybeEscape('line', 1) },
@@ -252,6 +279,7 @@ class CodeBlockViewImpl implements CodeBlockView {
         mac: 'Cmd-z',
         run: () => undo(view.state, view.dispatch),
       },
+      // 按 Ctrl + Shift + z 键, 重做
       {
         key: 'Shift-Ctrl-z',
         mac: 'Shift-Cmd-z',
