@@ -37,10 +37,12 @@ interface CodeBlockView extends NodeView {
   selectNode(): void;
   stopEvent(): boolean;
   update(node: Node): boolean;
+  deleteCodeBlock: () => boolean;
   getPos: () => number | undefined;
   forwardUpdate(update: ViewUpdate): void;
-  maybeEscape(unit: string, dir: number): boolean;
   setSelection(anchor: number, head: number): void;
+  maybeEscape(isLine: boolean, isTop: boolean): boolean;
+  hasContentAround: () => { before: boolean; after: boolean };
 }
 
 // 语言支持映射
@@ -205,28 +207,51 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.cm.focus();
   }
 
-  // 按上下左右键时, 如果光标在代码块的末尾或开头或行首或行尾, 则关闭移出代码块
-  maybeEscape(unit: string, dir: number): boolean {
+  // 检查代码块前后是否有内容
+  hasContentAround(): { before: boolean; after: boolean } {
+    const pos = this.getPos() ?? 0;
+    const afterPos = pos + this.node.nodeSize;
+    const docSize = this.view.state.doc.content.size;
+
+    return {
+      before: pos > 0,
+      after: afterPos < docSize,
+    };
+  }
+
+  // 移出代码块
+  maybeEscape(isLine: boolean, isTop: boolean): boolean {
     const { state } = this.cm;
     const { main } = state.selection;
-    if (!main.empty) return false;
 
-    if (unit == 'line') {
-      const line = state.doc.lineAt(main.head);
-      if (dir < 0 ? line.from > 0 : line.to < state.doc.length) return false;
-    } else {
-      if (dir < 0 ? main.from > 0 : main.to < state.doc.length) return false;
+    // 1. 如果有选中文本, 就不做处理
+    if (!main.empty) {
+      return false;
     }
 
-    const pos = this.getPos();
-    if (pos === undefined) return false;
-    const targetPos = pos + (dir < 0 ? 0 : this.node.nodeSize);
-    const selection = Selection.near(
-      this.view.state.doc.resolve(targetPos),
-      dir,
-    );
-    const tr = this.view.state.tr.setSelection(selection).scrollIntoView();
+    // 2. 边界判断: 如果光标不在代码块的行首或行尾或开始或结束位置, 则不进行处理
+    if (isLine) {
+      const line = state.doc.lineAt(main.head);
+      const isNotBoundary = isTop ? line.from > 0 : line.to < state.doc.length;
+      if (isNotBoundary) return false;
+    } else {
+      const isNotBoundary = isTop ? main.from > 0 : main.to < state.doc.length;
+      if (isNotBoundary) return false;
+    }
 
+    const targetPos = (this.getPos() ?? 0) + (isTop ? 0 : this.node.nodeSize);
+    const { before, after } = this.hasContentAround();
+
+    // 3. 如果有内容, 则不插入空行, 否则插入空行
+    const tr = (isTop ? before : after)
+      ? this.view.state.tr
+      : this.view.state.tr.insert(targetPos, this.view.state.schema.text('\n'));
+
+    // 4. 创建选择
+    const selection = Selection.near(tr.doc.resolve(targetPos), isTop ? -1 : 1);
+
+    // 5. 应用事务
+    tr.setSelection(selection);
     this.view.dispatch(tr);
     this.view.focus();
     return true;
@@ -258,12 +283,24 @@ class CodeBlockViewImpl implements CodeBlockView {
     const view = this.view;
     return [
       // 在最前面删除, 希望可以删除代码块
-      { key: 'Backspace', run: () => this.deleteCodeBlock() },
+      // { key: 'Backspace', run: () => this.deleteCodeBlock() },
       // 按上下左右键时, 如果光标在代码块的末尾或开头或行首或行尾, 则关闭移出代码块
-      { key: 'ArrowUp', run: () => this.maybeEscape('line', -1) },
-      { key: 'ArrowLeft', run: () => this.maybeEscape('char', -1) },
-      { key: 'ArrowDown', run: () => this.maybeEscape('line', 1) },
-      { key: 'ArrowRight', run: () => this.maybeEscape('char', 1) },
+      {
+        key: 'ArrowUp',
+        run: () => this.maybeEscape(true, true),
+      },
+      {
+        key: 'ArrowLeft',
+        run: () => this.maybeEscape(false, true),
+      },
+      {
+        key: 'ArrowDown',
+        run: () => this.maybeEscape(true, false),
+      },
+      {
+        key: 'ArrowRight',
+        run: () => this.maybeEscape(false, false),
+      },
       // 按 Ctrl + Enter 键, 退出代码块, 并聚焦到下一个节点
       {
         key: 'Ctrl-Enter',
@@ -293,14 +330,19 @@ class CodeBlockViewImpl implements CodeBlockView {
   }
 }
 
+// 代码块快捷键
 export const codeBlockKeymap: Record<string, Command> = {};
 
-export const codeBlockNodeView: NodeViewConstructor = (
-  node: Node,
-  view: EditorView,
-  getPos: () => number | undefined,
-) => new CodeBlockViewImpl(node, view, getPos);
+/**
+ * @param node 节点
+ * @param view 视图
+ * @param getPos 获取位置, 返回当前节点在文档中的绝对位置(以字符数计算)
+ * @returns 代码块节点视图
+ */
+export const codeBlockNodeView: NodeViewConstructor = (node, view, getPos) =>
+  new CodeBlockViewImpl(node, view, getPos);
 
+// 代码块输入规则
 export const codeBlockInputRule = textblockTypeInputRule(
   /^```(\w+)?\s$/,
   mySchema.nodes.code_block,
