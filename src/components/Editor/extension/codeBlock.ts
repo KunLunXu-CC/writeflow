@@ -37,10 +37,10 @@ interface CodeBlockView extends NodeView {
   selectNode(): void;
   stopEvent(): boolean;
   update(node: Node): boolean;
-  deleteCodeBlock: () => boolean;
   getPos: () => number | undefined;
   forwardUpdate(update: ViewUpdate): void;
   setSelection(anchor: number, head: number): void;
+  deleteCodeBlock: (isForce?: boolean) => boolean;
   maybeEscape(isLine: boolean, isTop: boolean): boolean;
   hasContentAround: () => { before: boolean; after: boolean };
 }
@@ -166,13 +166,24 @@ class CodeBlockViewImpl implements CodeBlockView {
     this.updating = false;
   }
 
+  // ProseMirror 节点更新方法: 用于同步 ProseMirror 文档中的代码块节点与 CodeMirror 编辑器之间的内容
   update(node: Node): boolean {
-    if (node.type != this.node.type) return false;
+    // 1. 检查节点类型是否匹配
+    if (node.type !== this.node.type) {
+      return false;
+    }
+
+    // 2. 更新节点
     this.node = node;
+
+    // 3. 如果正在更新, 则返回 true
     if (this.updating) return true;
+
+    // 4. 更新文本
     const newText = node.textContent;
     const curText = this.cm.state.doc.toString();
-    if (newText != curText) {
+
+    if (newText !== curText) {
       let start = 0;
       let curEnd = curText.length;
       let newEnd = newText.length;
@@ -243,9 +254,11 @@ class CodeBlockViewImpl implements CodeBlockView {
     const { before, after } = this.hasContentAround();
 
     // 3. 如果有内容, 则不插入空行, 否则插入空行
-    const tr = (isTop ? before : after)
-      ? this.view.state.tr
-      : this.view.state.tr.insert(targetPos, this.view.state.schema.text('\n'));
+    let tr = this.view.state.tr;
+    if (!(isTop ? before : after)) {
+      const pNode = this.view.state.schema.nodes.paragraph.createAndFill();
+      tr = tr.replaceWith(targetPos, targetPos, pNode!);
+    }
 
     // 4. 创建选择
     const selection = Selection.near(tr.doc.resolve(targetPos), isTop ? -1 : 1);
@@ -257,22 +270,17 @@ class CodeBlockViewImpl implements CodeBlockView {
     return true;
   }
 
-  // 光标在代码块开始位置, 「删除键」删除整个代码块
-  deleteCodeBlock() {
+  // 删除整个代码块, 默认情况下, 只有代码块为空时才允许按「删除键」删除整个代码块
+  deleteCodeBlock(isForce: boolean = false) {
     const isNotEmpty = this.cm.state.doc.length !== 0; // 代码块内容不为空
 
     // 1. 如果代码块内容不为空, 不删除代码块, 返回 false(继续执行默认的 Backspace 行为)
-    if (isNotEmpty) {
+    if (!isForce && isNotEmpty) {
       return false;
     }
 
-    // 2. 如果代码块内容为空, 删除整个代码块
-    const pos = this.getPos();
-    if (pos === undefined) {
-      return false;
-    }
-
-    // 3. 创建事务来删除整个代码块
+    // 2. 创建事务来删除整个代码块
+    const pos = this.getPos() ?? 0;
     const tr = this.view.state.tr.delete(pos, pos + this.node.nodeSize);
     this.view.dispatch(tr);
     this.view.focus();
@@ -282,8 +290,10 @@ class CodeBlockViewImpl implements CodeBlockView {
   codeMirrorKeymap() {
     const view = this.view;
     return [
-      // 在最前面删除, 希望可以删除代码块
-      // { key: 'Backspace', run: () => this.deleteCodeBlock() },
+      // 按「删除键」删除整个代码块, 默认情况下, 只有代码块为空时才允许按「删除键」删除整个代码块
+      { key: 'Backspace', run: () => this.deleteCodeBlock() },
+      // 按 Ctrl + 删除键, 删除整个代码块, 无论代码块是否为空
+      { key: 'Ctrl-Backspace', run: () => this.deleteCodeBlock(true) },
       // 按上下左右键时, 如果光标在代码块的末尾或开头或行首或行尾, 则关闭移出代码块
       {
         key: 'ArrowUp',
