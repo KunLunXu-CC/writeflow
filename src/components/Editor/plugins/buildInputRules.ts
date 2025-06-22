@@ -14,6 +14,7 @@ import {
 import { taskListInputRule } from '@/components/Editor/extension/list';
 import { tableInputRule } from '@/components/Editor/extension/tableBlock';
 import { codeBlockInputRule } from '@/components/Editor/extension/codeBlock';
+import { inlineCodeInputRule } from '@/components/Editor/extension/inlineCode';
 import mySchema from '@/components/Editor/schema';
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。
@@ -25,6 +26,7 @@ const customInputRules = inputRules({
     tableInputRule, // 表格, 将一个以 |- 开头的文本块转换为表格
     taskListInputRule, // 任务列表, 将一个以 [ ] 开头的文本块转换为任务列表。
     codeBlockInputRule, // 代码块, 将一个以三个反引号开头的文本块转换为代码块。
+    inlineCodeInputRule, // 内联代码, 将 `code` 转换为内联代码块。
     // 块引用, 将一个以 > 开头的文本块转换为块引用。
     wrappingInputRule(/^\s*>\s$/, mySchema.nodes.blockquote),
     // 有序列表, 将一个以数字后跟一个点开头的文本块转换为有序列表。
