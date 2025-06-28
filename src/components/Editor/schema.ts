@@ -4,6 +4,16 @@ import { nodes } from 'prosemirror-schema-basic';
 import { tableNodes } from '@/components/Editor/extension/tableBlock';
 import { listNodes } from '@/components/Editor/extension/list';
 
+const Mark = schema.spec.marks.update('code', {
+  parseDOM: [{ tag: 'code' }],
+  code: true,
+  excludes: '_',
+  exitable: true,
+  toDOM: () => {
+    return ['code', 0];
+  },
+});
+
 const mySchema = new Schema({
   nodes: {
     ...nodes,
@@ -16,7 +26,7 @@ const mySchema = new Schema({
       },
     },
   },
-  marks: schema.spec.marks,
+  marks: Mark,
 });
 
 export default mySchema;
