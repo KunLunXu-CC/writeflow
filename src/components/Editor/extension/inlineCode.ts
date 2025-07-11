@@ -1,9 +1,11 @@
-import { InputRule } from 'prosemirror-inputrules';
-import { Command, EditorState } from 'prosemirror-state';
+import {
+  isEndInParagraph,
+  isStartInParagraph,
+} from '@/components/Editor/utils';
 import { Mark } from 'prosemirror-model';
-import { Transaction } from 'prosemirror-state';
+import { Command } from 'prosemirror-state';
+import { InputRule } from 'prosemirror-inputrules';
 import mySchema from '@/components/Editor/schema';
-import isEndInParagraph from '@/components/Editor/utils/isEndInParagraph';
 
 const inputRegex = /(^|[^`])`([^`]+)`(?!`)/;
 
@@ -25,13 +27,7 @@ export const inlineCodeInputRule = new InputRule(
   },
 );
 
-const handleExit = ({
-  state,
-  dispatch,
-}: {
-  state: EditorState;
-  dispatch?: (tr: Transaction) => void;
-}) => {
+const handleExitToRight: Command = (state, dispatch) => {
   const { tr } = state;
   const mark = mySchema.marks.code;
   const $from = state.selection.$from;
@@ -40,7 +36,32 @@ const handleExit = ({
     (m: Mark | null | undefined) => m?.type.name === mark.name,
   );
 
-  if (isEndInParagraph({ state }) && isInMark) {
+  if (isEndInParagraph(state) && isInMark) {
+    tr.removeStoredMark(mark); // 移除 storedMark
+    tr.insertText('\u00A0', $from.pos); // 插入空格
+    dispatch?.(tr);
+
+    return true;
+  }
+
+  return false;
+};
+
+const handleExitToLeft: Command = (state, dispatch) => {
+  const { tr } = state;
+  const mark = mySchema.marks.code;
+  const $from = state.selection.$from;
+  console.log(
+    '%c [ $from ]-54',
+    'font-size:13px; background:#783ea8; color:#bc82ec;',
+    $from,
+  );
+  const currentMarks = $from.marks();
+  const isInMark = !!currentMarks.find(
+    (m: Mark | null | undefined) => m?.type.name === mark.name,
+  );
+
+  if (isStartInParagraph(state) && isInMark) {
     tr.removeStoredMark(mark); // 移除 storedMark
     tr.insertText('\u00A0', $from.pos); // 插入空格
     dispatch?.(tr);
@@ -53,5 +74,6 @@ const handleExit = ({
 
 // 内联代码快捷键
 export const inlineCodeKeymap: Record<string, Command> = {
-  ArrowRight: (state, dispatch) => handleExit({ state, dispatch }),
+  ArrowRight: handleExitToRight,
+  ArrowLeft: handleExitToLeft,
 };
