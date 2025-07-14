@@ -27,51 +27,35 @@ export const inlineCodeInputRule = new InputRule(
   },
 );
 
-const handleExitToRight: Command = (state, dispatch) => {
-  const { tr } = state;
-  const mark = mySchema.marks.code;
-  const $from = state.selection.$from;
-  const currentMarks = $from.marks();
-  const isInMark = !!currentMarks.find(
-    (m: Mark | null | undefined) => m?.type.name === mark.name,
-  );
+const maybeEscape =
+  (dir: 'left' | 'right'): Command =>
+  (state, dispatch) => {
+    const mark = mySchema.marks.code;
+    const $from = state.selection.$from;
+    const currentMarks = $from.marks();
 
-  if (isEndInParagraph(state) && isInMark) {
+    const isInMark = !!currentMarks.find(
+      (m: Mark | null | undefined) => m?.type.name === mark.name,
+    );
+
+    if (!isInMark || !isEndInParagraph(state) || !isStartInParagraph(state)) {
+      return false;
+    }
+
+    const { tr } = state;
     tr.removeStoredMark(mark); // 移除 storedMark
     tr.insertText('\u00A0', $from.pos); // 插入空格
-    dispatch?.(tr);
 
-    return true;
-  }
-
-  return false;
-};
-
-const handleExitToLeft: Command = (state, dispatch) => {
-  const { tr } = state;
-  const mark = mySchema.marks.code;
-  const $from = state.selection.$from;
-
-  const currentMarks = $from.marks();
-  const isInMark = !!currentMarks.find(
-    (m: Mark | null | undefined) => m?.type.name === mark.name,
-  );
-
-  if (isStartInParagraph(state) && isInMark) {
-    tr.removeStoredMark(mark); // 移除 storedMark
-    tr.insertText('\u00A0', $from.pos); // 插入空格
-    tr.setSelection(TextSelection.create(tr.doc, $from.pos));
+    if (dir === 'left') {
+      tr.setSelection(TextSelection.create(tr.doc, $from.pos));
+    }
 
     dispatch?.(tr);
-
     return true;
-  }
-
-  return false;
-};
+  };
 
 // 内联代码快捷键
 export const inlineCodeKeymap: Record<string, Command> = {
-  ArrowRight: handleExitToRight,
-  ArrowLeft: handleExitToLeft,
+  ArrowRight: maybeEscape('left'),
+  ArrowLeft: maybeEscape('right'),
 };
