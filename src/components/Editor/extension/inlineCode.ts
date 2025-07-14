@@ -3,7 +3,7 @@ import {
   isStartInParagraph,
 } from '@/components/Editor/utils';
 import { Mark } from 'prosemirror-model';
-import { Command } from 'prosemirror-state';
+import { Command, TextSelection } from 'prosemirror-state';
 import { InputRule } from 'prosemirror-inputrules';
 import mySchema from '@/components/Editor/schema';
 
@@ -51,11 +51,7 @@ const handleExitToLeft: Command = (state, dispatch) => {
   const { tr } = state;
   const mark = mySchema.marks.code;
   const $from = state.selection.$from;
-  console.log(
-    '%c [ $from ]-54',
-    'font-size:13px; background:#783ea8; color:#bc82ec;',
-    $from,
-  );
+
   const currentMarks = $from.marks();
   const isInMark = !!currentMarks.find(
     (m: Mark | null | undefined) => m?.type.name === mark.name,
@@ -64,6 +60,8 @@ const handleExitToLeft: Command = (state, dispatch) => {
   if (isStartInParagraph(state) && isInMark) {
     tr.removeStoredMark(mark); // 移除 storedMark
     tr.insertText('\u00A0', $from.pos); // 插入空格
+    tr.setSelection(TextSelection.create(tr.doc, $from.pos));
+
     dispatch?.(tr);
 
     return true;
