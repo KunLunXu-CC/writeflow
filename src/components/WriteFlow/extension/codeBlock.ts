@@ -26,7 +26,7 @@ import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { textblockTypeInputRule } from 'prosemirror-inputrules';
 import { Command, Selection, TextSelection } from 'prosemirror-state';
 import { EditorView, NodeView, NodeViewConstructor } from 'prosemirror-view';
-import mySchema from '@/components/Editor/schema';
+import mySchema from '@/components/WriteFlow/schema';
 
 interface CodeBlockView extends NodeView {
   node: Node;

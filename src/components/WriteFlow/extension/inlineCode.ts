@@ -1,11 +1,11 @@
 import {
   isEndInParagraph,
   isStartInParagraph,
-} from '@/components/Editor/utils';
+} from '@/components/WriteFlow/utils';
 import { Mark } from 'prosemirror-model';
 import { Command, TextSelection } from 'prosemirror-state';
 import { InputRule } from 'prosemirror-inputrules';
-import mySchema from '@/components/Editor/schema';
+import mySchema from '@/components/WriteFlow/schema';
 
 const inputRegex = /(^|[^`])`([^`]+)`(?!`)/;
 

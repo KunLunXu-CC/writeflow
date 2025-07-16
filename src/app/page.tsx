@@ -1,10 +1,10 @@
 'use client';
-import Editor from '@/components/Editor';
+import WriteFlow from '@/components/WriteFlow';
 
 export default function Home() {
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <Editor />
+      <WriteFlow />
     </div>
   );
 }

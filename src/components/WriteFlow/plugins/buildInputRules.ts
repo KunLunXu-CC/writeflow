@@ -11,11 +11,11 @@ import {
   textblockTypeInputRule,
   // smartQuotes,
 } from 'prosemirror-inputrules';
-import { taskListInputRule } from '@/components/Editor/extension/list';
-import { tableInputRule } from '@/components/Editor/extension/tableBlock';
-import { codeBlockInputRule } from '@/components/Editor/extension/codeBlock';
-import { inlineCodeInputRule } from '@/components/Editor/extension/inlineCode';
-import mySchema from '@/components/Editor/schema';
+import { taskListInputRule } from '@/components/WriteFlow/extension/list';
+import { tableInputRule } from '@/components/WriteFlow/extension/tableBlock';
+import { codeBlockInputRule } from '@/components/WriteFlow/extension/codeBlock';
+import { inlineCodeInputRule } from '@/components/WriteFlow/extension/inlineCode';
+import mySchema from '@/components/WriteFlow/schema';
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。
 const customInputRules = inputRules({

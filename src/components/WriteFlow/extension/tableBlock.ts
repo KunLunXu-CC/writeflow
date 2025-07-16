@@ -3,7 +3,7 @@ import { TextSelection } from 'prosemirror-state';
 import { InputRule } from 'prosemirror-inputrules';
 import { columnResizing, tableEditing } from 'prosemirror-tables';
 import { tableNodes as tableNodesOriginal } from 'prosemirror-tables';
-import mySchema from '@/components/Editor/schema';
+import mySchema from '@/components/WriteFlow/schema';
 
 const ROW_COUNT_INPUT_RULE = 2;
 const COL_COUNT_INPUT_RULE = 3;

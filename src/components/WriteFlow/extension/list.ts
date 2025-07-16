@@ -10,7 +10,7 @@ import { Command } from 'prosemirror-state';
 import { NodeSpec } from 'prosemirror-model';
 import { InputRule } from 'prosemirror-inputrules';
 import { chainCommands } from 'prosemirror-commands';
-import mySchema from '@/components/Editor/schema';
+import mySchema from '@/components/WriteFlow/schema';
 
 export const listNodes: Record<string, NodeSpec> = {
   ordered_list: {

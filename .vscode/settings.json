@@ -29,6 +29,7 @@
     "keymap",
     "prosemirror",
     "textblock",
+    "writeflow",
     "writerflow",
     "Yahei"
   ],

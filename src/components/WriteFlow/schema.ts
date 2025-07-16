@@ -1,8 +1,8 @@
 import { Schema } from 'prosemirror-model';
 import { schema } from 'prosemirror-schema-basic';
 import { nodes } from 'prosemirror-schema-basic';
-import { tableNodes } from '@/components/Editor/extension/tableBlock';
-import { listNodes } from '@/components/Editor/extension/list';
+import { tableNodes } from '@/components/WriteFlow/extension/tableBlock';
+import { listNodes } from '@/components/WriteFlow/extension/list';
 
 const Mark = schema.spec.marks.update('code', {
   parseDOM: [{ tag: 'code' }],
