@@ -1,5 +1,5 @@
 import { history } from 'prosemirror-history';
-import { tablePlugins } from '@/components/WriteFlow/extension/tableBlock';
+import { tablePlugins } from '@/components/WriteFlow/extensions/tableBlock';
 import buildKeymap from '@/components/WriteFlow/plugins/buildKeymap';
 import customInputRules from '@/components/WriteFlow/plugins/buildInputRules';
 

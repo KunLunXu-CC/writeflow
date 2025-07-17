@@ -2,9 +2,9 @@ import { keymap } from 'prosemirror-keymap';
 import { Command } from 'prosemirror-state';
 import { redo, undo } from 'prosemirror-history';
 import { baseKeymap } from 'prosemirror-commands';
-import { listKeymap } from '@/components/WriteFlow/extension/list';
-import { codeBlockKeymap } from '@/components/WriteFlow/extension/codeBlock';
-import { inlineCodeKeymap } from '@/components/WriteFlow/extension/inlineCode';
+import { listKeymap } from '@/components/WriteFlow/extensions/list';
+import { codeBlockKeymap } from '@/components/WriteFlow/extensions/codeBlock';
+import { inlineCodeKeymap } from '@/components/WriteFlow/extensions/inlineCode';
 
 const isMac = globalThis.navigator?.userAgent.includes('Mac');
 const modKey = isMac ? 'Mod-' : 'Ctrl-';
