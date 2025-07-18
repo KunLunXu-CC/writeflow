@@ -4,4 +4,5 @@ export interface WriteFlowOptions {
 
 export enum EXTENSIONS_TYPE {
   NODE = 'node',
+  EXTENDABLE = 'extendable',
 }

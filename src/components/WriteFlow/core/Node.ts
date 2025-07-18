@@ -1,13 +1,21 @@
 import { EXTENSIONS_TYPE } from '@/components/WriteFlow/types';
+import {
+  Extendable,
+  ExtendableConfig,
+} from '@/components/WriteFlow/core/Extendable';
+
+export interface NodeConfig<Options = unknown>
+  extends ExtendableConfig<Options> {
+  name: string;
+}
 
 /**
  * Node 类用于创建自定义节点扩展。
  * @see 参考 https://tiptap.dev/api/extensions#create-a-new-extension
  */
-export class Node<Options = unknown> {
+export class Node<Options = unknown> extends Extendable<Options> {
   type = EXTENSIONS_TYPE.NODE;
   options?: Options;
-  config?: NodeConfig;
 
   /**
    * 创建一个新的 Node 实例
@@ -20,12 +28,7 @@ export class Node<Options = unknown> {
     return new Node<Options>(resolvedConfig);
   }
 
-  constructor(config: NodeConfig) {
-    this.config = config;
+  constructor(config: NodeConfig<Options>) {
+    super(config);
   }
-}
-
-export interface NodeConfig<Options = unknown> {
-  name: string;
-  options?: Options;
 }
