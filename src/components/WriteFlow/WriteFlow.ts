@@ -3,7 +3,6 @@ import { WriteFlowOptions } from './types';
 import { EditorState } from 'prosemirror-state';
 import { DOMParser } from 'prosemirror-model';
 import { Schema } from 'prosemirror-model';
-import { nodes } from 'prosemirror-schema-basic';
 import CommandManager from './core/CommandManager';
 import ExtensionManager from './core/ExtensionManager';
 
@@ -19,8 +18,10 @@ export class WriteFlow {
 
   constructor(options: WriteFlowOptions) {
     this.setOptions(options);
+
     this.createCommandManager();
-    this.createCommandManager();
+    this.createExtensionManager();
+
     this.mount(options.element);
   }
 
@@ -119,19 +120,7 @@ export class WriteFlow {
    * 创建编辑器模式
    */
   private createSchema(): Schema {
-    this.schema = new Schema({
-      nodes: {
-        ...nodes,
-        code_block: {
-          ...nodes.code_block,
-          attrs: {
-            language: { default: null },
-          },
-        },
-      },
-      // marks: Mark,
-    });
-
+    this.schema = this.extensionManager.schema;
     return this.schema;
   }
 }

@@ -1,11 +1,12 @@
-// import getSchemaByResolvedExtensions from '@/components/WriteFlow/helpers/getSchemaByResolvedExtensions.js';
+import getSchemaByResolvedExtensions from '@/components/WriteFlow/helpers/getSchemaByResolvedExtensions';
 import type { WriteFlow } from '../WriteFlow.js';
 import { Schema } from 'prosemirror-model';
+import { Extensions } from '../types.js';
 
 export default class ExtensionManager {
   editor!: WriteFlow;
   schema!: Schema;
-  // extensions: Extensions;
+  extensions: Extensions = [];
 
   constructor(extensions: unknown[], editor: WriteFlow) {
     console.log(
@@ -15,8 +16,23 @@ export default class ExtensionManager {
     );
 
     this.editor = editor;
+
+    this.schema = getSchemaByResolvedExtensions(this.extensions, editor);
     // this.extensions = resolveExtensions(extensions);
     // this.editorSchema = getSchemaByResolvedExtensions(this.extensions, editor);
     // this.setupExtensions();
   }
+
+  // this.schema = new Schema({
+  //   nodes: {
+  //     ...nodes,
+  //     code_block: {
+  //       ...nodes.code_block,
+  //       attrs: {
+  //         language: { default: null },
+  //       },
+  //     },
+  //   },
+  //   // marks: Mark,
+  // });
 }
