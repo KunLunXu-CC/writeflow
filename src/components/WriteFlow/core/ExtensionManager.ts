@@ -1,10 +1,11 @@
 // import getSchemaByResolvedExtensions from '@/components/WriteFlow/helpers/getSchemaByResolvedExtensions.js';
-import type { WriteFlow } from './WriteFlow.js';
+import type { WriteFlow } from '../WriteFlow.js';
 import { Schema } from 'prosemirror-model';
 
-export class ExtensionManager {
+export default class ExtensionManager {
   editor!: WriteFlow;
-  editorSchema!: Schema;
+  schema!: Schema;
+  // extensions: Extensions;
 
   constructor(extensions: unknown[], editor: WriteFlow) {
     console.log(

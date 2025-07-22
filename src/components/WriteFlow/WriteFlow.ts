@@ -4,19 +4,22 @@ import { EditorState } from 'prosemirror-state';
 import { DOMParser } from 'prosemirror-model';
 import { Schema } from 'prosemirror-model';
 import { nodes } from 'prosemirror-schema-basic';
-import CommandManager from './CommandManager';
+import CommandManager from './core/CommandManager';
+import ExtensionManager from './core/ExtensionManager';
 
 export class WriteFlow {
   private options!: WriteFlowOptions;
 
   private commandManager!: CommandManager;
+  private extensionManager!: ExtensionManager;
 
-  private editorSchema!: Schema;
-  private editorState!: EditorState;
-  private editorView: EditorView | null = null;
+  private schema!: Schema;
+  private state!: EditorState;
+  private view: EditorView | null = null;
 
   constructor(options: WriteFlowOptions) {
     this.setOptions(options);
+    this.createCommandManager();
     this.createCommandManager();
     this.mount(options.element);
   }
@@ -31,8 +34,12 @@ export class WriteFlow {
     this.commandManager = new CommandManager();
   }
 
+  private createExtensionManager() {
+    this.extensionManager = new ExtensionManager(this.options.extensions, this);
+  }
+
   /**
-   * 将编辑器附加到 DOM, 最终创建一个新的编辑器视图(editorView)
+   * 将编辑器附加到 DOM, 最终创建一个新的编辑器视图(view)
    */
   private mount(el: WriteFlowOptions['element']) {
     if (typeof document === 'undefined') {
@@ -40,14 +47,14 @@ export class WriteFlow {
         '[WriteFlow error]: 无法挂载编辑器, 因为在此环境中没有定义挂载点(element)。',
       );
     }
-    this.createEditorView(el);
+    this.createView(el);
   }
 
   /**
    * 创建 PM 视图。
    */
-  private createEditorView(el: WriteFlowOptions['element']) {
-    this.editorView = new EditorView(el, {
+  private createView(el: WriteFlowOptions['element']) {
+    this.view = new EditorView(el, {
       nodeViews: {
         // code_block: codeBlockNodeView,
       },
@@ -58,10 +65,10 @@ export class WriteFlow {
       //   ...this.options.editorProps?.attributes,
       // },
       // dispatchTransaction: this.dispatchTransaction.bind(this),
-      state: this.createEditorState(),
+      state: this.createState(),
     });
 
-    return this.editorView;
+    return this.view;
 
     // editorRef.current = new EditorView(editorDom.current, {
     //   nodeViews: {
@@ -97,22 +104,22 @@ export class WriteFlow {
   /**
    * 创建编辑器状态
    */
-  private createEditorState(): EditorState {
-    this.editorState = EditorState.create({
+  private createState(): EditorState {
+    this.state = EditorState.create({
       plugins: [],
-      doc: DOMParser.fromSchema(this.createEditorSchema()).parse(
+      doc: DOMParser.fromSchema(this.createSchema()).parse(
         document.createElement('div'),
       ),
     });
 
-    return this.editorState;
+    return this.state;
   }
 
   /**
    * 创建编辑器模式
    */
-  private createEditorSchema(): Schema {
-    this.editorSchema = new Schema({
+  private createSchema(): Schema {
+    this.schema = new Schema({
       nodes: {
         ...nodes,
         code_block: {
@@ -125,6 +132,6 @@ export class WriteFlow {
       // marks: Mark,
     });
 
-    return this.editorSchema;
+    return this.schema;
   }
 }
