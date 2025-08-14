@@ -113,6 +113,6 @@ export type InputRuleHandler = (props: {
     from: number;
   };
   match: ExtendedRegExpMatchArray;
-}) => Transaction | undefined | null;
+}) => Transaction | void | null;
 
 // #endregion
