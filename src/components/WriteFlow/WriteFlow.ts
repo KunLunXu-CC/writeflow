@@ -3,13 +3,11 @@ import { WriteFlowOptions } from './types';
 import { EditorState } from 'prosemirror-state';
 import { DOMParser } from 'prosemirror-model';
 import { Schema } from 'prosemirror-model';
-import CommandManager from './core/CommandManager';
 import ExtensionManager from './core/ExtensionManager';
 
 export class WriteFlow {
   private options!: WriteFlowOptions;
 
-  private commandManager!: CommandManager;
   private extensionManager!: ExtensionManager;
 
   public schema!: Schema;
@@ -19,7 +17,7 @@ export class WriteFlow {
   constructor(options: WriteFlowOptions) {
     this.setOptions(options);
 
-    this.createCommandManager();
+    // this.createCommandManager();
     this.createExtensionManager();
 
     this.mount(options.element);
@@ -31,9 +29,9 @@ export class WriteFlow {
     };
   }
 
-  private createCommandManager() {
-    this.commandManager = new CommandManager();
-  }
+  // private createCommandManager() {
+  //   this.commandManager = new CommandManager();
+  // }
 
   private createExtensionManager() {
     this.extensionManager = new ExtensionManager(

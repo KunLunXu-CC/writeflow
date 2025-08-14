@@ -7,6 +7,8 @@ import { resolveExtensions } from '../helpers/resolveExtensions';
 import { InputRule, inputRulesPlugin } from '../InputRules';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
+import { keymap } from 'prosemirror-keymap';
+import { baseKeymap } from 'prosemirror-commands';
 
 export default class ExtensionManager {
   writeFlow!: WriteFlow;
@@ -45,6 +47,7 @@ export default class ExtensionManager {
     });
 
     return [
+      keymap(baseKeymap),
       inputRulesPlugin({
         inputRules,
         writeFlow: this.writeFlow,

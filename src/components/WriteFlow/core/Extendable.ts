@@ -1,8 +1,5 @@
 import {
-  WriteFlow,
-  RawCommands,
   EXTENSIONS_TYPE,
-  KeyboardShortcutCommand,
   ExtendableFunContext,
 } from '@/components/WriteFlow/types';
 import { InputRule } from 'prosemirror-inputrules';
@@ -22,12 +19,12 @@ export interface ExtendableConfig<Options = unknown> {
    *   }
    * }
    */
-  addCommands?: (this: {
-    name: string;
-    options: Options;
-    type: EXTENSIONS_TYPE;
-    editor: WriteFlow;
-  }) => Partial<RawCommands>;
+  // addCommands?: (this: {
+  //   name: string;
+  //   options: Options;
+  //   type: EXTENSIONS_TYPE;
+  //   editor: WriteFlow;
+  // }) => Partial<RawCommands>;
 
   /**
    * This function registers keyboard shortcuts.
@@ -39,14 +36,14 @@ export interface ExtendableConfig<Options = unknown> {
    *   }
    * },
    */
-  addKeyboardShortcuts?: (this: {
-    name: string;
-    options: Options;
-    type: EXTENSIONS_TYPE;
-    editor: WriteFlow;
-  }) => {
-    [key: string]: KeyboardShortcutCommand;
-  };
+  // addKeyboardShortcuts?: (this: {
+  //   name: string;
+  //   options: Options;
+  //   type: EXTENSIONS_TYPE;
+  //   editor: WriteFlow;
+  // }) => {
+  //   [key: string]: KeyboardShortcutCommand;
+  // };
 
   /**
    * This function adds input rules to the editor.

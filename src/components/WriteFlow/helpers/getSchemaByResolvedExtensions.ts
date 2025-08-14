@@ -2,13 +2,16 @@ import { NodeSpec, Schema } from 'prosemirror-model';
 import type { WriteFlow } from '../WriteFlow';
 import { getExtensionField } from './getExtensionField';
 import { AnyExtension, EXTENSIONS_TYPE } from '../types';
-import { nodes as basicNodes } from 'prosemirror-schema-basic';
+import {
+  nodes as basicNodes,
+  marks as basicMarks,
+} from 'prosemirror-schema-basic';
 
 /**
- * Creates a new Prosemirror schema based on the given extensions.
- * @param extensions An array of Tiptap extensions
- * @param editor The editor instance
- * @returns A Prosemirror schema
+ * 根据给定的扩展创建一个新的 Prosemirror 模式
+ * @param extensions 扩展数组
+ * @param writeFlow 编辑器实例
+ * @returns Prosemirror 模式
  */
 const getSchemaByResolvedExtensions = (
   extensions: AnyExtension[],
@@ -36,18 +39,12 @@ const getSchemaByResolvedExtensions = (
     {},
   );
 
-  console.log(
-    '%c [ nodes ]-40',
-    'font-size:13px; background:#1a9733; color:#5edb77;',
-    nodes,
-  );
-
   return new Schema({
     nodes: {
-      ...basicNodes,
+      ...basicNodes, // 基础节点: blockquote, code_block, doc、hard_break、heading,horizontal_rule、image、paragraph, text
       ...nodes,
     },
-    // marks: Mark,
+    marks: basicMarks,
   });
 };
 
