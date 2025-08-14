@@ -12,9 +12,9 @@ import {
   // smartQuotes,
 } from 'prosemirror-inputrules';
 import { taskListInputRule } from '@/components/WriteFlow/extensions/list';
-import { tableInputRule } from '@/components/WriteFlow/extensions/tableBlock';
-import { codeBlockInputRule } from '@/components/WriteFlow/extensions/codeBlock';
-import { inlineCodeInputRule } from '@/components/WriteFlow/extensions/inlineCode';
+import { tableInputRule } from '@/components/WriteFlow/extensions/tmp/tableBlock';
+import { codeBlockInputRule } from '@/components/WriteFlow/extensions/tmp/codeBlock';
+import { inlineCodeInputRule } from '@/components/WriteFlow/extensions/tmp/inlineCode';
 import mySchema from '@/components/WriteFlow/schema';
 
 // 一组用于创建基本块引号、列表、代码块和标题的输入规则。

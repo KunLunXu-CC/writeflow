@@ -1,5 +1,5 @@
 import { Node } from '@/components/WriteFlow/core/Node';
-import { textblockTypeInputRule } from '../InputRules/textblockTypeInputRule';
+import { textblockTypeInputRule } from '../../InputRules/textblockTypeInputRule';
 // import { mergeAttributes } from '../helpers/mergeAttributes';
 // import { textblockTypeInputRule } from '../inputRules';
 

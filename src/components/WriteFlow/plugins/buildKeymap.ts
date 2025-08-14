@@ -3,8 +3,8 @@ import { Command } from 'prosemirror-state';
 import { redo, undo } from 'prosemirror-history';
 import { baseKeymap } from 'prosemirror-commands';
 import { listKeymap } from '@/components/WriteFlow/extensions/list';
-import { codeBlockKeymap } from '@/components/WriteFlow/extensions/codeBlock';
-import { inlineCodeKeymap } from '@/components/WriteFlow/extensions/inlineCode';
+import { codeBlockKeymap } from '@/components/WriteFlow/extensions/tmp/codeBlock';
+import { inlineCodeKeymap } from '@/components/WriteFlow/extensions/tmp/inlineCode';
 
 const isMac = globalThis.navigator?.userAgent.includes('Mac');
 const modKey = isMac ? 'Mod-' : 'Ctrl-';
