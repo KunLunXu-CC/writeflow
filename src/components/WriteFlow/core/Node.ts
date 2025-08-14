@@ -3,10 +3,12 @@ import {
   Extendable,
   ExtendableConfig,
 } from '@/components/WriteFlow/core/Extendable';
+import { NodeSpec } from 'prosemirror-model';
 
 export interface NodeConfig<Options = unknown>
   extends ExtendableConfig<Options> {
   name: string;
+  getSchema: () => NodeSpec;
 }
 
 /**
@@ -15,7 +17,6 @@ export interface NodeConfig<Options = unknown>
  */
 export class Node<Options = unknown> extends Extendable<Options> {
   type = EXTENSIONS_TYPE.NODE;
-  options?: Options;
 
   /**
    * 创建一个新的 Node 实例

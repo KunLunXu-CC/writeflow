@@ -12,9 +12,9 @@ export class WriteFlow {
   private commandManager!: CommandManager;
   private extensionManager!: ExtensionManager;
 
-  private schema!: Schema;
-  private state!: EditorState;
-  private view: EditorView | null = null;
+  public schema!: Schema;
+  public state!: EditorState;
+  public view: EditorView | null = null;
 
   constructor(options: WriteFlowOptions) {
     this.setOptions(options);
@@ -36,7 +36,10 @@ export class WriteFlow {
   }
 
   private createExtensionManager() {
-    this.extensionManager = new ExtensionManager(this.options.extensions, this);
+    this.extensionManager = new ExtensionManager(
+      this.options.extensions || [],
+      this,
+    );
   }
 
   /**
@@ -107,7 +110,7 @@ export class WriteFlow {
    */
   private createState(): EditorState {
     this.state = EditorState.create({
-      plugins: [],
+      plugins: this.extensionManager.plugins,
       doc: DOMParser.fromSchema(this.createSchema()).parse(
         document.createElement('div'),
       ),
