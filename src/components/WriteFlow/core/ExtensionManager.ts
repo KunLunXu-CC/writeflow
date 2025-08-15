@@ -16,18 +16,24 @@ export default class ExtensionManager {
   writeFlow!: WriteFlow;
   extensions: Extensions = [];
 
+  schema!: Schema;
+  inputRules!: Plugin;
+  plugins!: Plugin[];
+
   constructor(extensions: Extensions, writeFlow: WriteFlow) {
     this.writeFlow = writeFlow;
     this.extensions = extensions;
-    // this.editorSchema = getSchemaByResolvedExtensions(this.extensions, editor);
-    // this.setupExtensions();
+
+    this.createSchema();
+    this.createInputRules();
+    this.createPlugins();
   }
 
   /**
    * 从扩展中获得所有注册的 Prosemirror 插件: 插件是 Prosemirror 的核心概念, 用于扩展编辑器功能(如: 输入规则、快捷键、菜单等)
    * @returns 一个 Prosemirror 插件数组
    */
-  get plugins(): Plugin[] {
+  private createPlugins() {
     // const extensions = sortExtensions([...this.extensions].reverse())
     // const inputRules: InputRule[] = [];
 
@@ -46,10 +52,30 @@ export default class ExtensionManager {
     //   inputRules.push(...(addInputRules?.(context) || []));
     // });
 
-    return [keymap(baseKeymap), this.inputRules];
+    this.plugins = [keymap(baseKeymap), this.inputRules];
   }
 
-  get schema(): Schema {
+  private createInputRules() {
+    const inputRulesByExtension: InputRule[] = [];
+
+    this.extensions.forEach((extension) => {
+      const addInputRules = getExtensionField(extension, 'addInputRules');
+
+      const context = {
+        schema: this.schema,
+        name: extension.name,
+        writeFlow: this.writeFlow,
+        options: extension.options,
+        type: getSchemaTypeByName(extension.name, this.schema),
+        // storage: this.editor.extensionStorage[extension.name as keyof Storage],
+      } as ExtendableFunContext;
+
+      inputRulesByExtension.push(...(addInputRules?.(context) || []));
+    });
+    this.inputRules = inputRules({ rules: inputRulesByExtension });
+  }
+
+  private createSchema() {
     const nodes = this.extensions.reduce<Record<string, NodeSpec>>(
       (acc, extension) => {
         const getSchema = getExtensionField(extension, 'getSchema');
@@ -72,33 +98,12 @@ export default class ExtensionManager {
       {},
     );
 
-    return new Schema({
+    this.schema = new Schema({
       nodes: {
         ...basicNodes, // 基础节点: blockquote, code_block, doc、hard_break、heading,horizontal_rule、image、paragraph, text
         ...nodes,
       },
       marks: basicMarks,
     });
-  }
-
-  get inputRules(): Plugin {
-    const inputRulesByExtension: InputRule[] = [];
-
-    this.extensions.forEach((extension) => {
-      const addInputRules = getExtensionField(extension, 'addInputRules');
-
-      const context = {
-        schema: this.schema,
-        name: extension.name,
-        writeFlow: this.writeFlow,
-        options: extension.options,
-        type: getSchemaTypeByName(extension.name, this.schema),
-        // storage: this.editor.extensionStorage[extension.name as keyof Storage],
-      } as ExtendableFunContext;
-
-      inputRulesByExtension.push(...(addInputRules?.(context) || []));
-    });
-
-    return inputRules({ rules: inputRulesByExtension });
   }
 }
