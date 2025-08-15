@@ -1,5 +1,5 @@
 import { Node } from '@/components/WriteFlow/core/Node';
-import { textblockTypeInputRule } from '../../InputRules/textblockTypeInputRule';
+import { textblockTypeInputRule } from 'prosemirror-inputrules';
 // import { mergeAttributes } from '../helpers/mergeAttributes';
 // import { textblockTypeInputRule } from '../inputRules';
 
@@ -95,14 +95,11 @@ export const Heading = Node.create<HeadingOptions>({
   // },
 
   // 返回 InputRule 对象 { find, handler }[] 的数组
-  addInputRules({ options, type }) {
-    return options.levels.map((level: number) => {
-      // 这里返回一个 InputRule 对象 { find, handler }, 而 InputRule 中的 handler 在 runInputRule 被执行
-      return textblockTypeInputRule({
-        type,
-        attributes: { level },
-        find: new RegExp(`^(#{${level},${level}})\\s$`),
-      });
-    });
+  addInputRules({ type }) {
+    return [
+      textblockTypeInputRule(new RegExp('^(#{1,6})\\s$'), type, (match) => ({
+        level: match[1].length,
+      })),
+    ];
   },
 });

@@ -1,24 +1,24 @@
-import getSchemaByResolvedExtensions from '@/components/WriteFlow/helpers/getSchemaByResolvedExtensions';
 import type { WriteFlow } from '../WriteFlow.js';
-import { Schema } from 'prosemirror-model';
-import { ExtendableFunContext, Extensions } from '../types.js';
+import { NodeSpec, Schema } from 'prosemirror-model';
+import { ExtendableFunContext, Extensions, EXTENSIONS_TYPE } from '../types';
 import { Plugin } from 'prosemirror-state';
-import { resolveExtensions } from '../helpers/resolveExtensions';
-import { InputRule, inputRulesPlugin } from '../InputRules';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
 import { keymap } from 'prosemirror-keymap';
 import { baseKeymap } from 'prosemirror-commands';
+import { InputRule, inputRules } from 'prosemirror-inputrules';
+import {
+  nodes as basicNodes,
+  marks as basicMarks,
+} from 'prosemirror-schema-basic';
 
 export default class ExtensionManager {
   writeFlow!: WriteFlow;
-  schema!: Schema;
   extensions: Extensions = [];
 
   constructor(extensions: Extensions, writeFlow: WriteFlow) {
     this.writeFlow = writeFlow;
-    this.extensions = resolveExtensions(extensions);
-    this.schema = getSchemaByResolvedExtensions(this.extensions, writeFlow);
+    this.extensions = extensions;
     // this.editorSchema = getSchemaByResolvedExtensions(this.extensions, editor);
     // this.setupExtensions();
   }
@@ -29,11 +29,66 @@ export default class ExtensionManager {
    */
   get plugins(): Plugin[] {
     // const extensions = sortExtensions([...this.extensions].reverse())
-    const inputRules: InputRule[] = [];
+    // const inputRules: InputRule[] = [];
+
+    // this.extensions.forEach((extension) => {
+    //   // 执行方法时需要传递的上下文
+    //   const context = {
+    //     name: extension.name,
+    //     writeFlow: this.writeFlow,
+    //     options: extension.options,
+    //     type: getSchemaTypeByName(extension.name, this.schema),
+    //     // storage: this.editor.extensionStorage[extension.name as keyof Storage],
+    //   } as ExtendableFunContext;
+
+    //   const addInputRules = getExtensionField(extension, 'addInputRules');
+
+    //   inputRules.push(...(addInputRules?.(context) || []));
+    // });
+
+    return [keymap(baseKeymap), this.inputRules];
+  }
+
+  get schema(): Schema {
+    const nodes = this.extensions.reduce<Record<string, NodeSpec>>(
+      (acc, extension) => {
+        const getSchema = getExtensionField(extension, 'getSchema');
+        if (extension.type !== EXTENSIONS_TYPE.NODE && !getSchema) {
+          return acc;
+        }
+
+        const schema = getSchema({
+          extension,
+          name: extension.name,
+          writeFlow: this.writeFlow,
+          options: extension.options,
+        });
+
+        return {
+          ...acc,
+          [extension.name]: schema,
+        };
+      },
+      {},
+    );
+
+    return new Schema({
+      nodes: {
+        ...basicNodes, // 基础节点: blockquote, code_block, doc、hard_break、heading,horizontal_rule、image、paragraph, text
+        ...nodes,
+      },
+      marks: basicMarks,
+    });
+  }
+
+  get inputRules(): Plugin {
+    const inputRulesByExtension: InputRule[] = [];
 
     this.extensions.forEach((extension) => {
-      // 执行方法时需要传递的上下文
+      const addInputRules = getExtensionField(extension, 'addInputRules');
+
       const context = {
+        schema: this.schema,
         name: extension.name,
         writeFlow: this.writeFlow,
         options: extension.options,
@@ -41,30 +96,9 @@ export default class ExtensionManager {
         // storage: this.editor.extensionStorage[extension.name as keyof Storage],
       } as ExtendableFunContext;
 
-      const addInputRules = getExtensionField(extension, 'addInputRules');
-
-      inputRules.push(...(addInputRules?.(context) || []));
+      inputRulesByExtension.push(...(addInputRules?.(context) || []));
     });
 
-    return [
-      keymap(baseKeymap),
-      inputRulesPlugin({
-        inputRules,
-        writeFlow: this.writeFlow,
-      }),
-    ];
+    return inputRules({ rules: inputRulesByExtension });
   }
-
-  // this.schema = new Schema({
-  //   nodes: {
-  //     ...nodes,
-  //     code_block: {
-  //       ...nodes.code_block,
-  //       attrs: {
-  //         language: { default: null },
-  //       },
-  //     },
-  //   },
-  //   // marks: Mark,
-  // });
 }
