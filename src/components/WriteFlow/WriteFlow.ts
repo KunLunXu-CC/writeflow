@@ -21,6 +21,18 @@ export class WriteFlow {
   }
 
   /**
+   * 将编辑器附加到 DOM, 最终创建一个新的编辑器视图(view)
+   */
+  private mount(el: WriteFlowOptions['element']) {
+    if (typeof el === 'undefined') {
+      throw new Error(
+        '[WriteFlow error]: 无法挂载编辑器, 因为在此环境中没有定义挂载点(element)。',
+      );
+    }
+    this.createView(el);
+  }
+
+  /**
    * 创建 PM 视图。
    */
   private createView(el: WriteFlowOptions['element']) {
@@ -78,6 +90,12 @@ export class WriteFlow {
     const plugins = this.extensionManager.plugins;
     const schema = this.extensionManager.schema;
 
+    if (!plugins || !schema) {
+      throw new Error(
+        '[WriteFlow error]: 无法创建编辑器状态, 因为在此环境中没有定义插件(plugins)或模式(schema)。',
+      );
+    }
+
     this.state = EditorState.create({
       plugins,
       doc: DOMParser.fromSchema(schema).parse(document.createElement('div')),
@@ -101,17 +119,5 @@ export class WriteFlow {
       this.options.extensions || [],
       this,
     );
-  }
-
-  /**
-   * 将编辑器附加到 DOM, 最终创建一个新的编辑器视图(view)
-   */
-  private mount(el: WriteFlowOptions['element']) {
-    if (typeof document === 'undefined') {
-      throw new Error(
-        '[WriteFlow error]: 无法挂载编辑器, 因为在此环境中没有定义挂载点(element)。',
-      );
-    }
-    this.createView(el);
   }
 }
