@@ -1,6 +1,13 @@
 import { useEffect, useRef } from 'react';
 import { WriteFlow } from '@/components/WriteFlow/WriteFlow';
 import { Heading } from '@/components/WriteFlow/extensions/heading';
+import {
+  TaskList,
+  TaskItem,
+  ListItem,
+  BulletList,
+  OrderedList,
+} from '@/components/WriteFlow/extensions/list';
 
 import '@/components/WriteFlow/theme';
 
@@ -12,7 +19,14 @@ export default function Editor() {
     if (editorRef.current) return;
     editorRef.current = new WriteFlow({
       element: editorDom.current!,
-      extensions: [Heading],
+      extensions: [
+        Heading,
+        BulletList,
+        OrderedList,
+        ListItem,
+        TaskList,
+        TaskItem,
+      ],
     });
   }, []);
 
