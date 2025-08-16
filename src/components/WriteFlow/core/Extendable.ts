@@ -3,6 +3,7 @@ import {
   ExtendableFunContext,
 } from '@/components/WriteFlow/types';
 import { InputRule } from 'prosemirror-inputrules';
+import { Command } from 'prosemirror-state';
 
 export interface ExtendableConfig<Options = unknown> {
   name: string;
@@ -59,6 +60,18 @@ export interface ExtendableConfig<Options = unknown> {
    * },
    */
   addInputRules?: (context: ExtendableFunContext) => InputRule[];
+
+  /**
+   * This function adds keyboard shortcuts to the editor.
+   * @see https://tiptap.dev/docs/editor/guide/custom-extensions#keyboard-shortcuts
+   * @example
+   * addKeymap() {
+   *   return {
+   *     'Mod-l': () => this.editor.commands.toggleBulletList(),
+   *   }
+   * },
+   */
+  addKeymap?: (context: ExtendableFunContext) => Record<string, Command>;
 }
 
 export class Extendable<Options = unknown> {

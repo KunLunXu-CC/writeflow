@@ -1,16 +1,25 @@
 import type { WriteFlow } from '../WriteFlow.js';
 import { NodeSpec, Schema } from 'prosemirror-model';
 import { ExtendableFunContext, Extensions, EXTENSIONS_TYPE } from '../types';
-import { Plugin } from 'prosemirror-state';
+import { Command, Plugin } from 'prosemirror-state';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
 import { keymap } from 'prosemirror-keymap';
 import { baseKeymap } from 'prosemirror-commands';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
+import { redo, undo, history } from 'prosemirror-history';
 import {
   nodes as basicNodes,
   marks as basicMarks,
 } from 'prosemirror-schema-basic';
+
+const isMac = globalThis.navigator?.userAgent.includes('Mac');
+const modKey = isMac ? 'Mod-' : 'Ctrl-';
+
+const customKeymap: Record<string, Command> = {
+  [`${modKey}z`]: undo, // 撤销
+  [`${modKey}Shift-z`]: redo, // 重做
+};
 
 export default class ExtensionManager {
   writeFlow!: WriteFlow;
@@ -75,33 +84,13 @@ export default class ExtensionManager {
       );
     }
 
-    // const extensions = sortExtensions([...this.extensions].reverse())
-    // const inputRules: InputRule[] = [];
-
-    // this.extensions.forEach((extension) => {
-    //   // 执行方法时需要传递的上下文
-    //   const context = {
-    //     name: extension.name,
-    //     writeFlow: this.writeFlow,
-    //     options: extension.options,
-    //     type: getSchemaTypeByName(extension.name, this.schema),
-    //     // storage: this.editor.extensionStorage[extension.name as keyof Storage],
-    //   } as ExtendableFunContext;
-
-    //   const addInputRules = getExtensionField(extension, 'addInputRules');
-
-    //   inputRules.push(...(addInputRules?.(context) || []));
-    // });
-
-    this.plugins = [keymap(baseKeymap), this.createInputRules()];
-  }
-
-  private createInputRules(): Plugin {
     const inputRulesByExtension: InputRule[] = [];
+    const keymapByExtension: Plugin[] = [
+      keymap(baseKeymap),
+      keymap(customKeymap),
+    ];
 
     this.extensions.forEach((extension) => {
-      const addInputRules = getExtensionField(extension, 'addInputRules');
-
       const context = {
         schema: this.schema,
         name: extension.name,
@@ -111,9 +100,23 @@ export default class ExtensionManager {
         // storage: this.editor.extensionStorage[extension.name as keyof Storage],
       } as ExtendableFunContext;
 
-      inputRulesByExtension.push(...(addInputRules?.(context) || []));
+      // 添加快捷键
+      const addKeymap = getExtensionField(extension, 'addKeymap');
+      if (addKeymap) {
+        keymapByExtension.unshift(keymap(addKeymap(context))); // 注意这里: 将扩展的快捷键插件插入到数组的最前面, 这样会优先执行扩展的快捷键
+      }
+
+      // 添加输入规则
+      const addInputRules = getExtensionField(extension, 'addInputRules');
+      if (addInputRules) {
+        inputRulesByExtension.push(...addInputRules(context));
+      }
     });
 
-    return inputRules({ rules: inputRulesByExtension });
+    this.plugins = [
+      ...keymapByExtension,
+      history(),
+      inputRules({ rules: inputRulesByExtension }),
+    ];
   }
 }
