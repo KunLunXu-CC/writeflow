@@ -6,12 +6,12 @@ import { wrappingInputRule } from 'prosemirror-inputrules';
  * 有序列表
  */
 export const OrderedList = Node.create({
-  name: 'ordered_list',
+  name: 'orderedList',
 
   getSchema() {
     return {
       ...orderedList,
-      content: 'list_item+',
+      content: 'listItem+',
       group: 'block',
     };
   },

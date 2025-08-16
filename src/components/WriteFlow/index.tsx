@@ -8,6 +8,12 @@ import {
   BulletList,
   OrderedList,
 } from '@/components/WriteFlow/extensions/list';
+import {
+  Table,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from '@/components/WriteFlow/extensions/table';
 
 import '@/components/WriteFlow/theme';
 
@@ -21,11 +27,15 @@ export default function Editor() {
       element: editorDom.current!,
       extensions: [
         Heading,
-        BulletList,
-        OrderedList,
         ListItem,
         TaskList,
         TaskItem,
+        BulletList,
+        OrderedList,
+        Table,
+        TableRow,
+        TableCell,
+        TableHeader,
       ],
     });
   }, []);

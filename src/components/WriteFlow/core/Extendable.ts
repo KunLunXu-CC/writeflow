@@ -3,7 +3,7 @@ import {
   ExtendableFunContext,
 } from '@/components/WriteFlow/types';
 import { InputRule } from 'prosemirror-inputrules';
-import { Command } from 'prosemirror-state';
+import { Command, Plugin } from 'prosemirror-state';
 
 export interface ExtendableConfig<Options = unknown> {
   name: string;
@@ -72,6 +72,16 @@ export interface ExtendableConfig<Options = unknown> {
    * },
    */
   addKeymap?: (context: ExtendableFunContext) => Record<string, Command>;
+
+  /**
+   * This function adds a plugin to the editor.
+   * @see https://tiptap.dev/docs/editor/guide/custom-extensions#plugins
+   * @example
+   * getPlugin() {
+   *   return [tableEditing()]
+   * },
+   */
+  getPlugins?: (context: ExtendableFunContext) => Plugin[];
 }
 
 export class Extendable<Options = unknown> {

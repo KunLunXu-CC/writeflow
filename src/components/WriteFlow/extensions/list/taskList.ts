@@ -6,12 +6,12 @@ import { InputRule } from 'prosemirror-inputrules';
  * 任务列表
  */
 export const TaskList = Node.create({
-  name: 'task_list',
+  name: 'taskList',
 
   getSchema() {
     return {
       ...bulletList,
-      content: 'task_item+',
+      content: 'taskItem+',
       group: 'block',
     };
   },
@@ -20,8 +20,8 @@ export const TaskList = Node.create({
     return [
       new InputRule(/^\[([ |x])\]\s$/, (state, match, start, end) => {
         const attrs = { checked: match[1] === 'x' };
-        const taskItem = schema.nodes.task_item.createAndFill(attrs);
-        const taskList = schema.nodes.task_list.createAndFill(null, taskItem)!;
+        const taskItem = schema.nodes.taskItem.createAndFill(attrs);
+        const taskList = schema.nodes.taskList.createAndFill(null, taskItem)!;
         return state.tr.delete(start, end).replaceSelectionWith(taskList);
       }),
     ];

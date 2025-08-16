@@ -6,13 +6,13 @@ import { wrappingInputRule } from 'prosemirror-inputrules';
  * 无序列表
  */
 export const BulletList = Node.create({
-  name: 'bullet_list',
+  name: 'bulletList',
 
   getSchema() {
     return {
       ...bulletList,
       group: 'block',
-      content: 'list_item+',
+      content: 'listItem+',
     };
   },
   addInputRules({ type }) {

@@ -84,6 +84,7 @@ export default class ExtensionManager {
       );
     }
 
+    const pluginsByExtension: Plugin[] = [];
     const inputRulesByExtension: InputRule[] = [];
     const keymapByExtension: Plugin[] = [
       keymap(baseKeymap),
@@ -111,10 +112,17 @@ export default class ExtensionManager {
       if (addInputRules) {
         inputRulesByExtension.push(...addInputRules(context));
       }
+
+      // 添加插件
+      const getPlugins = getExtensionField(extension, 'getPlugins');
+      if (getPlugins) {
+        pluginsByExtension.push(...getPlugins(context));
+      }
     });
 
     this.plugins = [
       ...keymapByExtension,
+      ...pluginsByExtension,
       history(),
       inputRules({ rules: inputRulesByExtension }),
     ];

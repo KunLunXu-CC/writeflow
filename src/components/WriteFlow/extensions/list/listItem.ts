@@ -10,7 +10,7 @@ import { Node } from '@/components/WriteFlow/core/Node';
  * 列表项
  */
 export const ListItem = Node.create({
-  name: 'list_item',
+  name: 'listItem',
 
   getSchema() {
     return {

@@ -11,7 +11,7 @@ import { wrappingInputRule } from 'prosemirror-inputrules';
  * 任务列表项
  */
 export const TaskItem = Node.create({
-  name: 'task_item',
+  name: 'taskItem',
 
   getSchema() {
     return {
@@ -26,7 +26,7 @@ export const TaskItem = Node.create({
         return [
           'li',
           {
-            'data-type': 'todo_item',
+            'data-type': 'todoItem',
             'data-done': checked.toString(),
           },
           [
