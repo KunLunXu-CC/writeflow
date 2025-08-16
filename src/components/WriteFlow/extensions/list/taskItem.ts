@@ -5,7 +5,6 @@ import {
   splitListItem,
 } from 'prosemirror-schema-list';
 import { Node } from '@/components/WriteFlow/core/Node';
-import { wrappingInputRule } from 'prosemirror-inputrules';
 
 /**
  * 任务列表项
@@ -26,7 +25,7 @@ export const TaskItem = Node.create({
         return [
           'li',
           {
-            'data-type': 'todoItem',
+            'data-type': 'taskItem',
             'data-done': checked.toString(),
           },
           [
@@ -43,10 +42,6 @@ export const TaskItem = Node.create({
         ];
       },
     };
-  },
-
-  addInputRules({ type }) {
-    return [wrappingInputRule(/^\s*([-+*])\s$/, type)];
   },
 
   addKeymap({ type }) {
