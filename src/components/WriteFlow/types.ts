@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Command, EditorState, Transaction } from 'prosemirror-state';
 import { Extendable } from './core/Extendable';
-import type { WriteFlow } from './WriteFlow';
+import type { WriteFlow } from './core/WriteFlow';
 import type { Node, NodeConfig } from './core/Node';
 import type { ExtendableConfig } from './core/Extendable';
 import { NodeType, Schema } from 'prosemirror-model';

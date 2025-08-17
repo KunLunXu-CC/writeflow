@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { WriteFlow } from '@/components/WriteFlow/WriteFlow';
+import { WriteFlow } from '@/components/WriteFlow/core/WriteFlow';
 import { Heading } from '@/components/WriteFlow/extensions/heading';
 import {
   TaskList,

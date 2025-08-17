@@ -1,8 +1,8 @@
 import { EditorView } from 'prosemirror-view';
-import { WriteFlowOptions } from './types';
+import { WriteFlowOptions } from '../types';
 import { EditorState } from 'prosemirror-state';
 import { DOMParser } from 'prosemirror-model';
-import ExtensionManager from './core/ExtensionManager';
+import ExtensionManager from './ExtensionManager';
 
 export class WriteFlow {
   private options!: WriteFlowOptions;

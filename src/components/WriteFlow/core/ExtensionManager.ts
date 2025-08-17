@@ -1,4 +1,4 @@
-import type { WriteFlow } from '../WriteFlow.js';
+import type { WriteFlow } from './WriteFlow.js';
 import { NodeSpec, Schema } from 'prosemirror-model';
 import { ExtendableFunContext, Extensions, EXTENSIONS_TYPE } from '../types';
 import { Command, Plugin } from 'prosemirror-state';
