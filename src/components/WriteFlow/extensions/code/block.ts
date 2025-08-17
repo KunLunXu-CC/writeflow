@@ -1,6 +1,7 @@
 import { Node } from '@/components/WriteFlow/core/Node';
 import { textblockTypeInputRule } from 'prosemirror-inputrules';
 import { NodeType } from 'prosemirror-model';
+import { CodeBlockNodeView } from './codeBlockNodeView';
 
 export const CodeBlock = Node.create({
   name: 'codeBlock',
@@ -92,5 +93,9 @@ export const CodeBlock = Node.create({
         language: match[1],
       })),
     ];
+  },
+
+  addNodeView() {
+    return (node, view, getPos) => new CodeBlockNodeView(node, view, getPos);
   },
 });

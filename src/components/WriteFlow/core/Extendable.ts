@@ -5,7 +5,7 @@ import {
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeSpec } from 'prosemirror-model';
 import { Command, Plugin } from 'prosemirror-state';
-import { NodeView } from 'prosemirror-view';
+import { NodeViewConstructor } from 'prosemirror-view';
 
 export interface ExtendableConfig<Options = unknown> {
   name: string;
@@ -100,7 +100,7 @@ export interface ExtendableConfig<Options = unknown> {
    *   }
    * },
    */
-  addNodeView?: (context: ExtendableFunContext) => Record<string, NodeView>;
+  addNodeView?: (context: ExtendableFunContext) => NodeViewConstructor;
 }
 
 export class Extendable<Options = unknown> {

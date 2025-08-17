@@ -12,7 +12,7 @@ import {
   nodes as basicNodes,
   marks as basicMarks,
 } from 'prosemirror-schema-basic';
-import { NodeView } from 'prosemirror-view';
+import { NodeViewConstructor } from 'prosemirror-view';
 
 const isMac = globalThis.navigator?.userAgent.includes('Mac');
 const modKey = isMac ? 'Mod-' : 'Ctrl-';
@@ -28,7 +28,7 @@ export default class ExtensionManager {
 
   schema!: Schema;
   plugins!: Plugin[];
-  nodeViews!: Record<string, NodeView>;
+  nodeViews!: Record<string, NodeViewConstructor>;
 
   constructor(extensions: Extensions, writeFlow: WriteFlow) {
     this.writeFlow = writeFlow;
@@ -131,18 +131,17 @@ export default class ExtensionManager {
    * @returns 一个包含所有扩展的 nodeView 对象的记录
    */
   private createNodeViews = () => {
-    this.nodeViews = this.extensions.reduce<Record<string, NodeView>>(
-      (acc, extension) => {
-        const addNodeView = getExtensionField(extension, 'addNodeView');
-        const context = this.getContext(extension);
+    this.nodeViews = this.extensions.reduce<
+      Record<string, NodeViewConstructor>
+    >((acc, extension) => {
+      const addNodeView = getExtensionField(extension, 'addNodeView');
+      const context = this.getContext(extension);
 
-        if (addNodeView) {
-          acc[extension.name] = addNodeView(context);
-        }
+      if (addNodeView) {
+        acc[extension.name] = addNodeView(context);
+      }
 
-        return acc;
-      },
-      {},
-    );
+      return acc;
+    }, {});
   };
 }

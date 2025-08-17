@@ -38,7 +38,7 @@ export class WriteFlow {
   private createView(el: WriteFlowOptions['element']) {
     this.view = new EditorView(el, {
       nodeViews: {
-        // code_block: codeBlockNodeView,
+        ...this.extensionManager.nodeViews,
       },
       // ...this.options.editorProps,
       // attributes: {
