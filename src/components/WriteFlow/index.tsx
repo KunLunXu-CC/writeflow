@@ -15,6 +15,8 @@ import {
   TableRow,
 } from '@/components/WriteFlow/extensions/table';
 
+import { CodeBlock } from '@/components/WriteFlow/extensions/code/block';
+
 import '@/components/WriteFlow/theme';
 
 export default function Editor() {
@@ -36,6 +38,7 @@ export default function Editor() {
         TableRow,
         TableCell,
         TableHeader,
+        CodeBlock,
       ],
     });
   }, []);
