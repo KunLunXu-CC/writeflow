@@ -12,7 +12,7 @@ import { Node } from '@/components/WriteFlow/core/Node';
 export const ListItem = Node.create({
   name: 'listItem',
 
-  getSchema() {
+  addSchema() {
     return {
       ...listItem,
       content: 'paragraph block*',

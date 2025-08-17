@@ -1,6 +1,6 @@
 import type { WriteFlow } from './WriteFlow.js';
 import { NodeSpec, Schema } from 'prosemirror-model';
-import { ExtendableFunContext, Extensions, EXTENSIONS_TYPE } from '../types';
+import { AnyExtension, ExtendableFunContext, Extensions } from '../types';
 import { Command, Plugin } from 'prosemirror-state';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
@@ -12,6 +12,7 @@ import {
   nodes as basicNodes,
   marks as basicMarks,
 } from 'prosemirror-schema-basic';
+import { NodeView } from 'prosemirror-view';
 
 const isMac = globalThis.navigator?.userAgent.includes('Mac');
 const modKey = isMac ? 'Mod-' : 'Ctrl-';
@@ -27,6 +28,7 @@ export default class ExtensionManager {
 
   schema!: Schema;
   plugins!: Plugin[];
+  nodeViews!: Record<string, NodeView>;
 
   constructor(extensions: Extensions, writeFlow: WriteFlow) {
     this.writeFlow = writeFlow;
@@ -34,31 +36,40 @@ export default class ExtensionManager {
 
     this.createSchema();
     this.createPlugins();
+    this.createNodeViews();
   }
-  private createSchema() {
-    if (!this.extensions) {
-      throw new Error(
-        '[WriteFlow error]: 无法创建编辑器模式, 因为在此环境中没有定义扩展(extensions)。',
-      );
-    }
 
+  /**
+   * 获取扩展的上下文, 用于传递给扩展的函数参数
+   * @param extension 扩展
+   * @returns 扩展的上下文
+   */
+  private getContext = (extension: AnyExtension): ExtendableFunContext => {
+    return {
+      extension,
+      schema: this.schema,
+      writeFlow: this.writeFlow,
+      type: getSchemaTypeByName(extension.name, this.schema),
+    };
+  };
+
+  /**
+   * 创建 schema
+   * returns 返回一个包含所有扩展的 schema 对象
+   */
+  private createSchema = () => {
     const nodes = this.extensions.reduce<Record<string, NodeSpec>>(
       (acc, extension) => {
-        const getSchema = getExtensionField(extension, 'getSchema');
-        if (extension.type !== EXTENSIONS_TYPE.NODE && !getSchema) {
+        const addSchema = getExtensionField(extension, 'addSchema');
+
+        if (!addSchema) {
           return acc;
         }
 
-        const schema = getSchema({
-          extension,
-          name: extension.name,
-          writeFlow: this.writeFlow,
-          options: extension.options,
-        });
-
+        const context = this.getContext(extension);
         return {
           ...acc,
-          [extension.name]: schema,
+          [extension.name]: addSchema(context),
         };
       },
       {},
@@ -71,19 +82,13 @@ export default class ExtensionManager {
       },
       marks: basicMarks,
     });
-  }
+  };
 
   /**
    * 从扩展中获得所有注册的 Prosemirror 插件: 插件是 Prosemirror 的核心概念, 用于扩展编辑器功能(如: 输入规则、快捷键、菜单等)
    * @returns 一个 Prosemirror 插件数组
    */
-  private createPlugins() {
-    if (!this.extensions) {
-      throw new Error(
-        '[WriteFlow error]: 无法创建编辑器插件, 因为在此环境中没有定义扩展(extensions)。',
-      );
-    }
-
+  private createPlugins = () => {
     const pluginsByExtension: Plugin[] = [];
     const inputRulesByExtension: InputRule[] = [];
     const keymapByExtension: Plugin[] = [
@@ -92,14 +97,7 @@ export default class ExtensionManager {
     ];
 
     this.extensions.forEach((extension) => {
-      const context = {
-        schema: this.schema,
-        name: extension.name,
-        writeFlow: this.writeFlow,
-        options: extension.options,
-        type: getSchemaTypeByName(extension.name, this.schema),
-        // storage: this.editor.extensionStorage[extension.name as keyof Storage],
-      } as ExtendableFunContext;
+      const context = this.getContext(extension);
 
       // 添加快捷键
       const addKeymap = getExtensionField(extension, 'addKeymap');
@@ -114,9 +112,9 @@ export default class ExtensionManager {
       }
 
       // 添加插件
-      const getPlugins = getExtensionField(extension, 'getPlugins');
-      if (getPlugins) {
-        pluginsByExtension.push(...getPlugins(context));
+      const addPlugins = getExtensionField(extension, 'addPlugins');
+      if (addPlugins) {
+        pluginsByExtension.push(...addPlugins(context));
       }
     });
 
@@ -126,5 +124,25 @@ export default class ExtensionManager {
       history(),
       inputRules({ rules: inputRulesByExtension }),
     ];
-  }
+  };
+
+  /**
+   * 获取所有扩展的 nodeView 对象
+   * @returns 一个包含所有扩展的 nodeView 对象的记录
+   */
+  private createNodeViews = () => {
+    this.nodeViews = this.extensions.reduce<Record<string, NodeView>>(
+      (acc, extension) => {
+        const addNodeView = getExtensionField(extension, 'addNodeView');
+        const context = this.getContext(extension);
+
+        if (addNodeView) {
+          acc[extension.name] = addNodeView(context);
+        }
+
+        return acc;
+      },
+      {},
+    );
+  };
 }

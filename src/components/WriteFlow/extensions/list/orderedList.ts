@@ -8,7 +8,7 @@ import { wrappingInputRule } from 'prosemirror-inputrules';
 export const OrderedList = Node.create({
   name: 'orderedList',
 
-  getSchema() {
+  addSchema() {
     return {
       ...orderedList,
       content: 'listItem+',

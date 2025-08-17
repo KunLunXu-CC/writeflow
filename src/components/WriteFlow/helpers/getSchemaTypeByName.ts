@@ -10,5 +10,9 @@ export const getSchemaTypeByName = (
   name: string,
   schema: Schema,
 ): NodeType | MarkType | null => {
+  if (!schema) {
+    return null;
+  }
+
   return schema.nodes[name] || schema.marks[name] || null;
 };

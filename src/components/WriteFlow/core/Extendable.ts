@@ -3,12 +3,19 @@ import {
   ExtendableFunContext,
 } from '@/components/WriteFlow/types';
 import { InputRule } from 'prosemirror-inputrules';
+import { NodeSpec } from 'prosemirror-model';
 import { Command, Plugin } from 'prosemirror-state';
+import { NodeView } from 'prosemirror-view';
 
 export interface ExtendableConfig<Options = unknown> {
   name: string;
   options?: Options;
   type?: EXTENSIONS_TYPE;
+
+  /*
+   * 添加 schema
+   */
+  addSchema: () => NodeSpec;
 
   /**
    * This function adds commands to the editor
@@ -81,7 +88,19 @@ export interface ExtendableConfig<Options = unknown> {
    *   return [tableEditing()]
    * },
    */
-  getPlugins?: (context: ExtendableFunContext) => Plugin[];
+  addPlugins?: (context: ExtendableFunContext) => Plugin[];
+
+  /**
+   * This function adds a node view to the editor.
+   * @see https://tiptap.dev/docs/editor/guide/custom-extensions#node-views
+   * @example
+   * addNodeView() {
+   *   return (node, view, getPos, decorations, innerDecorations) => {
+   *     return view.dom.appendChild(document.createElement('div'));
+   *   }
+   * },
+   */
+  addNodeView?: (context: ExtendableFunContext) => Record<string, NodeView>;
 }
 
 export class Extendable<Options = unknown> {

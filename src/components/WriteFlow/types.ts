@@ -4,7 +4,7 @@ import { Extendable } from './core/Extendable';
 import type { WriteFlow } from './core/WriteFlow';
 import type { Node, NodeConfig } from './core/Node';
 import type { ExtendableConfig } from './core/Extendable';
-import { NodeType, Schema } from 'prosemirror-model';
+import { MarkType, NodeType, Schema } from 'prosemirror-model';
 
 export { WriteFlow, ExtendableConfig, NodeConfig };
 
@@ -22,11 +22,10 @@ export type Primitive =
   | bigint;
 
 export interface ExtendableFunContext {
-  type: NodeType;
-  writeFlow: WriteFlow;
-  name: string;
+  extension: AnyExtension;
   schema: Schema;
-  options: Record<string, any>;
+  writeFlow: WriteFlow;
+  type: NodeType | MarkType | null;
 }
 
 export type RemoveThis<T> = T extends (...args: any) => any

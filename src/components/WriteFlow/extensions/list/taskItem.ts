@@ -12,7 +12,7 @@ import { Node } from '@/components/WriteFlow/core/Node';
 export const TaskItem = Node.create({
   name: 'taskItem',
 
-  getSchema() {
+  addSchema() {
     return {
       ...listItem,
       // 定义节点属性, 只有定义了才能正确传递获取到该属性值

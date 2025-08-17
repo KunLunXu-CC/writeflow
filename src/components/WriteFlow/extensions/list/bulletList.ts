@@ -8,7 +8,7 @@ import { wrappingInputRule } from 'prosemirror-inputrules';
 export const BulletList = Node.create({
   name: 'bulletList',
 
-  getSchema() {
+  addSchema() {
     return {
       ...bulletList,
       group: 'block',

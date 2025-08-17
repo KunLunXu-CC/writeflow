@@ -8,7 +8,7 @@ import { InputRule } from 'prosemirror-inputrules';
 export const TaskList = Node.create({
   name: 'taskList',
 
-  getSchema() {
+  addSchema() {
     return {
       ...bulletList,
       content: 'taskItem+',
