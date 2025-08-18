@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/WriteFlow/extensions/table';
-
+import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
 import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
 
 import '@/components/WriteFlow/theme';
@@ -29,6 +29,7 @@ export default function Editor() {
       element: editorDom.current!,
       extensions: [
         Heading,
+        Blockquote,
         ListItem,
         TaskList,
         TaskItem,
