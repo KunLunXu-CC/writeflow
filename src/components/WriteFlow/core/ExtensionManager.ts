@@ -1,6 +1,11 @@
 import type { WriteFlow } from './WriteFlow.js';
-import { NodeSpec, Schema } from 'prosemirror-model';
-import { AnyExtension, ExtendableFunContext, Extensions } from '../types';
+import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
+import {
+  AnyExtension,
+  ExtendableFunContext,
+  Extensions,
+  EXTENSIONS_TYPE,
+} from '../types';
 import { Command, Plugin } from 'prosemirror-state';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
@@ -58,7 +63,10 @@ export default class ExtensionManager {
    * returns 返回一个包含所有扩展的 schema 对象
    */
   private createSchema = () => {
-    const nodes = this.extensions.reduce<Record<string, NodeSpec>>(
+    const { nodes, marks } = this.extensions.reduce<{
+      nodes: Record<string, NodeSpec>;
+      marks: Record<string, MarkSpec>;
+    }>(
       (acc, extension) => {
         const addSchema = getExtensionField(extension, 'addSchema');
 
@@ -67,21 +75,27 @@ export default class ExtensionManager {
         }
 
         const context = this.getContext(extension);
-        return {
-          ...acc,
-          [extension.name]: addSchema(context),
-        };
+
+        switch (extension.type) {
+          case EXTENSIONS_TYPE.NODE:
+            acc.nodes[extension.name] = addSchema(context);
+            break;
+          case EXTENSIONS_TYPE.MARK:
+            acc.marks[extension.name] = addSchema(context);
+            break;
+          default:
+            break;
+        }
+
+        return acc;
       },
-      {},
+      {
+        nodes: { ...basicNodes },
+        marks: { ...basicMarks },
+      },
     );
 
-    this.schema = new Schema({
-      nodes: {
-        ...basicNodes, // 基础节点: blockquote, code_block, doc、hard_break、heading,horizontal_rule、image、paragraph, text
-        ...nodes,
-      },
-      marks: basicMarks,
-    });
+    this.schema = new Schema({ nodes, marks });
   };
 
   /**
