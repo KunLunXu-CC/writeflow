@@ -16,8 +16,6 @@ const customInputRules = inputRules({
     // ...smartQuotes, // " 和 ' 的智能转换, 比如 "hello" 转换为 "hello", 或者 'hello' 转换为 'hello'
     ellipsis, // 将三个点转换为省略号, 比如 ... 转换为 …
     emDash, // 将双破折号转换为长破折号, 比如 -- 转换为 —
-    // 块引用, 将一个以 > 开头的文本块转换为块引用。
-    // wrappingInputRule(/^\s*>\s$/, mySchema.nodes.blockquote),
   ],
 });
 

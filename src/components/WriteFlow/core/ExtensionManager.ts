@@ -6,26 +6,18 @@ import {
   Extensions,
   EXTENSIONS_TYPE,
 } from '../types';
-import { Command, Plugin } from 'prosemirror-state';
+import { Plugin } from 'prosemirror-state';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
 import { keymap } from 'prosemirror-keymap';
 import { baseKeymap } from 'prosemirror-commands';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
-import { redo, undo, history } from 'prosemirror-history';
+import { history } from 'prosemirror-history';
 import {
   nodes as basicNodes,
   marks as basicMarks,
 } from 'prosemirror-schema-basic';
 import { NodeViewConstructor } from 'prosemirror-view';
-
-const isMac = globalThis.navigator?.userAgent.includes('Mac');
-const modKey = isMac ? 'Mod-' : 'Ctrl-';
-
-const customKeymap: Record<string, Command> = {
-  [`${modKey}z`]: undo, // 撤销
-  [`${modKey}Shift-z`]: redo, // 重做
-};
 
 export default class ExtensionManager {
   writeFlow!: WriteFlow;
@@ -105,10 +97,7 @@ export default class ExtensionManager {
   private createPlugins = () => {
     const pluginsByExtension: Plugin[] = [];
     const inputRulesByExtension: InputRule[] = [];
-    const keymapByExtension: Plugin[] = [
-      keymap(baseKeymap),
-      keymap(customKeymap),
-    ];
+    const keymapByExtension: Plugin[] = [keymap(baseKeymap)];
 
     this.extensions.forEach((extension) => {
       const context = this.getContext(extension);

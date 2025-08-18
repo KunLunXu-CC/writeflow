@@ -14,9 +14,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/WriteFlow/extensions/table';
+import { Base } from '@/components/WriteFlow/extensions/base';
 import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
 import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
-
 import '@/components/WriteFlow/theme';
 
 export default function Editor() {
@@ -28,6 +28,7 @@ export default function Editor() {
     editorRef.current = new WriteFlow({
       element: editorDom.current!,
       extensions: [
+        Base,
         Heading,
         Blockquote,
         ListItem,

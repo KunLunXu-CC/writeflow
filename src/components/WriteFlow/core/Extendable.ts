@@ -15,7 +15,7 @@ export interface ExtendableConfig<Options = unknown> {
   /*
    * 添加 schema
    */
-  addSchema: () => NodeSpec;
+  addSchema?: () => NodeSpec;
 
   /**
    * This function adds commands to the editor
@@ -113,5 +113,16 @@ export class Extendable<Options = unknown> {
     this.config = config;
     this.name = this.config.name;
     this.options = config.options;
+  }
+
+  /**
+   * 创建一个新的 Extendable 实例
+   * @param config - 扩展配置对象或返回配置对象的函数
+   */
+  static create<Options = unknown>(
+    config: ExtendableConfig<Options> | (() => ExtendableConfig<Options>),
+  ) {
+    const resolvedConfig = typeof config === 'function' ? config?.() : config;
+    return new Extendable<Options>(resolvedConfig);
   }
 }
