@@ -2,6 +2,7 @@ import { baseTableNodes } from '.';
 import { Node } from '@/components/WriteFlow/core/Node';
 import { InputRule } from 'prosemirror-inputrules';
 import { TextSelection } from 'prosemirror-state';
+import { columnResizing, goToNextCell, tableEditing } from 'prosemirror-tables';
 // import { tableEditing } from 'prosemirror-tables';
 
 const ROW_COUNT_INPUT_RULE = 2;
@@ -34,8 +35,14 @@ export const Table = Node.create({
     ];
   },
 
-  // getPlugins: () => {
-  //   return [tableEditing()];
-  //   // return [columnResizing(), tableEditing()];
-  // },
+  addKeymap: () => {
+    return {
+      Tab: goToNextCell(1),
+      'Shift-Tab': goToNextCell(-1),
+    };
+  },
+
+  addPlugins: () => {
+    return [columnResizing(), tableEditing()];
+  },
 });
