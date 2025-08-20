@@ -1,17 +1,18 @@
 import { orderedList } from 'prosemirror-schema-list';
 import { Node } from '@/components/WriteFlow/core/Node';
 import { wrappingInputRule } from 'prosemirror-inputrules';
+import { NodeType } from 'prosemirror-model';
 
 /**
  * 有序列表
  */
 export const OrderedList = Node.create({
-  name: 'orderedList',
+  name: 'ordered_list',
 
   addSchema() {
     return {
       ...orderedList,
-      content: 'listItem+',
+      content: 'list_item+',
       group: 'block',
     };
   },
@@ -22,7 +23,7 @@ export const OrderedList = Node.create({
     return [
       wrappingInputRule(
         /^(\d+)\.\s$/,
-        type,
+        type as NodeType,
         (match) => ({ order: +match[1] }),
         (match, node) => node.childCount + node.attrs.order == +match[1],
       ),

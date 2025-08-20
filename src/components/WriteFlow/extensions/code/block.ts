@@ -4,7 +4,7 @@ import { NodeType } from 'prosemirror-model';
 import { CodeBlockNodeView } from './CodeBlockNodeView';
 
 export const CodeBlock = Node.create({
-  name: 'codeBlock',
+  name: 'code_block',
 
   // options: {
   //   languageClassPrefix: 'language-',

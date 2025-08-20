@@ -34,7 +34,7 @@ const maybeEscape =
   };
 
 export const InlineCode = Mark.create({
-  name: 'inlineCode',
+  name: 'inline_code',
 
   addSchema() {
     return {
