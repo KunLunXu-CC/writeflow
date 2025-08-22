@@ -1,3 +1,7 @@
+:root {
+  --write-flow-primary: #ff6d6d;
+}
+
 // 整体设置
 .markdown-preview-light {
   $base-font-size: 16;
@@ -178,6 +182,7 @@
 
     width: 100%;
     margin: 2.5em 0;
+    table-layout: fixed;
     border-collapse: collapse;
     border: 0.0625em solid $color-border;
 
@@ -193,6 +198,12 @@
     td {
       padding: 0.375em 0.625em;
       border: 0.0625em solid $color-border;
+    }
+
+    // selector-class-pattern
+    .selectedCell {
+      pointer-events: none;
+      background-color: var(--write-flow-primary);
     }
   }
 

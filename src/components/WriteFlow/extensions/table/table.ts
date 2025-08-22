@@ -2,8 +2,10 @@ import { baseTableNodes } from '.';
 import { Node } from '@/components/WriteFlow/core/Node';
 import { InputRule } from 'prosemirror-inputrules';
 import { TextSelection } from 'prosemirror-state';
-import { columnResizing, goToNextCell, tableEditing } from 'prosemirror-tables';
+import { goToNextCell, tableEditing } from 'prosemirror-tables';
+// import { TableView } from './TableVIew';
 // import { tableEditing } from 'prosemirror-tables';
+// columnResizing,
 
 const ROW_COUNT_INPUT_RULE = 2;
 const COL_COUNT_INPUT_RULE = 3;
@@ -39,10 +41,28 @@ export const Table = Node.create({
     return {
       Tab: goToNextCell(1),
       'Shift-Tab': goToNextCell(-1),
+
+      // Tab: () => {
+      //   if (this.editor.commands.goToNextCell()) {
+      //     return true
+      //   }
+
+      //   if (!this.editor.can().addRowAfter()) {
+      //     return false
+      //   }
+
+      //   return this.editor.chain().addRowAfter().goToNextCell().run()
+      // },
+      // 'Shift-Tab': () => this.editor.commands.goToPreviousCell(),
+      // Backspace: deleteTableWhenAllCellsSelected,
+      // 'Mod-Backspace': deleteTableWhenAllCellsSelected,
+      // Delete: deleteTableWhenAllCellsSelected,
+      // 'Mod-Delete': deleteTableWhenAllCellsSelected,
     };
   },
 
   addPlugins: () => {
-    return [columnResizing(), tableEditing()];
+    // columnResizing,
+    return [tableEditing()];
   },
 });
