@@ -1,5 +1,5 @@
 :root {
-  --write-flow-primary: #ff6d6d;
+  --write-flow-primary: 0 100% 71%;
 }
 
 // 整体设置
@@ -33,7 +33,7 @@
 
     &:not(h1)::before {
       content: '#';
-      color: #ff6d6d;
+      color: hsl(var(--write-flow-primary));
       padding: {
         right: 0.5em;
       };
@@ -187,6 +187,7 @@
     border: 0.0625em solid $color-border;
 
     th {
+      position: relative;
       padding: 0.375em 0.625em;
       color: #666;
       text-align: left;
@@ -196,14 +197,29 @@
     }
 
     td {
+      position: relative;
       padding: 0.375em 0.625em;
       border: 0.0625em solid $color-border;
     }
 
-    // selector-class-pattern
+    // 表格选中样式 
     .selectedCell {
-      pointer-events: none;
-      background-color: var(--write-flow-primary);
+      background-color: hsl(var(--write-flow-primary) / 20%);
+
+      *::selection {
+        background: none;
+      }
+    }
+
+    // 表格列宽调整
+    .column-resize-handle {
+      width: 4px;
+      top: 0;
+      bottom: 0;
+      right: -2px;
+      position: absolute;
+      cursor: col-resize;
+      background-color: hsl(var(--write-flow-primary));
     }
   }
 

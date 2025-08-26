@@ -2,10 +2,7 @@ import { baseTableNodes } from '.';
 import { Node } from '@/components/WriteFlow/core/Node';
 import { InputRule } from 'prosemirror-inputrules';
 import { TextSelection } from 'prosemirror-state';
-import { goToNextCell, tableEditing } from 'prosemirror-tables';
-// import { TableView } from './TableVIew';
-// import { tableEditing } from 'prosemirror-tables';
-// columnResizing,
+import { goToNextCell, tableEditing, columnResizing } from 'prosemirror-tables';
 
 const ROW_COUNT_INPUT_RULE = 2;
 const COL_COUNT_INPUT_RULE = 3;
@@ -62,7 +59,7 @@ export const Table = Node.create({
   },
 
   addPlugins: () => {
-    // columnResizing,
-    return [tableEditing()];
+    // WARNING: 顺序很重要, 若把 tableEditing 放在前面, 调整宽度是会选中单元格
+    return [columnResizing(), tableEditing()];
   },
 });
