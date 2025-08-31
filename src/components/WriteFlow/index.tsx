@@ -27,6 +27,9 @@ export default function Editor() {
     if (editorRef.current) return;
     editorRef.current = new WriteFlow({
       element: editorDom.current!,
+      attributes: {
+        class: 'write-flow-light',
+      },
       extensions: [
         Base,
         Heading,
@@ -49,7 +52,7 @@ export default function Editor() {
   return (
     <div
       ref={editorDom}
-      className="w-[800px] h-[800px] write-flow-light [&_.ProseMirror]:outline-none [&_.ProseMirror]:bg-[#fafafa] [&_.ProseMirror]:min-h-[600px] [&_.ProseMirror]:p-1"
+      className="w-[800px] h-[800px] [&_.ProseMirror]:outline-none [&_.ProseMirror]:bg-[#fafafa] [&_.ProseMirror]:min-h-[600px] [&_.ProseMirror]:p-1"
     />
   );
 }

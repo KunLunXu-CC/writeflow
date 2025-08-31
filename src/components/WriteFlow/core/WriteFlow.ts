@@ -20,6 +20,11 @@ export class WriteFlow {
     this.mount(options.element);
   }
 
+  private setOptions(options: WriteFlowOptions) {
+    this.options = {
+      ...options,
+    };
+  }
   /**
    * 将编辑器附加到 DOM, 最终创建一个新的编辑器视图(view)
    */
@@ -39,6 +44,9 @@ export class WriteFlow {
     this.view = new EditorView(el, {
       nodeViews: {
         ...this.extensionManager.nodeViews,
+      },
+      attributes: {
+        ...this.options.attributes,
       },
       // ...this.options.editorProps,
       // attributes: {
@@ -102,12 +110,6 @@ export class WriteFlow {
     });
 
     return this.state;
-  }
-
-  private setOptions(options: WriteFlowOptions) {
-    this.options = {
-      ...options,
-    };
   }
 
   // private createCommandManager() {

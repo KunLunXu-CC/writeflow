@@ -5,6 +5,7 @@ import type { Node, NodeConfig } from './core/Node';
 import type { Mark, MarkConfig } from './core/Mark';
 import type { ExtendableConfig } from './core/Extendable';
 import { MarkType, NodeType, Schema } from 'prosemirror-model';
+import { EditorProps } from 'prosemirror-view';
 
 export { WriteFlow, ExtendableConfig, NodeConfig };
 
@@ -41,7 +42,7 @@ export type RemoveThis<T> = T extends (...args: any) => any
   ? (...args: Parameters<T>) => ReturnType<T>
   : T;
 
-export interface WriteFlowOptions {
+export interface WriteFlowOptions extends EditorProps {
   element: Element;
   extensions?: AnyExtension[];
 }

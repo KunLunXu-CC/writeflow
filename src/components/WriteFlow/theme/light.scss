@@ -1,23 +1,40 @@
 :root {
   --write-flow-color-primary: 0 100% 71%;
+
+  // colorText	最深的文本色。为了符合W3C标准，默认的文本颜色使用了该色，同时这个颜色也是最深的中性色。	string	rgba(0,0,0,0.88)
+  // colorTextQuaternary	第四级文本色是最浅的文本色，例如表单的输入提示文本、禁用色文本等。	string	rgba(0,0,0,0.25)
+  // colorTextSecondary	作为第二梯度的文本色，一般用在不那么需要强化文本颜色的场景，例如 Label 文本、Menu 的文本选中态等场景。	string	rgba(0,0,0,0.65)
+  // colorTextTertiary	第三级文本色一般用于描述性文本，例如表单的中的补充说明文本、列表的描述性文本等场景。
+
+
+  /* 字体大小 */
   --write-flow-text-base: 16px;
+  --write-flow-font-family: 'Microsoft Yahei', 'Helvetica Neue', helvetica, arial, sans-serif;
+
+  // fontSizeHeading1	H1 标签所使用的字号	number	38
+  // fontSizeHeading2	h2 标签所使用的字号	number	30
+  // fontSizeHeading3	h3 标签使用的字号	number	24
+  // fontSizeHeading4	h4 标签使用的字号	number	20
+  // fontSizeHeading5	h5 标签使用的字号
 }
 
 // 整体设置
 .write-flow-light {
-  $base-font-size: 16;
-
+  line-height: 1.6;
+  font-weight: 400;
   color: #252933;
-  line-height: 1.7;
-  font-size: 16px;
-  font-family: 'Microsoft Yahei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background: #fff;
+  font-size: var(--write-flow-text-base);
+  font-family: var(--write-flow-font-family);
 
-  padding: {
-    left: 1.25em;
-    right: 1.25em;
-    bottom: 1.25em;
-  };
+  // 段落
+  p {
+    font-size: 1em;
+
+    &:not(:first-child) {
+      margin-top: 1.25em;
+    }
+  }
 
   h1,
   h2,
@@ -28,7 +45,6 @@
     color: inherit;
     font-weight: 500;
     line-height: 1.42;
-    margin-top: 1.35em;
     padding-bottom: 0.4em;
     border-bottom: 1px dashed #ddd;
 
@@ -39,11 +55,6 @@
         right: 0.5em;
       };
     }
-  }
-
-  // 段落 
-  p {
-    font-size: 1em;
   }
 
   ul {
