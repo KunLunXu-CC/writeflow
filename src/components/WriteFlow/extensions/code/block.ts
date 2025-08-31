@@ -22,6 +22,8 @@ export const CodeBlock = Node.create({
 
       marks: '',
 
+      isolating: true,
+
       group: 'block',
 
       code: true,

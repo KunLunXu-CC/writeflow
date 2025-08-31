@@ -25,12 +25,15 @@ export enum EXTENSIONS_TYPE {
 
 export type AnyConfig = NodeConfig | MarkConfig;
 
-export type AnyExtension = Node | Mark | Extendable;
+export type AnyExtension<Options = unknown> =
+  | Node<Options>
+  | Mark<Options>
+  | Extendable<Options>;
 
 export type Extensions = AnyExtension[];
 
-export interface ExtendableFunContext {
-  extension: AnyExtension;
+export interface ExtendableFunContext<Options = unknown> {
+  extension: AnyExtension<Options>;
   schema: Schema;
   writeFlow: WriteFlow;
   type: NodeType | MarkType | null;

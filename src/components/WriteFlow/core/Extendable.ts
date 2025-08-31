@@ -15,7 +15,7 @@ export interface ExtendableConfig<Options = unknown> {
   /*
    * 添加 schema
    */
-  addSchema?: () => NodeSpec;
+  addSchema?: (context: ExtendableFunContext<Options>) => NodeSpec;
 
   /**
    * This function adds commands to the editor
@@ -66,7 +66,7 @@ export interface ExtendableConfig<Options = unknown> {
    *   ]
    * },
    */
-  addInputRules?: (context: ExtendableFunContext) => InputRule[];
+  addInputRules?: (context: ExtendableFunContext<Options>) => InputRule[];
 
   /**
    * This function adds keyboard shortcuts to the editor.
@@ -78,7 +78,9 @@ export interface ExtendableConfig<Options = unknown> {
    *   }
    * },
    */
-  addKeymap?: (context: ExtendableFunContext) => Record<string, Command>;
+  addKeymap?: (
+    context: ExtendableFunContext<Options>,
+  ) => Record<string, Command>;
 
   /**
    * This function adds a plugin to the editor.
@@ -88,7 +90,7 @@ export interface ExtendableConfig<Options = unknown> {
    *   return [tableEditing()]
    * },
    */
-  addPlugins?: (context: ExtendableFunContext) => Plugin[];
+  addPlugins?: (context: ExtendableFunContext<Options>) => Plugin[];
 
   /**
    * This function adds a node view to the editor.
@@ -100,7 +102,7 @@ export interface ExtendableConfig<Options = unknown> {
    *   }
    * },
    */
-  addNodeView?: (context: ExtendableFunContext) => NodeViewConstructor;
+  addNodeView?: (context: ExtendableFunContext<Options>) => NodeViewConstructor;
 }
 
 export class Extendable<Options = unknown> {

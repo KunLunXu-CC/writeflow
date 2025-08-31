@@ -1,5 +1,6 @@
 import { redo, undo } from 'prosemirror-history';
 import { Extendable } from '@/components/WriteFlow/core/Extendable';
+import { gapCursor } from 'prosemirror-gapcursor';
 
 /**
  * This extension allows you to create blockquote.
@@ -16,5 +17,9 @@ export const Base = Extendable.create({
       [`${modKey}z`]: undo, // 撤销
       [`${modKey}Shift-z`]: redo, // 重做
     };
+  },
+
+  addPlugins() {
+    return [gapCursor()];
   },
 });

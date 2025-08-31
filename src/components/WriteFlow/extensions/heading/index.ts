@@ -1,8 +1,6 @@
 import { Node } from '@/components/WriteFlow/core/Node';
 import { textblockTypeInputRule } from 'prosemirror-inputrules';
 import { NodeType } from 'prosemirror-model';
-// import { mergeAttributes } from '../helpers/mergeAttributes';
-// import { textblockTypeInputRule } from '../inputRules';
 
 /**
  * The heading level options.
@@ -32,9 +30,16 @@ export interface HeadingOptions {
 export const Heading = Node.create<HeadingOptions>({
   name: 'heading',
 
+  options: {
+    HTMLAttributes: {},
+    levels: [1, 2, 3, 4, 5, 6],
+  },
+
   // 决定了如果渲染节点, 比如: 渲染 heading 节点时, 会渲染成 <h1> 标签
   // 用于往 schema 中注册节点, 会根据 this.name 注册成对应的节点
-  addSchema() {
+  addSchema({ extension }) {
+    const levels = extension?.options?.levels || [1, 2, 3, 4, 5, 6];
+
     return {
       content: 'inline*',
       group: 'block',
@@ -51,12 +56,12 @@ export const Heading = Node.create<HeadingOptions>({
         const { level } = node.attrs;
         return [`h${level}`, {}, 0];
       },
-    };
-  },
 
-  options: {
-    HTMLAttributes: {},
-    levels: [1, 2, 3, 4, 5, 6],
+      parseDOM: levels.map((level: Level) => ({
+        tag: `h${level}`,
+        attrs: { level },
+      })),
+    };
   },
 
   // addCommands() {
@@ -96,10 +101,14 @@ export const Heading = Node.create<HeadingOptions>({
   // },
 
   // 返回 InputRule 对象 { find, handler }[] 的数组
-  addInputRules({ type }) {
+  addInputRules({ type, extension }) {
+    const level: Level[] = extension.options?.levels || [];
+    const first = level[0];
+    const last = level[level.length - 1];
+
     return [
       textblockTypeInputRule(
-        new RegExp('^(#{1,6})\\s$'),
+        new RegExp(`^(#{${first},${last}})\\s$`),
         type as NodeType,
         (match) => ({
           level: match[1].length,
