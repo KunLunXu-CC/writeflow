@@ -1,9 +1,10 @@
 :root {
-  --write-flow-primary: 0 100% 71%;
+  --write-flow-color-primary: 0 100% 71%;
+  --write-flow-text-base: 16px;
 }
 
 // 整体设置
-.markdown-preview-light {
+.write-flow-light {
   $base-font-size: 16;
 
   color: #252933;
@@ -33,7 +34,7 @@
 
     &:not(h1)::before {
       content: '#';
-      color: hsl(var(--write-flow-primary));
+      color: hsl(var(--write-flow-color-primary));
       padding: {
         right: 0.5em;
       };
@@ -204,7 +205,7 @@
 
     // 表格选中样式 
     .selectedCell {
-      background-color: hsl(var(--write-flow-primary) / 20%);
+      background-color: hsl(var(--write-flow-color-primary) / 20%);
 
       *::selection {
         background: none;
@@ -219,7 +220,7 @@
       right: -2px;
       position: absolute;
       cursor: col-resize;
-      background-color: hsl(var(--write-flow-primary));
+      background-color: hsl(var(--write-flow-color-primary));
     }
   }
 

@@ -23,16 +23,14 @@ export enum EXTENSIONS_TYPE {
   EXTENDABLE = 'extendable',
 }
 
-export type AnyConfig = NodeConfig | MarkConfig;
+export type AnyExtensionConfig = NodeConfig | MarkConfig;
 
-export type AnyExtension<Options = unknown> =
+export type AnyExtension<Options = any> =
   | Node<Options>
   | Mark<Options>
   | Extendable<Options>;
 
-export type Extensions = AnyExtension[];
-
-export interface ExtendableFunContext<Options = unknown> {
+export interface ExtendableFunContext<Options> {
   extension: AnyExtension<Options>;
   schema: Schema;
   writeFlow: WriteFlow;
@@ -45,5 +43,5 @@ export type RemoveThis<T> = T extends (...args: any) => any
 
 export interface WriteFlowOptions {
   element: Element;
-  extensions?: Extensions;
+  extensions?: AnyExtension[];
 }
