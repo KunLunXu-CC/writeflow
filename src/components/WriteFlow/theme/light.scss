@@ -1,15 +1,16 @@
 :root {
   --write-flow-color-primary: 0 100% 71%;
+  --write-flow-color-bg: 0 0% 100%;
 
-  // colorText	最深的文本色。为了符合W3C标准，默认的文本颜色使用了该色，同时这个颜色也是最深的中性色。	string	rgba(0,0,0,0.88)
-  // colorTextQuaternary	第四级文本色是最浅的文本色，例如表单的输入提示文本、禁用色文本等。	string	rgba(0,0,0,0.25)
-  // colorTextSecondary	作为第二梯度的文本色，一般用在不那么需要强化文本颜色的场景，例如 Label 文本、Menu 的文本选中态等场景。	string	rgba(0,0,0,0.65)
-  // colorTextTertiary	第三级文本色一般用于描述性文本，例如表单的中的补充说明文本、列表的描述性文本等场景。
-
+  // 文本颜色
+  --write-flow-color-text: 220 4% 14%; // 最深的文本色, 为了符合 W3C 标准, 默认的文本颜色使用了该色, 同时这个颜色也是最深的中性色
+  // --write-flow-color-text-secondary: 0 0% 0%; // 作为第二梯度的文本色, 一般用在不那么需要强化文本颜色的场景, 例如 Label 文本、Menu 的文本选中态等场景
+  // --write-flow-color-text-tertiary: 0 0% 0%; // 第三级文本色一般用于描述性文本, 例如表单的中的补充说明文本、列表的描述性文本等场景
+  // --write-flow-color-text-quaternary: 0 0% 0%; // 第四级文本色是最浅的文本色, 例如表单的输入提示文本、禁用色文本等
 
   /* 字体大小 */
   --write-flow-text-base: 16px;
-  --write-flow-font-family: 'Microsoft Yahei', 'Helvetica Neue', helvetica, arial, sans-serif;
+  --write-flow-font-family: "DM Sans", sans-serif;
 
   // fontSizeHeading1	H1 标签所使用的字号	number	38
   // fontSizeHeading2	h2 标签所使用的字号	number	30
@@ -20,14 +21,14 @@
 
 // 整体设置
 .write-flow-light {
-  line-height: 1.6;
+  line-height: 1.5;
   font-weight: 400;
-  color: #252933;
-  background: #fff;
+  background: var(--write-flow-color-bg);
+  color: hsl(var(--write-flow-color-text));
   font-size: var(--write-flow-text-base);
   font-family: var(--write-flow-font-family);
 
-  // 段落
+  // #region 段落
   p {
     font-size: 1em;
 
@@ -36,17 +37,14 @@
     }
   }
 
+  // #region 标题
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    color: inherit;
-    font-weight: 500;
-    line-height: 1.42;
-    padding-bottom: 0.4em;
-    border-bottom: 1px dashed #ddd;
+    // border-bottom: 1px dashed #ddd;
 
     &:not(h1)::before {
       content: '#';
@@ -56,6 +54,40 @@
       };
     }
   }
+
+  h1 {
+    font-size: 1.5em;
+    margin-top: 3em;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 1.25em;
+    margin-top: 2.5em;
+    font-weight: 700;
+  }
+
+  h3 {
+    font-size: 1.125em;
+    font-weight: 600;
+    margin-top: 2em;
+  }
+
+  h4 {
+    font-size: 1em;
+    font-weight: 600;
+    margin-top: 2em;
+  }
+
+  h5,
+  h6 {
+    font-size: 1em;
+    font-weight: 400;
+    margin-top: 1.25em;
+  }
+
+  // #endregion
+  
 
   ul {
     padding-left: 1.75em;
@@ -245,13 +277,6 @@
   // mermaid 样式设置 
   .brick-markdown-preview-mermaid {
     text-align: center;
-  }
-
-  // 标题设置
-  @for $i from 0 through 5 {
-    h#{$i + 1} {
-      font-size: 1.625 - $i * 0.125 + em;
-    }
   }
 
   .ProseMirror-gapcursor {
