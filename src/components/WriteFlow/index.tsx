@@ -52,7 +52,7 @@ export default function Editor() {
   return (
     <div
       ref={editorDom}
-      className="w-[600px] h-[600px] rounded-md [&_.ProseMirror]:outline-none shadow-2xl [&_.ProseMirror]:min-h-[600px] [&_.ProseMirror]:p-1"
+      className="w-[600px] overflow-auto h-[600px] rounded-md [&_.ProseMirror]:outline-none shadow-2xl [&_.ProseMirror]:min-h-[600px] [&_.ProseMirror]:p-4"
     />
   );
 }

@@ -3,10 +3,10 @@
   --write-flow-color-bg: 0 0% 100%;
 
   // 文本颜色
-  --write-flow-color-text: 220 4% 14%; // 最深的文本色, 为了符合 W3C 标准, 默认的文本颜色使用了该色, 同时这个颜色也是最深的中性色
-  // --write-flow-color-text-secondary: 0 0% 0%; // 作为第二梯度的文本色, 一般用在不那么需要强化文本颜色的场景, 例如 Label 文本、Menu 的文本选中态等场景
-  // --write-flow-color-text-tertiary: 0 0% 0%; // 第三级文本色一般用于描述性文本, 例如表单的中的补充说明文本、列表的描述性文本等场景
-  // --write-flow-color-text-quaternary: 0 0% 0%; // 第四级文本色是最浅的文本色, 例如表单的输入提示文本、禁用色文本等
+  --write-flow-color-text: 0 0% 15%; // 最深的文本色, 为了符合 W3C 标准, 默认的文本颜色使用了该色, 同时这个颜色也是最深的中性色
+  --write-flow-color-text-secondary: 0 0% 55%; // 作为第二梯度的文本色, 一般用在不那么需要强化文本颜色的场景, 例如 Label 文本、Menu 的文本选中态等场景
+  --write-flow-color-text-tertiary: 0 0% 75%; // 第三级文本色一般用于描述性文本, 例如表单的中的补充说明文本、列表的描述性文本等场景
+  --write-flow-color-text-quaternary: 0 0% 90%; // 第四级文本色是最浅的文本色, 例如表单的输入提示文本、禁用色文本等
 
   /* 字体大小 */
   --write-flow-text-base: 16px;
@@ -28,6 +28,10 @@
   font-size: var(--write-flow-text-base);
   font-family: var(--write-flow-font-family);
 
+  > *:first-child {
+    margin-top: 0;
+  }
+
   // #region 段落
   p {
     font-size: 1em;
@@ -37,6 +41,8 @@
     }
   }
 
+  // #endregion
+
   // #region 标题
   h1,
   h2,
@@ -44,9 +50,9 @@
   h4,
   h5,
   h6 {
-    // border-bottom: 1px dashed #ddd;
+    border-bottom: 1px dashed hsl(var(--write-flow-color-text-quaternary));
 
-    &:not(h1)::before {
+    &::before {
       content: '#';
       color: hsl(var(--write-flow-color-primary));
       padding: {
@@ -88,15 +94,15 @@
 
   // #endregion
   
-
+  // #region 列表
   ul {
-    padding-left: 1.75em;
-    margin-block: 1em;
+    margin-top: 1.25em;
+    padding-left: 1.5em;
     list-style: disc outside none;
 
     ul {
-      list-style: circle outside none;
       margin-block: 0;
+      list-style: circle outside none;
 
       ul {
         list-style: square outside none;
@@ -105,13 +111,13 @@
   }
 
   ol {
-    padding-left: 1.75em;
-    margin-block: 1em;
+    margin-top: 1.25em;
+    padding-left: 1.5em;
     list-style: decimal outside none;
 
     ol {
-      list-style: lower-roman outside none;
       margin-block: 0;
+      list-style: lower-roman outside none;
 
       ol {
         list-style: lower-latin outside none;
@@ -135,6 +141,7 @@
     }
   }
 
+  // #endregion
 
   // 图片设置 
   img {
