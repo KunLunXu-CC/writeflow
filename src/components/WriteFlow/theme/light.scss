@@ -126,7 +126,11 @@
   }
 
   // 任务列表
-  li[data-type='task-item'] {
+  ul[date-type='taskList'] {
+    padding-left: 0 !important;
+  }
+
+  li[data-type='taskItem'] {
     gap: 0.5em;
     width: 100%;
     display: flex;

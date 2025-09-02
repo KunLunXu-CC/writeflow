@@ -13,6 +13,13 @@ export const TaskList = Node.create({
       ...bulletList,
       content: 'task_item+',
       group: 'block',
+      toDOM: () => [
+        'ul',
+        {
+          'data-type': 'taskList',
+        },
+        0,
+      ],
     };
   },
 

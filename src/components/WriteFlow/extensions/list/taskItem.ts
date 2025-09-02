@@ -26,7 +26,7 @@ export const TaskItem = Node.create({
         return [
           'li',
           {
-            'data-type': 'task-item',
+            'data-type': 'taskItem',
             'data-done': checked.toString(),
           },
           [
