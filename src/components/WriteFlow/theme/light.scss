@@ -15,6 +15,7 @@
   // 圆角
   --write-flow-rounded-sm: 0.25;
   --write-flow-rounded: var(--write-flow-rounded-sm);
+  --write-flow-motion-duration-fast: 0.4s;
 
   // fontSizeHeading1	H1 标签所使用的字号	number	38
   // fontSizeHeading2	h2 标签所使用的字号	number	30
@@ -25,7 +26,7 @@
 
 // 整体设置
 .write-flow-light {
-  line-height: 1.5;
+  line-height: 1.6;
   font-weight: 400;
   background: var(--write-flow-color-bg);
   color: hsl(var(--write-flow-color-text));
@@ -149,6 +150,8 @@
     }
 
     label {
+      height: 1em;
+      margin-top: 0.3em;
       position: relative;
     }
 
@@ -162,16 +165,15 @@
     label span {
       width: 1em;
       height: 1em;
-      border-radius: 4px;
       position: relative;
       cursor: pointer;
+      border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-
-      // transition: background-color 80ms ease-out, border-color 80ms ease-out;
-      // background-color: hsl(var(--write-flow-color-bg));
-      border: 0.125em solid hsl(var(--write-flow-color-text-quaternary));
+      border: 0.0625em solid hsl(var(--write-flow-color-text-quaternary));
+      background-color: hsl(var(--write-flow-color-text-quaternary) / 10%);
+      transition: all var(--write-flow-motion-duration-fast);
     }
 
     label span::before {
@@ -183,20 +185,13 @@
       border-top: 0;
       border-left: 0;
       transform: rotate(45deg);
-
-      // transform-origin: center;
-      // transform: rotate(45deg) scale(0) translate(-50%, -50%);
-      // opacity: 0;
-      // transition: all var(--ant-motion-duration-fast) var(--ant-motion-ease-in-back), opacity var(--ant-motion-duration-fast);
     }
 
-    // label input[type="checkbox"]:checked+span {
-    //   background-color: hsl(var(--write-flow-color-primary));
-    // }
-    
-    // label input[type="checkbox"]:checked+span::before {
-    //   opacity: 1;
-    // }
+    label input[type="checkbox"]:checked+span {
+      opacity: 1;
+      border-color: hsl(var(--write-flow-color-primary));
+      background-color: hsl(var(--write-flow-color-primary));
+    }
   }
 
   // #endregion
