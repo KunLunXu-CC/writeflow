@@ -38,6 +38,7 @@ export const TaskItem = Node.create({
                 checked: checked ? 'checked' : null,
               },
             ],
+            ['span'],
           ],
           ['div', 0],
         ];
