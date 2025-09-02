@@ -126,7 +126,7 @@
   }
 
   // 任务列表
-  ul[date-type='taskList'] {
+  ul[data-type='taskList'] {
     padding-left: 0 !important;
   }
 
@@ -152,21 +152,12 @@
     max-width: 100%;
   }
 
-  // 快引用、折叠面板 
-  details,
+  // 快引用
   blockquote {
-    margin: 1.375em 0;
-    padding: 1px 1.2em;
-    color: #666;
-    border-left: 0.25em solid #ff7a45;
-    background: rgb(217 217 217 / 20%);
-
-    summary {
-      color: #666;
-      outline: none;
-      cursor: pointer;
-      margin: 0.65em 0;
-    }
+    margin-top: 1.25em;
+    padding: 0.375em 0.75em;
+    background: hsl(var(--write-flow-color-text-quaternary) / 10%);
+    border-left: 0.25em solid hsl(var(--write-flow-color-primary));
   }
 
   // code `` 提示内容 
