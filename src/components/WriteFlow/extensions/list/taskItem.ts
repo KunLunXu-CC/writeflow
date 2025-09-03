@@ -48,7 +48,7 @@ export const TaskItem = Node.create({
 
   addKeymap({ type }) {
     return {
-      Enter: splitListItem(type as NodeType), // 按 enter 键, 会拆分列表项
+      Enter: splitListItem(type as NodeType, { checked: false }), // 按 enter 键, 会拆分列表项
       Tab: sinkListItem(type as NodeType), // 按 tab 键, 会下沉列表项
       'Shift-Tab': liftListItem(type as NodeType), // 按 shift + tab 键, 会上移列表项
     };

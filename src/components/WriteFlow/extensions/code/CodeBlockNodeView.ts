@@ -94,11 +94,11 @@ export class CodeBlockNodeView implements NodeView {
 
   createDom(): HTMLElement {
     const wrap = document.createElement('div');
-    wrap.className = 'writerflow-code-block';
+    wrap.className = 'writer-flow-code-block';
 
     const header = document.createElement('div');
-    header.className = 'writerflow-code-block-header';
-    header.innerHTML = `<div class="writerflow-code-block-point"/>`;
+    header.className = 'writer-flow-code-block-header';
+    header.innerHTML = `<div class="writer-flow-code-block-point"/>`;
 
     wrap.appendChild(header);
     wrap.appendChild(this.cm.dom);
