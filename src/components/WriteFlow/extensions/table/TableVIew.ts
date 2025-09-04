@@ -3,7 +3,7 @@ import { NodeView, ViewMutationRecord } from 'prosemirror-view';
 import { updateColumnsOnResize } from 'prosemirror-tables';
 
 /**
- * @public
+ * see: https://github.com/ProseMirror/prosemirror-tables/blob/master/src/tableview.ts
  */
 export class TableView implements NodeView {
   public dom: HTMLDivElement;
@@ -18,13 +18,15 @@ export class TableView implements NodeView {
     this.dom = document.createElement('div');
     this.dom.className = 'writer-flow-table';
     this.table = this.dom.appendChild(document.createElement('table'));
+    this.colgroup = this.table.appendChild(document.createElement('colgroup'));
+    this.contentDOM = this.table.appendChild(document.createElement('tbody'));
+
     this.table.style.setProperty(
       '--default-cell-min-width',
       `${defaultCellMinWidth}px`,
     );
-    this.colgroup = this.table.appendChild(document.createElement('colgroup'));
+
     updateColumnsOnResize(node, this.colgroup, this.table, defaultCellMinWidth);
-    this.contentDOM = this.table.appendChild(document.createElement('tbody'));
   }
 
   update(node: Node): boolean {

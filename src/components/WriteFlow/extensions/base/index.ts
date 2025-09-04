@@ -1,6 +1,7 @@
 import { redo, undo } from 'prosemirror-history';
 import { Extendable } from '@/components/WriteFlow/core/Extendable';
 import { gapCursor } from 'prosemirror-gapcursor';
+import { bubbleMenuPlugin } from '../bubble-menu';
 
 /**
  * This extension allows you to create blockquote.
@@ -20,6 +21,6 @@ export const Base = Extendable.create({
   },
 
   addPlugins() {
-    return [gapCursor()];
+    return [gapCursor(), bubbleMenuPlugin()];
   },
 });
