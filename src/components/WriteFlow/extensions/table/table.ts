@@ -65,6 +65,6 @@ export const Table = Node.create({
   },
 
   addNodeView: () => {
-    return () => new TableView();
+    return (node) => new TableView(node, 25);
   },
 });
