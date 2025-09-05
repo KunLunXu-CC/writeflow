@@ -1,7 +1,7 @@
 import { EditorView } from 'prosemirror-view';
 import { WriteFlowOptions } from '../types';
-import { EditorState } from 'prosemirror-state';
 import { DOMParser } from 'prosemirror-model';
+import { EditorState, Plugin } from 'prosemirror-state';
 import ExtensionManager from './ExtensionManager';
 
 export class WriteFlow {
@@ -25,6 +25,7 @@ export class WriteFlow {
       ...options,
     };
   }
+
   /**
    * 将编辑器附加到 DOM, 最终创建一个新的编辑器视图(view)
    */
@@ -122,4 +123,80 @@ export class WriteFlow {
       this,
     );
   }
+
+  /**
+   * 注册 PM 插件
+   *
+   * @param plugin PM 插件
+   * @param handlePlugins 控制如何将插件合并到现有插件中, 可二次处理、过滤插件
+   * @returns 新的编辑器状态
+   */
+  public registerPlugin(
+    plugin: Plugin,
+    handlePlugins?: (newPlugin: Plugin, plugins: Plugin[]) => Plugin[],
+  ): EditorState {
+    if (!this.view) {
+      throw new Error('[WriteFlow error]: no view.');
+    }
+
+    const plugins = handlePlugins?.(plugin, [...this.state.plugins]) ?? [
+      ...this.state.plugins,
+      plugin,
+    ];
+
+    const state = this.state.reconfigure({ plugins });
+
+    this.view.updateState(state);
+
+    return state;
+  }
+
+  /**
+   * 取消注册 PM 插件
+   *
+   * @param nameOrPluginKeyToRemove 插件名称或插件键
+   * @returns 新的编辑器状态或 undefined
+   */
+  // public unregisterPlugin(
+  //   nameOrPluginKeyToRemove: string | PluginKey | (string | PluginKey)[],
+  // ): EditorState | undefined {
+  //   if (!this.view) {
+  //     throw new Error('[WriteFlow error]: no view.');
+  //   }
+
+  //   const prevPlugins = this.state.plugins;
+  //   let plugins = prevPlugins;
+
+  //   const targetNames = ([] as (string | PluginKey)[])
+  //     .concat(nameOrPluginKeyToRemove)
+  //     .map((nameOrPluginKey) => {
+  //       if (typeof nameOrPluginKey === 'string') {
+  //         return `${nameOrPluginKey}$`;
+  //       }
+  //       // PluginKey doesn't expose its internal name in types; cast to any
+  //       return ((nameOrPluginKey as unknown as { key?: string })?.key ||
+  //         '') as string;
+  //     })
+  //     .filter((n): n is string => Boolean(n));
+
+  //   plugins = plugins.filter((plugin) => {
+  //     const currentKeyName = (plugin.spec.key as unknown as { key?: string })
+  //       ?.key;
+  //     if (!currentKeyName) return true;
+  //     return !targetNames.some((name) => currentKeyName.startsWith(name));
+  //   });
+
+  //   if (prevPlugins.length === plugins.length) {
+  //     // No plugin was removed, so we don’t need to update the state
+  //     return undefined;
+  //   }
+
+  //   const state = this.state.reconfigure({
+  //     plugins,
+  //   });
+
+  //   this.view.updateState(state);
+
+  //   return state;
+  // }
 }
