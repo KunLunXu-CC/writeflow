@@ -2,48 +2,52 @@ import { Plugin, PluginKey, PluginView } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
 interface BubbleMenuViewOptions {
-  content: HTMLElement;
   view: EditorView;
+  element: HTMLElement;
+
+  // 可选配置
+  options?: {
+    onShow?: () => void;
+    onHide?: () => void;
+    onUpdate?: () => void;
+    onDestroy?: () => void;
+    shouldShow?: () => boolean;
+  };
 }
 
 class BubbleMenuView implements PluginView {
-  view: EditorView;
-  content: HTMLElement;
-  wrapper: HTMLElement;
+  private element: BubbleMenuViewOptions['element'];
+  private view: BubbleMenuViewOptions['view'];
+  private options: BubbleMenuViewOptions['options'];
 
-  constructor({ content, view }: BubbleMenuViewOptions) {
+  constructor({ element, view, options }: BubbleMenuViewOptions) {
     this.view = view;
-    this.content = content;
-    this.wrapper = document.createElement('div');
-
-    this.init();
-    this.update();
+    this.element = element;
+    this.options = options;
   }
 
   /**
-   * 初始化
-   * 1. 将内容 DOM 插入到 wrapper 中
-   * 2. 将 wrapper 插入到 body 中
+   * 检查是否显示
+   * 1. 如果 element 的 display 属性为 none, 则返回 false
+   * 2. 否则返回 true
    */
-  init = () => {
-    this.wrapper.appendChild(this.content);
-    document.body.appendChild(this.wrapper);
+  shouldShow = () => {
+    if (this.options?.shouldShow) {
+      return this.options.shouldShow();
+    }
+
+    return true;
   };
 
   /**
-   * 更新
-   * 1. 如果选区为空, 则隐藏 wrapper
-   * 2. 否则计算选区坐标, 并设置 wrapper 的样式
-   * @returns
+   * 显示
+   * 1. 将 element 插入到 view.dom.parentNode 中
+   * 2. 调用 options.onShow
    */
-  update = () => {
-    const { state } = this.view;
-    const { from, to, empty } = state.selection;
+  show = () => {
+    this.view.dom.parentNode?.appendChild(this.element);
 
-    if (empty) {
-      this.wrapper.style.display = 'none';
-      return;
-    }
+    const { from, to } = this.view.state.selection;
 
     // 1. 计算选区坐标
     const start = this.view.coordsAtPos(from);
@@ -54,19 +58,53 @@ class BubbleMenuView implements PluginView {
     };
 
     // 2. 设置 wrapper 的样式
-    this.wrapper.style.display = 'block';
-    this.wrapper.style.position = 'absolute';
-    this.wrapper.style.top = `${box.top - 40}px`; // 放到选区上方
-    this.wrapper.style.left = `${box.left}px`;
+    this.element.style.display = 'block';
+    this.element.style.position = 'absolute';
+    this.element.style.top = `${box.top - 40}px`; // 放到选区上方
+    this.element.style.left = `${box.left}px`;
+
+    this.options?.onShow?.();
+  };
+
+  /**
+   * 隐藏
+   * 1. 移除 element
+   * 2. 调用 options.onHide
+   */
+  hide = () => {
+    this.element.style.display = 'none';
+    this.element.remove();
+    this.options?.onHide?.();
+  };
+
+  /**
+   * 更新
+   * 1. 如果选区为空, 则隐藏 wrapper
+   * 2. 否则计算选区坐标, 并设置 wrapper 的样式
+   * 3. 调用 options.onUpdate
+   * @returns
+   */
+  update = () => {
+    const { empty } = this.view.state.selection;
+    this.options?.onUpdate?.();
+
+    if (empty) {
+      this.hide();
+      return;
+    }
+
+    this.show();
   };
 
   /**
    * 销毁
    * 1. 移除 wrapper
+   * 2. 调用 options.onDestroy
    * @returns
    */
   destroy = () => {
-    this.wrapper.remove();
+    this.hide();
+    this.options?.onDestroy?.();
   };
 }
 
@@ -76,6 +114,24 @@ export const bubbleMenuPlugin = () => {
 
   return new Plugin({
     key: new PluginKey('bubble-menu'),
-    view: (view) => new BubbleMenuView({ view, content: menu }),
+    view: (view) =>
+      new BubbleMenuView({
+        view,
+        element: menu,
+        options: {
+          onShow: () => {
+            console.log('onShow');
+          },
+          onHide: () => {
+            console.log('onHide');
+          },
+          onUpdate: () => {
+            console.log('onUpdate');
+          },
+          onDestroy: () => {
+            console.log('onDestroy');
+          },
+        },
+      }),
   });
 };
