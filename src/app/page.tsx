@@ -1,5 +1,5 @@
 'use client';
-import WriteFlow from '@/components/WriteFlow';
+import WriteFlow from '@/components';
 
 export default function Home() {
   return (

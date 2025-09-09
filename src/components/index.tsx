@@ -17,6 +17,8 @@ import {
 import { Base } from '@/components/WriteFlow/extensions/base';
 import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
 import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
+import { BubbleMenu } from '@/components/BubbleMenu';
+import { WriteFlowContext } from '@/components/WriteFlowContext';
 import '@/components/WriteFlow/theme';
 
 export default function Editor() {
@@ -50,9 +52,12 @@ export default function Editor() {
   }, []);
 
   return (
-    <div
-      ref={editorDom}
-      className="w-[600px] overflow-auto h-[600px] rounded-md [&_.ProseMirror]:outline-none shadow-2xl [&_.ProseMirror]:min-h-[600px] [&_.ProseMirror]:p-4"
-    />
+    <WriteFlowContext.Provider value={editorRef.current}>
+      <div
+        ref={editorDom}
+        className="w-[600px] overflow-auto h-[600px] rounded-md [&_.ProseMirror]:outline-none shadow-2xl [&_.ProseMirror]:min-h-[600px] [&_.ProseMirror]:p-4"
+      />
+      <BubbleMenu />
+    </WriteFlowContext.Provider>
   );
 }
