@@ -20,12 +20,8 @@ import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
 
 export const useWriteFlow = () => {
   const writeFlowDomRef = useRef(null);
-  const [writeFlow, setWriteFlow] = useState<WriteFlow>();
+  const [writeFlow, setWriteFlow] = useState<WriteFlow | null>(null);
 
-  // const writeFlow = useSyncExternalStore(
-  //   () => () => {},
-  //   () => {},
-  // );
   useEffect(() => {
     if (writeFlowDomRef.current) return;
 
