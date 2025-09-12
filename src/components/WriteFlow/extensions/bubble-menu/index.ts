@@ -1,1 +1,2 @@
-export * from './Plugin';
+export * from './PluginView';
+export * from './buildPlugin';

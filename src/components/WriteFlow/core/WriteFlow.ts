@@ -144,11 +144,11 @@ export class WriteFlow {
       plugin,
     ];
 
-    const state = this.state.reconfigure({ plugins });
+    const newState = this.state.reconfigure({ plugins });
 
-    this.view.updateState(state);
+    this.view.updateState(newState);
 
-    return state;
+    return newState;
   }
 
   /**

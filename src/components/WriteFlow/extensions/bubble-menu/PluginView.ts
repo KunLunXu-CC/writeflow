@@ -1,7 +1,7 @@
-import { Plugin, PluginKey, PluginView } from 'prosemirror-state';
+import { PluginView } from 'prosemirror-state';
 import { EditorView } from 'prosemirror-view';
 
-interface BubbleMenuViewOptions {
+export interface BubbleMenuPluginViewParams {
   view: EditorView;
   element: HTMLElement;
 
@@ -15,12 +15,12 @@ interface BubbleMenuViewOptions {
   };
 }
 
-class BubbleMenuView implements PluginView {
-  private element: BubbleMenuViewOptions['element'];
-  private view: BubbleMenuViewOptions['view'];
-  private options: BubbleMenuViewOptions['options'];
+export class BubbleMenuPluginView implements PluginView {
+  private element: BubbleMenuPluginViewParams['element'];
+  private view: BubbleMenuPluginViewParams['view'];
+  private options: BubbleMenuPluginViewParams['options'];
 
-  constructor({ element, view, options }: BubbleMenuViewOptions) {
+  constructor({ element, view, options }: BubbleMenuPluginViewParams) {
     this.view = view;
     this.element = element;
     this.options = options;
@@ -107,31 +107,3 @@ class BubbleMenuView implements PluginView {
     this.options?.onDestroy?.();
   };
 }
-
-export const bubbleMenuPlugin = () => {
-  const menu = document.createElement('div');
-  menu.innerHTML = '<button>加粗</button><button>斜体</button>';
-
-  return new Plugin({
-    key: new PluginKey('bubble-menu'),
-    view: (view) =>
-      new BubbleMenuView({
-        view,
-        element: menu,
-        options: {
-          onShow: () => {
-            console.log('onShow');
-          },
-          onHide: () => {
-            console.log('onHide');
-          },
-          onUpdate: () => {
-            console.log('onUpdate');
-          },
-          onDestroy: () => {
-            console.log('onDestroy');
-          },
-        },
-      }),
-  });
-};

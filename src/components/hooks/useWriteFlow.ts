@@ -23,7 +23,7 @@ export const useWriteFlow = () => {
   const [writeFlow, setWriteFlow] = useState<WriteFlow | null>(null);
 
   useEffect(() => {
-    if (writeFlowDomRef.current) return;
+    if (!writeFlowDomRef.current) return;
 
     const newWriteFlow = new WriteFlow({
       element: writeFlowDomRef.current!,
