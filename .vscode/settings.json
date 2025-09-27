@@ -1,4 +1,15 @@
 {
+  //#region 配置 TailwindCSS, see: https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss
+  // 配置告诉 VSCode 你想将哪些文件视为 TailwindCSS
+ "files.associations": {
+    "*.tailwindcss.css": "tailwindcss"
+  },
+  // 默认情况下在编辑“字符串”内容（例如 JSX 属性值）时不会触发补全。
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  //#endregion
+
   //#region 格式化
   "editor.codeActionsOnSave": {
     "source.fixAll.stylelint": "explicit"

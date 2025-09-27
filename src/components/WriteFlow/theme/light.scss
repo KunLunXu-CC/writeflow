@@ -1,28 +1,28 @@
 :root {
-  --write-flow-color-primary: 0 100% 71%;
-  --write-flow-color-bg: 0 0% 100%;
+  --wf-color-primary: 0 100% 71%;
+  --wf-color-bg: 0 0% 100%;
 
   // 文本颜色
-  --write-flow-color-text: 0 0% 15%; // 最深的文本色, 为了符合 W3C 标准, 默认的文本颜色使用了该色, 同时这个颜色也是最深的中性色
-  --write-flow-color-text-secondary: 0 0% 55%; // 作为第二梯度的文本色, 一般用在不那么需要强化文本颜色的场景, 例如 Label 文本、Menu 的文本选中态等场景
-  --write-flow-color-text-tertiary: 0 0% 75%; // 第三级文本色一般用于描述性文本, 例如表单的中的补充说明文本、列表的描述性文本等场景
-  --write-flow-color-text-quaternary: 0 0% 90%; // 第四级文本色是最浅的文本色, 例如表单的输入提示文本、禁用色文本等
+  --wf-color-text: 0 0% 15%; // 最深的文本色, 为了符合 W3C 标准, 默认的文本颜色使用了该色, 同时这个颜色也是最深的中性色
+  --wf-color-text-secondary: 0 0% 55%; // 作为第二梯度的文本色, 一般用在不那么需要强化文本颜色的场景, 例如 Label 文本、Menu 的文本选中态等场景
+  --wf-color-text-tertiary: 0 0% 75%; // 第三级文本色一般用于描述性文本, 例如表单的中的补充说明文本、列表的描述性文本等场景
+  --wf-color-text-quaternary: 0 0% 90%; // 第四级文本色是最浅的文本色, 例如表单的输入提示文本、禁用色文本等
 
   // 代码块颜色
-  --write-flow-code-block-bg: 233 11% 16%;
-  --write-flow-code-block-header-bg: 223 10% 14%;
-  --write-flow-code-block-point-color-1: 2 96% 68%;
-  --write-flow-code-block-point-color-2: 39 98% 62%;
-  --write-flow-code-block-point-color-3: 129 60% 51%;
+  --wf-code-block-bg: 233 11% 16%;
+  --wf-code-block-header-bg: 223 10% 14%;
+  --wf-code-block-point-color-1: 2 96% 68%;
+  --wf-code-block-point-color-2: 39 98% 62%;
+  --wf-code-block-point-color-3: 129 60% 51%;
 
   /* 字体大小 */
-  --write-flow-text-base: 16px;
-  --write-flow-font-family: "DM Sans", sans-serif;
+  --wf-text-base: 16px;
+  --wf-font-family: "DM Sans", sans-serif;
 
   // 圆角
-  --write-flow-rounded-sm: 0.25em;
-  --write-flow-rounded: var(--write-flow-rounded-sm);
-  --write-flow-motion-duration-fast: 0.4s;
+  --wf-rounded-sm: 0.25em;
+  --wf-rounded: var(--wf-rounded-sm);
+  --wf-motion-duration-fast: 0.4s;
 
   // fontSizeHeading1	H1 标签所使用的字号	number	38
   // fontSizeHeading2	h2 标签所使用的字号	number	30
@@ -32,13 +32,13 @@
 }
 
 // 整体设置
-.write-flow-light {
+.wf-light {
   line-height: 1.6;
   font-weight: 400;
-  background: var(--write-flow-color-bg);
-  color: hsl(var(--write-flow-color-text));
-  font-size: var(--write-flow-text-base);
-  font-family: var(--write-flow-font-family);
+  background: var(--wf-color-bg);
+  color: hsl(var(--wf-color-text));
+  font-size: var(--wf-text-base);
+  font-family: var(--wf-font-family);
 
   > *:first-child {
     margin-top: 0;
@@ -62,11 +62,11 @@
   h4,
   h5,
   h6 {
-    border-bottom: 1px dashed hsl(var(--write-flow-color-text-quaternary));
+    border-bottom: 1px dashed hsl(var(--wf-color-text-quaternary));
 
     &::before {
       content: '#';
-      color: hsl(var(--write-flow-color-primary));
+      color: hsl(var(--wf-color-primary));
       padding: {
         right: 0.5em;
       };
@@ -178,9 +178,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 0.0625em solid hsl(var(--write-flow-color-text-quaternary));
-      background-color: hsl(var(--write-flow-color-text-quaternary) / 10%);
-      transition: all var(--write-flow-motion-duration-fast);
+      border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
+      background-color: hsl(var(--wf-color-text-quaternary) / 10%);
+      transition: all var(--wf-motion-duration-fast);
     }
 
     label span::before {
@@ -188,7 +188,7 @@
       width: 0.35em;
       height: 0.57em;
       margin-bottom: 0.1em;
-      border: 0.125em solid hsl(var(--write-flow-color-bg));
+      border: 0.125em solid hsl(var(--wf-color-bg));
       border-top: 0;
       border-left: 0;
       transform: rotate(45deg);
@@ -196,8 +196,8 @@
 
     label input[type="checkbox"]:checked+span {
       opacity: 1;
-      border-color: hsl(var(--write-flow-color-primary));
-      background-color: hsl(var(--write-flow-color-primary));
+      border-color: hsl(var(--wf-color-primary));
+      background-color: hsl(var(--wf-color-primary));
     }
   }
 
@@ -212,31 +212,31 @@
   blockquote {
     margin-top: 1.25em;
     padding: 0.375em 0.75em;
-    background: hsl(var(--write-flow-color-text-quaternary) / 10%);
-    border-left: 0.25em solid hsl(var(--write-flow-color-primary));
+    background: hsl(var(--wf-color-text-quaternary) / 10%);
+    border-left: 0.25em solid hsl(var(--wf-color-primary));
   }
 
   // code `` 提示内容 
   code {
     font-size: 0.87em;
     padding: 0.065em 0.4em;
-    border-radius: var(--write-flow-rounded);
-    color: hsl(var(--write-flow-color-primary));
-    background-color: hsl(var(--write-flow-color-primary) / 8%);
+    border-radius: var(--wf-rounded);
+    color: hsl(var(--wf-color-primary));
+    background-color: hsl(var(--wf-color-primary) / 8%);
   }
 
   // 代码块部分
   .writer-flow-code-block {
     overflow: hidden;
-    border-radius: var(--write-flow-rounded);
-    background: hsl(var(--write-flow-code-block-bg));
+    border-radius: var(--wf-rounded);
+    background: hsl(var(--wf-code-block-bg));
 
     &-header {
       display: flex;
       height: 1.875em;
       align-items: center;
       position: relative;
-      background: hsl(var(--write-flow-code-block-header-bg));
+      background: hsl(var(--wf-code-block-header-bg));
 
       .writer-flow-code-block-point {
         $gap: 1em;
@@ -253,7 +253,7 @@
         top: 50%;
         transform: translateY(-50%);
         
-        @include point(hsl(var(--write-flow-code-block-point-color-1)), 12px);
+        @include point(hsl(var(--wf-code-block-point-color-1)), 12px);
 
         &::after,
         &::before {
@@ -262,11 +262,11 @@
         }
 
         &::after {
-          @include point(hsl(var(--write-flow-code-block-point-color-2)), $gap);
+          @include point(hsl(var(--wf-code-block-point-color-2)), $gap);
         }
 
         &::before {
-          @include point(hsl(var(--write-flow-code-block-point-color-3)), $gap * 2);
+          @include point(hsl(var(--wf-code-block-point-color-3)), $gap * 2);
         }
       }
     }
@@ -297,19 +297,19 @@
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    border: 0.0625em solid hsl(var(--write-flow-color-text-quaternary));
+    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
   }
 
   th, td{
     position: relative;
     padding: 0.375em 0.625em;
     text-align: left;
-    border: 0.0625em solid hsl(var(--write-flow-color-text-quaternary));
+    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
   }
 
   // 表格选中样式 
   .selectedCell {
-    background-color: hsl(var(--write-flow-color-primary) / 20%);
+    background-color: hsl(var(--wf-color-primary) / 20%);
 
     *::selection {
       background: none;
@@ -324,6 +324,6 @@
     width: 0.25em;
     right: -0.125em;
     cursor: col-resize;
-    background-color: hsl(var(--write-flow-color-primary));
+    background-color: hsl(var(--wf-color-primary));
   }
 }

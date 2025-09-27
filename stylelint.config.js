@@ -2,16 +2,10 @@
 const config = {
   extends: 'stylelint-config-standard-scss',
   rules: {
-    'at-rule-no-deprecated': [
+    'scss/at-rule-no-unknown': [
       true,
       {
-        ignoreAtRules: [
-          'tailwind',
-          'apply',
-          'variants',
-          'responsive',
-          'screen',
-        ],
+        ignoreAtRules: ['plugin', 'apply', 'source'],
       },
     ],
     'no-unknown-custom-properties': true, // css 变量支持

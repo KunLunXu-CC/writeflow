@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useWriteFlowContext } from '../WriteFlowContext';
 import { createPortal } from 'react-dom';
 import { buildBubbleMenuPlugin } from '../WriteFlow/extensions/bubble-menu';
@@ -14,14 +14,12 @@ export const BubbleMenu: React.FC<BubbleMenuProps> = (props) => {
   const { children, className } = props;
 
   const writeFlow = useWriteFlowContext();
-  const [isMounted, setIsMounted] = useState(false);
   const bubbleMenuPluginRef = useRef<Plugin | null>(null);
   const bubbleMenuElementRef = useRef<HTMLDivElement | null>(null);
 
   // 在客户端首次渲染时创建 DOM 元素
-  useEffect(() => {
+  useLayoutEffect(() => {
     bubbleMenuElementRef.current = document.createElement('div');
-    setIsMounted(true);
   }, []);
 
   // 在客户端首次渲染时创建插件
@@ -36,7 +34,7 @@ export const BubbleMenu: React.FC<BubbleMenuProps> = (props) => {
   }, [writeFlow]);
 
   // 在客户端首次渲染时创建 DOM 元素
-  if (!isMounted || !bubbleMenuElementRef.current) return null;
+  if (!bubbleMenuElementRef.current) return null;
 
   return createPortal(
     <div className={clsx('wf-inline-flex wf-items-center wf-gap-2', className)}>

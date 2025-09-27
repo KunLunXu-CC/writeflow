@@ -47,21 +47,18 @@ export class BubbleMenuPluginView implements PluginView {
   show = () => {
     this.view.dom.parentNode?.appendChild(this.element);
 
+    // 计算 left 和 top
     const { from, to } = this.view.state.selection;
+    const startPos = this.view.coordsAtPos(from);
+    const endPos = this.view.coordsAtPos(to);
+    const left = Math.min(startPos.left, endPos.left);
+    const top = Math.min(startPos.top, endPos.top);
 
-    // 1. 计算选区坐标
-    const start = this.view.coordsAtPos(from);
-    const end = this.view.coordsAtPos(to);
-    const box = {
-      top: Math.min(start.top, end.top),
-      left: (start.left + end.left) / 2,
-    };
-
-    // 2. 设置 wrapper 的样式
+    // 设置 element 的样式
     this.element.style.display = 'block';
     this.element.style.position = 'absolute';
-    this.element.style.top = `${box.top - 40}px`; // 放到选区上方
-    this.element.style.left = `${box.left}px`;
+    this.element.style.top = `${top - 40}px`;
+    this.element.style.left = `${left}px`;
 
     this.options?.onShow?.();
   };
