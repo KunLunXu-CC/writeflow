@@ -1,23 +1,61 @@
 import { BubbleMenu } from '@/components/BubbleMenu';
-import { Card, CardBody } from '@heroui/react';
-import { Button } from '@heroui/react';
 
 export const RichBubbleMenu = () => {
+
+  const items = [
+    {
+      key: 'bold',
+      label: '加粗',
+      onClick: () => {},
+    },
+    {
+      key: 'italic',
+      label: '斜体',
+      onClick: () => {},
+    },
+    {
+      key: 'underline',
+      label: '下划线',
+      onClick: () => {},
+    },
+    {
+      key: 'strikethrough',
+      label: '删除线',
+      onClick: () => {},
+    },
+    {
+      key: 'code',
+      label: '代码',
+      onClick: () => {},
+    },
+    {
+      key: 'link',
+      label: '链接',
+      onClick: () => {},
+    },
+    {
+      key: 'image',
+      label: '图片',
+      onClick: () => {},
+    },
+    {
+      key: 'video',
+      label: '视频',
+      onClick: () => {},
+    },
+    {
+      key: 'audio',
+      label: '音频',
+      onClick: () => {},
+    },
+    {
+      key: 'table',
+      label: '表格',
+      onClick: () => {},
+    },    
+  ];
+
   return (
-    <BubbleMenu>
-      <Card>
-        <CardBody>
-          <Button>加粗</Button>
-          <Button>删除</Button>
-          <Button>斜体</Button>
-          <Button>下划线</Button>
-          <Button>链接</Button>
-          <Button>图片</Button>
-          <Button>表格</Button>
-          <Button>代码</Button>
-          <Button>引用</Button>
-        </CardBody>
-      </Card>
-    </BubbleMenu>
+    <BubbleMenu items={items} />
   );
 };

@@ -1,45 +1,27 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
-import { useWriteFlowContext } from '../WriteFlowContext';
-import { createPortal } from 'react-dom';
-import { buildBubbleMenuPlugin } from '../WriteFlow/extensions/bubble-menu';
-import { Plugin } from 'prosemirror-state';
 import clsx from 'clsx';
-
-export interface BubbleMenuProps {
-  children: React.ReactNode;
-  className?: string;
-}
+import { Popover, PopoverContent, PopoverTrigger } from '@heroui/react';
+import { BubbleMenuProps, BubbleMenuPortal, BubbleMenuItem } from '.';
 
 export const BubbleMenu: React.FC<BubbleMenuProps> = (props) => {
-  const { children, className } = props;
+  const { children, className, items } = props;
 
-  const writeFlow = useWriteFlowContext();
-  const bubbleMenuPluginRef = useRef<Plugin | null>(null);
-  const bubbleMenuElementRef = useRef<HTMLDivElement | null>(null);
-
-  // 在客户端首次渲染时创建 DOM 元素
-  useLayoutEffect(() => {
-    bubbleMenuElementRef.current = document.createElement('div');
-  }, []);
-
-  // 在客户端首次渲染时创建插件
-  useEffect(() => {
-    if (!writeFlow || !bubbleMenuElementRef.current) return;
-
-    bubbleMenuPluginRef.current = buildBubbleMenuPlugin({
-      element: bubbleMenuElementRef.current,
-    });
-
-    writeFlow.registerPlugin(bubbleMenuPluginRef.current);
-  }, [writeFlow]);
-
-  // 在客户端首次渲染时创建 DOM 元素
-  if (!bubbleMenuElementRef.current) return null;
-
-  return createPortal(
-    <div className={clsx('wf-inline-flex wf-items-center wf-gap-2', className)}>
-      {children}
-    </div>,
-    bubbleMenuElementRef.current,
-  );
+  return (
+    <BubbleMenuPortal>
+      <Popover className={clsx('inline-fle items-center gap-2', className)}>
+        <PopoverTrigger>
+          <div className='h-[10px] w-[10px] overflow-hidden'>111</div> 
+        </PopoverTrigger>
+        <PopoverContent>
+          <div className='inline-flex items-center gap-2'>
+          {items?.map((item) => (
+            <BubbleMenuItem {...item} key={item.key} onClick={item.onClick} />
+          ))}
+          {children}
+          </div>
+        </PopoverContent>
+    </Popover>
+    </BubbleMenuPortal>
+  )
 };
+
+
