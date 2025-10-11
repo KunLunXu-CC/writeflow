@@ -1,61 +1,45 @@
 import { BubbleMenu } from '@/components/BubbleMenu';
+import Icon from '@/components/Icon';
 
 export const RichBubbleMenu = () => {
-
   const items = [
     {
       key: 'bold',
-      label: '加粗',
       onClick: () => {},
+      tooltip: '加粗',
+      label: <Icon name="icon-zitixiahuaxian" />,
     },
     {
       key: 'italic',
-      label: '斜体',
       onClick: () => {},
+      tooltip: '斜体',
+      label: <Icon name="icon-zitixiahuaxian" />,
     },
     {
       key: 'underline',
-      label: '下划线',
       onClick: () => {},
+      tooltip: '下划线',
+      label: <Icon name="icon-zitixiahuaxian" />,
     },
     {
       key: 'strikethrough',
-      label: '删除线',
       onClick: () => {},
-    },
-    {
-      key: 'code',
-      label: '代码',
-      onClick: () => {},
+      tooltip: '删除线',
+      label: <Icon name="icon-zitixiahuaxian" />,
     },
     {
       key: 'link',
-      label: '链接',
       onClick: () => {},
-    },
-    {
-      key: 'image',
-      label: '图片',
-      onClick: () => {},
-    },
-    {
-      key: 'video',
-      label: '视频',
-      onClick: () => {},
+      tooltip: '链接',
+      label: <Icon name="icon-zitixiahuaxian" />,
     },
     {
       key: 'audio',
-      label: '音频',
       onClick: () => {},
+      tooltip: '音频',
+      label: <Icon name="icon-zitixiahuaxian" />,
     },
-    {
-      key: 'table',
-      label: '表格',
-      onClick: () => {},
-    },    
   ];
 
-  return (
-    <BubbleMenu items={items} />
-  );
+  return <BubbleMenu items={items} />;
 };

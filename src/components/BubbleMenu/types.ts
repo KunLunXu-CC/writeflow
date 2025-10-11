@@ -1,10 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 export interface BubbleMenuItemProps {
   key: string;
-  // icon: ReactNode;
   label: ReactNode;
+  tooltip?: ReactNode;
   onClick?: () => void;
+  className?: string;
 }
 
 export interface BubbleMenuPortalProps {
