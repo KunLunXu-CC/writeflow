@@ -57,7 +57,7 @@ export class BubbleMenuPluginView implements PluginView {
     // 设置 element 的样式
     this.element.style.display = 'block';
     this.element.style.position = 'absolute';
-    this.element.style.top = `${top - 40}px`;
+    this.element.style.top = `${top - 48}px`;
     this.element.style.left = `${left}px`;
 
     this.options?.onShow?.();

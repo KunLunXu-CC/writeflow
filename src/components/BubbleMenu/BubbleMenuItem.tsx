@@ -13,7 +13,10 @@ export const BubbleMenuItem: React.FC<BubbleMenuItemProps> = (props) => {
         radius="sm"
         variant="light"
         onPress={onClick}
-        className={clsx('inline-flex items-center gap-1 min-w-0', className)}>
+        className={clsx(
+          'inline-flex justify-center items-center gap-1 min-w-0 size-8 p-0',
+          className,
+        )}>
         {label}
       </Button>
     </Tooltip>
