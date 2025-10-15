@@ -28,7 +28,7 @@ export const useWriteFlow = () => {
     const newWriteFlow = new WriteFlow({
       element: writeFlowDomRef.current!,
       attributes: {
-        class: 'write-flow-light',
+        class: 'wf-light',
       },
       extensions: [
         Base,

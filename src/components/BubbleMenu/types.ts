@@ -6,6 +6,8 @@ export interface BubbleMenuItemProps {
   tooltip?: ReactNode;
   onClick?: () => void;
   className?: string;
+
+  shouldShow?: () => boolean;
 }
 
 export interface BubbleMenuPortalProps {
