@@ -24,14 +24,14 @@ export enum EXTENSIONS_TYPE {
   EXTENDABLE = 'extendable',
 }
 
-export type AnyExtensionConfig = NodeConfig | MarkConfig;
+export type AnyExtensionConfig = NodeConfig | MarkConfig | ExtendableConfig;
 
 export type AnyExtension<Options = any> =
   | Node<Options>
   | Mark<Options>
   | Extendable<Options>;
 
-export interface ExtendableFunContext<Options> {
+export interface ExtendableFunContext<Options = any> {
   extension: AnyExtension<Options>;
   schema: Schema;
   writeFlow: WriteFlow;

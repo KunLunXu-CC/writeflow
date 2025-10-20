@@ -1,11 +1,6 @@
 import type { WriteFlow } from './WriteFlow.js';
 import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
-import {
-  AnyExtension,
-  ExtendableFunContext,
-  Extensions,
-  EXTENSIONS_TYPE,
-} from '../types';
+import { AnyExtension, ExtendableFunContext, EXTENSIONS_TYPE } from '../types';
 import { Plugin } from 'prosemirror-state';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
@@ -19,15 +14,26 @@ import {
 } from 'prosemirror-schema-basic';
 import { NodeViewConstructor } from 'prosemirror-view';
 
+/**
+ * ExtensionManager 扩展管理器
+ * 负责管理所有扩展的解析、创建, 包括:
+ * - 创建 schema
+ * - 创建 plugins
+ * - 创建 nodeViews
+ * - 创建 helpers
+ * - 创建 commands
+ * - 创建 keymaps
+ * - 创建 inputRules
+ */
 export default class ExtensionManager {
   writeFlow!: WriteFlow;
-  extensions: Extensions = [];
+  extensions: AnyExtension[] = [];
 
   schema!: Schema;
   plugins!: Plugin[];
   nodeViews!: Record<string, NodeViewConstructor>;
 
-  constructor(extensions: Extensions, writeFlow: WriteFlow) {
+  constructor(extensions: AnyExtension[], writeFlow: WriteFlow) {
     this.writeFlow = writeFlow;
     this.extensions = extensions;
 
@@ -70,10 +76,10 @@ export default class ExtensionManager {
 
         switch (extension.type) {
           case EXTENSIONS_TYPE.NODE:
-            acc.nodes[extension.name] = addSchema(context);
+            acc.nodes[extension.name] = addSchema(context) as NodeSpec;
             break;
           case EXTENSIONS_TYPE.MARK:
-            acc.marks[extension.name] = addSchema(context);
+            acc.marks[extension.name] = addSchema(context) as MarkSpec;
             break;
           default:
             break;

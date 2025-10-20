@@ -3,7 +3,7 @@ import {
   ExtendableFunContext,
 } from '@/components/WriteFlow/types';
 import { InputRule } from 'prosemirror-inputrules';
-import { NodeSpec } from 'prosemirror-model';
+import { MarkSpec, NodeSpec } from 'prosemirror-model';
 import { Command, Plugin } from 'prosemirror-state';
 import { NodeViewConstructor } from 'prosemirror-view';
 
@@ -15,7 +15,7 @@ export interface ExtendableConfig<Options = unknown> {
   /*
    * 添加 schema
    */
-  addSchema?: (context: ExtendableFunContext<Options>) => NodeSpec;
+  addSchema?: (context: ExtendableFunContext<Options>) => NodeSpec | MarkSpec;
 
   /**
    * This function adds commands to the editor

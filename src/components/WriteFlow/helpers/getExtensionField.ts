@@ -1,4 +1,4 @@
-import { AnyExtension, RemoveThis, AnyExtensionConfig } from '../types';
+import { AnyExtension, AnyExtensionConfig } from '../types';
 
 /**
  * 获取扩展的配置项
@@ -6,15 +6,13 @@ import { AnyExtension, RemoveThis, AnyExtensionConfig } from '../types';
  * @param field 配置项
  * @returns 配置项的值
  */
-export function getExtensionField<T, E extends AnyExtension>(
-  extension: E,
-  field: keyof AnyExtensionConfig,
-): RemoveThis<T> {
+export function getExtensionField<K extends keyof AnyExtensionConfig>(
+  extension: AnyExtension,
+  field: K,
+): AnyExtensionConfig[K] | undefined {
   if (extension.config === undefined) {
-    return (() => {}) as RemoveThis<T>;
+    return undefined;
   }
 
-  return extension.config[
-    field as keyof typeof extension.config
-  ] as RemoveThis<T>;
+  return extension.config[field];
 }
