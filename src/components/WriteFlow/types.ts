@@ -46,3 +46,7 @@ export interface WriteFlowOptions extends EditorProps {
   element: Element;
   extensions?: AnyExtension[];
 }
+
+export type HelperFunction = (...args: any[]) => any;
+
+export type AnyHelpers = Record<string, HelperFunction>;

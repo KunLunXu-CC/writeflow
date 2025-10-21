@@ -1,6 +1,11 @@
 import type { WriteFlow } from './WriteFlow.js';
 import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
-import { AnyExtension, ExtendableFunContext, EXTENSIONS_TYPE } from '../types';
+import {
+  AnyHelpers,
+  AnyExtension,
+  ExtendableFunContext,
+  EXTENSIONS_TYPE,
+} from '../types';
 import { Plugin } from 'prosemirror-state';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
@@ -31,6 +36,9 @@ export default class ExtensionManager {
 
   schema!: Schema;
   plugins!: Plugin[];
+
+  helpers: AnyHelpers = {};
+
   nodeViews!: Record<string, NodeViewConstructor>;
 
   constructor(extensions: AnyExtension[], writeFlow: WriteFlow) {
@@ -40,6 +48,8 @@ export default class ExtensionManager {
     this.createSchema();
     this.createPlugins();
     this.createNodeViews();
+
+    this.collectHelpers();
   }
 
   /**
@@ -148,6 +158,22 @@ export default class ExtensionManager {
 
       if (addNodeView) {
         acc[extension.name] = addNodeView(context);
+      }
+
+      return acc;
+    }, {});
+  };
+
+  /**
+   * 收集 helper
+   */
+  private collectHelpers = () => {
+    this.extensions.reduce<AnyHelpers>((acc, extension) => {
+      const context = this.getContext(extension);
+
+      const addHelpers = getExtensionField(extension, 'addHelpers');
+      if (addHelpers) {
+        return { ...acc, ...addHelpers(context) };
       }
 
       return acc;

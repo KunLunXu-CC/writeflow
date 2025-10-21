@@ -1,5 +1,5 @@
 import { EditorView } from 'prosemirror-view';
-import { WriteFlowOptions } from '../types';
+import { AnyHelpers, WriteFlowOptions } from '../types';
 import { DOMParser } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
 import ExtensionManager from './ExtensionManager';
@@ -149,6 +149,10 @@ export class WriteFlow {
     this.view.updateState(newState);
 
     return newState;
+  }
+
+  public get helpers(): AnyHelpers {
+    return this.extensionManager.helpers;
   }
 
   /**

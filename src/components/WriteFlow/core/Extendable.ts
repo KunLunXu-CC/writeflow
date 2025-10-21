@@ -1,4 +1,5 @@
 import {
+  AnyHelpers,
   EXTENSIONS_TYPE,
   ExtendableFunContext,
 } from '@/components/WriteFlow/types';
@@ -103,6 +104,18 @@ export interface ExtendableConfig<Options = unknown> {
    * },
    */
   addNodeView?: (context: ExtendableFunContext<Options>) => NodeViewConstructor;
+
+  /**
+   * This function adds helpers to the editor.
+   * @see https://tiptap.dev/docs/editor/guide/custom-extensions#helpers
+   * @example
+   * addHelpers() {
+   *   return {
+   *     myHelper: () => 'myHelper',
+   *   }
+   * },
+   */
+  addHelpers?: (context: ExtendableFunContext<Options>) => AnyHelpers;
 }
 
 export class Extendable<Options = unknown> {
