@@ -15,6 +15,15 @@ export const Table = Node.create({
     return baseTableNodes.table;
   },
 
+  addPlugins: () => {
+    // WARNING: 顺序很重要, 若把 tableEditing 放在前面, 调整宽度是会选中单元格
+    return [columnResizing(), tableEditing()];
+  },
+
+  addNodeView: () => {
+    return (node) => new TableView(node, 25);
+  },
+
   addInputRules: ({ schema }) => {
     return [
       new InputRule(/^\|-\s$/, (state, match, start, end) => {
@@ -59,12 +68,11 @@ export const Table = Node.create({
     };
   },
 
-  addPlugins: () => {
-    // WARNING: 顺序很重要, 若把 tableEditing 放在前面, 调整宽度是会选中单元格
-    return [columnResizing(), tableEditing()];
-  },
-
-  addNodeView: () => {
-    return (node) => new TableView(node, 25);
-  },
+  // addHelpers: () => {
+  //   return {
+  //     deleteTable: () => {
+  //       return true;
+  //     },
+  //   };
+  // },
 });

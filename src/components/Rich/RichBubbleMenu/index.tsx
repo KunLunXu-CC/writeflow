@@ -1,13 +1,17 @@
 import { BubbleMenu } from '@/components/BubbleMenu';
 import Icon from '@/components/Icon';
+import { useWriteFlowContext } from '@/components/WriteFlowContext';
 
 export const RichBubbleMenu = () => {
+  const writeFlow = useWriteFlowContext();
+
   const items = [
     {
       key: 'bold',
       onClick: () => {},
       tooltip: '加粗',
       label: <Icon name="icon-zitixiahuaxian" />,
+      shouldShow: () => writeFlow?.helpers.getSelectedCells?.(),
     },
     {
       key: 'italic',
@@ -40,6 +44,8 @@ export const RichBubbleMenu = () => {
       label: <Icon name="icon-zitixiahuaxian" />,
     },
   ];
+
+  writeFlow?.helpers.getSelectedCells?.();
 
   return <BubbleMenu items={items} />;
 };

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
 export interface BubbleMenuItemProps {
   key: string;
@@ -11,7 +11,7 @@ export interface BubbleMenuItemProps {
 }
 
 export interface BubbleMenuPortalProps {
-  children: ReactNode;
+  children: ReactElement;
 }
 
 export interface BubbleMenuProps {

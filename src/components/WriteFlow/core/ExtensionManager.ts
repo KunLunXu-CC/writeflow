@@ -168,7 +168,7 @@ export default class ExtensionManager {
    * 收集 helper
    */
   private collectHelpers = () => {
-    this.extensions.reduce<AnyHelpers>((acc, extension) => {
+    this.helpers = this.extensions.reduce<AnyHelpers>((acc, extension) => {
       const context = this.getContext(extension);
 
       const addHelpers = getExtensionField(extension, 'addHelpers');

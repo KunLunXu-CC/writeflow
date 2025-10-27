@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import { Card } from '@heroui/react';
-import { BubbleMenuProps, BubbleMenuPortal, BubbleMenuItem } from '.';
+import { FC, useEffect, useMemo } from 'react';
 import { useWriteFlowContext } from '../WriteFlowContext';
-import { useEffect, useMemo } from 'react';
+import { BubbleMenuProps, BubbleMenuPortal, BubbleMenuItem } from '.';
 
-export const BubbleMenu: React.FC<BubbleMenuProps> = (props) => {
-  const { children, className, items } = props;
+const BubbleMenuContent: FC<BubbleMenuProps> = (props) => {
+  const { className, items, children } = props;
   const writeFlow = useWriteFlowContext();
 
   const handledItems = useMemo(() => {
@@ -25,22 +25,26 @@ export const BubbleMenu: React.FC<BubbleMenuProps> = (props) => {
   }, [writeFlow]);
 
   return (
-    <BubbleMenuPortal>
-      <Card
-        radius="sm"
-        className={clsx(
-          'inline-flex flex-row items-center gap-1 p-1',
-          className,
-        )}>
-        {handledItems.map((item) => (
-          <BubbleMenuItem
-            {...item}
-            key={item.key}
-            onClick={item.onClick}
-          />
-        ))}
-        {children}
-      </Card>
-    </BubbleMenuPortal>
+    <Card
+      radius="sm"
+      className={clsx(
+        'inline-flex flex-row items-center gap-1 p-1',
+        className,
+      )}>
+      {handledItems.map((item) => (
+        <BubbleMenuItem
+          {...item}
+          key={item.key}
+          onClick={item.onClick}
+        />
+      ))}
+      {children}
+    </Card>
   );
 };
+
+export const BubbleMenu: FC<BubbleMenuProps> = (props) => (
+  <BubbleMenuPortal>
+    <BubbleMenuContent {...props} />
+  </BubbleMenuPortal>
+);

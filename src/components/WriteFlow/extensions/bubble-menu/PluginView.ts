@@ -59,6 +59,7 @@ export class BubbleMenuPluginView implements PluginView {
     this.element.style.position = 'absolute';
     this.element.style.top = `${top - 48}px`;
     this.element.style.left = `${left}px`;
+    this.element.setAttribute('data-range', `[${from}, ${to}]`);
 
     this.options?.onShow?.();
   };
