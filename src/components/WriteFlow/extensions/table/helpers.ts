@@ -1,4 +1,4 @@
-import { CellSelection } from 'prosemirror-tables';
+import { CellSelection, mergeCells } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
 import { EditorView } from 'prosemirror-view';
 
@@ -8,9 +8,19 @@ export interface SelectedCell {
 }
 
 /**
+ * 合并选中的单元格
+ * @param view - 编辑器视图
+ */
+export const mergeSelectedCells = (view: EditorView | null) => {
+  if (!view) return;
+
+  mergeCells(view.state);
+};
+
+/**
  * 获取选中的单元格
- * @param state - 编辑器状态
- * @returns 获取选中的单元格
+ * @param view - 编辑器视图
+ * @returns 获取选中的单元格信息
  */
 export const getSelectedCells = (view: EditorView | null): SelectedCell[] => {
   if (!view) return [];

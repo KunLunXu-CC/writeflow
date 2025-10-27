@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Script from 'next/script';
 import clsx from 'clsx';
 
-const CDN = '//at.alicdn.com/t/c/font_5034984_9ll3d2soidg.js';
+const CDN = '//at.alicdn.com/t/c/font_5034983_e5wyb7aju2s.js';
 
 interface IconProps {
   name: string;
