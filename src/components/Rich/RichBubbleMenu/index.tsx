@@ -11,7 +11,9 @@ export const RichBubbleMenu = () => {
       {
         key: 'mergeCells',
         tooltip: '合并单元格',
-        onClick: () => {},
+        onClick: () => {
+          writeFlow?.commands.mergeTableCells?.();
+        },
         label: (
           <Icon
             className="text-base"
@@ -19,7 +21,7 @@ export const RichBubbleMenu = () => {
           />
         ),
         shouldShow: () => {
-          const cells = writeFlow?.helpers.getSelectedCells?.();
+          const cells = writeFlow?.helpers.getTableSelectedCells?.();
           return cells.length > 1;
         },
       },

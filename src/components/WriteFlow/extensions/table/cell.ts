@@ -1,6 +1,7 @@
 import { Node } from '@/components/WriteFlow/core/Node';
 import { baseTableNodes } from '.';
-import { getSelectedCells, mergeSelectedCells } from './helpers';
+import { getTableSelectedCells } from './helpers';
+import { mergeTableCells } from './commands';
 
 export const TableCell = Node.create({
   name: 'table_cell',
@@ -11,15 +12,15 @@ export const TableCell = Node.create({
 
   addCommands: ({ writeFlow }) => {
     return {
-      mergeSelectedCells: () => {
-        return mergeSelectedCells(writeFlow.view);
+      mergeTableCells: () => {
+        return mergeTableCells(writeFlow.view);
       },
     };
   },
 
   addHelpers: ({ writeFlow }) => {
     return {
-      getSelectedCells: () => getSelectedCells(writeFlow.view),
+      getTableSelectedCells: () => getTableSelectedCells(writeFlow.view),
     };
   },
 });
