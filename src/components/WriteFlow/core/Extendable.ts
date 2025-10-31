@@ -1,4 +1,5 @@
 import {
+  AnyCommands,
   AnyHelpers,
   EXTENSIONS_TYPE,
   ExtendableFunContext,
@@ -116,6 +117,18 @@ export interface ExtendableConfig<Options = unknown> {
    * },
    */
   addHelpers?: (context: ExtendableFunContext<Options>) => AnyHelpers;
+
+  /**
+   * This function adds commands to the editor.
+   * @see https://tiptap.dev/docs/editor/guide/custom-extensions#commands
+   * @example
+   * addCommands() {
+   *   return {
+   *     myCommand: () => ({ chain }) => chain().setMark('type', 'foo').run(),
+   *   }
+   * }
+   */
+  addCommands?: (context: ExtendableFunContext<Options>) => AnyCommands;
 }
 
 export class Extendable<Options = unknown> {

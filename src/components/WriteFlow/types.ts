@@ -49,4 +49,8 @@ export interface WriteFlowOptions extends EditorProps {
 
 export type HelperFunction = (...args: any[]) => any;
 
+export type CommandFunction = (...args: any[]) => any;
+
 export type AnyHelpers = Record<string, HelperFunction>;
+
+export type AnyCommands = Record<string, CommandFunction>;

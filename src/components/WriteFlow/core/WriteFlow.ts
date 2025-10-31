@@ -1,7 +1,7 @@
 import { EditorView } from 'prosemirror-view';
-import { AnyHelpers, WriteFlowOptions } from '../types';
 import { DOMParser } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
+import { AnyCommands, AnyHelpers, WriteFlowOptions } from '../types';
 import ExtensionManager from './ExtensionManager';
 
 export class WriteFlow {
@@ -153,6 +153,10 @@ export class WriteFlow {
 
   public get helpers(): AnyHelpers {
     return this.extensionManager.helpers;
+  }
+
+  public get commands(): AnyCommands {
+    return this.extensionManager.commands;
   }
 
   /**
