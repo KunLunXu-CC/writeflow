@@ -2,7 +2,7 @@ import { ReactElement, ReactNode } from 'react';
 
 export interface BubbleMenuItemProps {
   key: string;
-  label: ReactNode;
+  icon: string;
   tooltip?: ReactNode;
   onClick?: () => void;
   className?: string;

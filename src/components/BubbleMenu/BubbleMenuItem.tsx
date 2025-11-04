@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import { BubbleMenuItemProps } from '.';
 import { Tooltip, Button } from '@heroui/react';
+import Icon from '@/components/Icon';
 
 export const BubbleMenuItem: React.FC<BubbleMenuItemProps> = (props) => {
-  const { label, onClick, tooltip, className } = props;
+  const { icon, onClick, tooltip, className } = props;
   return (
     <Tooltip
       radius="sm"
@@ -17,7 +18,10 @@ export const BubbleMenuItem: React.FC<BubbleMenuItemProps> = (props) => {
           'inline-flex justify-center items-center gap-1 min-w-0 size-8 p-0',
           className,
         )}>
-        {label}
+        <Icon
+          name={icon}
+          className="text-base"
+        />
       </Button>
     </Tooltip>
   );
