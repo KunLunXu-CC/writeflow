@@ -1,65 +1,69 @@
 import { BubbleMenu } from '@/components/BubbleMenu';
 import { useWriteFlowContext } from '@/components/WriteFlowContext';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const RichBubbleMenu = () => {
   const writeFlow = useWriteFlowContext();
 
-  const items = useMemo(
-    () => [
+  const isSelectedTable = useCallback(() => {
+    if (!writeFlow) {
+      return false;
+    }
+
+    return !!writeFlow.helpers.getTableSelectedCells().length;
+  }, [writeFlow]);
+
+  const isSelectedTableMoreThanOne = useCallback(() => {
+    if (!writeFlow) {
+      return false;
+    }
+
+    return writeFlow.helpers.getTableSelectedCells().length > 1;
+  }, [writeFlow]);
+
+  const items = useMemo(() => {
+    if (!writeFlow) {
+      return [];
+    }
+
+    return [
       {
         tooltip: '合并',
         key: 'mergeCells',
-        onClick: writeFlow?.commands.mergeTableCells,
         icon: 'icon-merge-cells',
-        // shouldShow: () => {
-        //   const cells = writeFlow?.helpers.getTableSelectedCells?.();
-        //   return cells.length > 1;
-        // },
+        shouldShow: isSelectedTableMoreThanOne,
+        onClick: writeFlow?.commands.mergeTableCells,
       },
       {
         tooltip: '插入行',
         key: 'insertRowBelow',
-        // onClick: writeFlow?.commands.mergeTableCells,
         icon: 'icon-insert-row-below',
-        // shouldShow: () => {
-        //   const cells = writeFlow?.helpers.getTableSelectedCells?.();
-        //   return cells.length > 1;
-        // },
+        shouldShow: isSelectedTable,
+        onClick: writeFlow.commands.addTableRowAfter,
       },
       {
         tooltip: '插入列',
         key: 'insertColumnRight',
-        // onClick: writeFlow?.commands.mergeTableCells,
         icon: 'icon-insert-row-right',
-        // shouldShow: () => {
-        //   const cells = writeFlow?.helpers.getTableSelectedCells?.();
-        //   return cells.length > 1;
-        // },
+        shouldShow: isSelectedTable,
+        onClick: writeFlow.commands.addTableColumnAfter,
       },
       {
         tooltip: '删除列',
         key: 'deleteRow',
-        // onClick: writeFlow?.commands.mergeTableCells,
         icon: 'icon-delete-row',
-        // shouldShow: () => {
-        //   const cells = writeFlow?.helpers.getTableSelectedCells?.();
-        //   return cells.length > 1;
-        // },
+        shouldShow: isSelectedTable,
+        onClick: writeFlow.commands.deleteTableRow,
       },
       {
         tooltip: '删除列',
         key: 'deleteColumn',
-        // onClick: writeFlow?.commands.mergeTableCells,
         icon: 'icon-delete-column',
-        // shouldShow: () => {
-        //   const cells = writeFlow?.helpers.getTableSelectedCells?.();
-        //   return cells.length > 1;
-        // },
+        shouldShow: isSelectedTable,
+        onClick: writeFlow.commands.deleteTableColumn,
       },
-    ],
-    [writeFlow],
-  );
+    ];
+  }, [writeFlow, isSelectedTable, isSelectedTableMoreThanOne]);
 
   return <BubbleMenu items={items} />;
 };

@@ -5,6 +5,15 @@ import { TextSelection } from 'prosemirror-state';
 import { goToNextCell, tableEditing, columnResizing } from 'prosemirror-tables';
 import { TableView } from './TableVIew';
 
+import { getTableSelectedCells } from './helpers';
+import {
+  deleteTableRow,
+  mergeTableCells,
+  addTableRowAfter,
+  deleteTableColumn,
+  addTableColumnAfter,
+} from './commands';
+
 const ROW_COUNT_INPUT_RULE = 2;
 const COL_COUNT_INPUT_RULE = 3;
 
@@ -42,6 +51,34 @@ export const Table = Node.create({
         return tr.setSelection(TextSelection.create(tr.doc, start));
       }),
     ];
+  },
+
+  addCommands: ({ writeFlow }) => {
+    return {
+      mergeTableCells: () => {
+        return mergeTableCells(writeFlow.view);
+      },
+
+      addTableRowAfter: () => {
+        return addTableRowAfter(writeFlow.view);
+      },
+      addTableColumnAfter: () => {
+        return addTableColumnAfter(writeFlow.view);
+      },
+
+      deleteTableRow: () => {
+        return deleteTableRow(writeFlow.view);
+      },
+      deleteTableColumn: () => {
+        return deleteTableColumn(writeFlow.view);
+      },
+    };
+  },
+
+  addHelpers: ({ writeFlow }) => {
+    return {
+      getTableSelectedCells: () => getTableSelectedCells(writeFlow.view),
+    };
   },
 
   addKeymap: () => {
