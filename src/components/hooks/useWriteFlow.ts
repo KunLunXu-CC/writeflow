@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@/components/WriteFlow/extensions/table';
 import { Base } from '@/components/WriteFlow/extensions/base';
+import { HardBreak } from '@/components/WriteFlow/extensions/HardBreak';
 import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
 import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
 
@@ -45,6 +46,7 @@ export const useWriteFlow = () => {
         TableHeader,
         CodeBlock,
         InlineCode,
+        HardBreak,
       ],
     });
 
