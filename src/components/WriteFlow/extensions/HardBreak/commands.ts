@@ -8,13 +8,12 @@ import { WriteFlow, WFCommand } from '../../types';
  */
 
 export const insertHardBreak: WFCommand = (writeFlow) => {
-  const { state, view } = writeFlow;
-  const { hard_break: hardBreakType } = state.schema.nodes;
-  const dispatch = view?.dispatch;
-
-  if (!dispatch) {
+  if (!writeFlow.view) {
     return false;
   }
+
+  const { state, dispatch } = writeFlow.view;
+  const { hard_break: hardBreakType } = state.schema.nodes;
 
   const newTr = state.tr
     .replaceSelectionWith(hardBreakType.create())

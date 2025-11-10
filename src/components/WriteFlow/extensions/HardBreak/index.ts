@@ -1,5 +1,6 @@
 import { NodeSpec } from 'prosemirror-model';
 import { Node } from '@/components/WriteFlow/core/Node';
+import { insertHardBreak } from './commands';
 
 export const HardBreak = Node.create({
   name: 'hard_break',
@@ -13,42 +14,16 @@ export const HardBreak = Node.create({
       parseDOM: [{ tag: 'br' }],
     }) as NodeSpec,
 
-  addCommands: () => {
+  addCommands: ({ writeFlow }) => {
     return {
-      // setHardBreak: () => (state, dispatch) => {
-      //   if (dispatch) {
-      //     dispatch(state.tr.replaceSelectionWith(this.type.create()).scrollIntoView());
-      //   }
-      //   return true;
-      // },
+      insertHardBreak: insertHardBreak.bind(null, writeFlow),
     };
   },
 
-  addKeymap: () => {
+  addKeymap: ({ writeFlow }) => {
     return {
       // Shift + Enter: 在段落内插入换行符
-      'Shift-Enter': (state, dispatch) => {
-        const { hard_break: hardBreakType } = state.schema.nodes;
-
-        if (!dispatch) {
-          return true;
-        }
-
-        dispatch(
-          state.tr
-            .replaceSelectionWith(hardBreakType.create())
-            .scrollIntoView(),
-        );
-
-        return true;
-      },
-      // Shift + Enter: 在段落内插入换行符
-      // 'Shift-Enter': chainCommands(exitCode, (state, dispatch) => {
-      //   if (dispatch) {
-      //     dispatch(state.tr.replaceSelectionWith(this.type.create()).scrollIntoView());
-      //   }
-      //   return true;
-      // }),
+      'Shift-Enter': () => writeFlow.commands.insertHardBreak(),
     };
   },
 });
