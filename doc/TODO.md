@@ -8,6 +8,8 @@
 
 - com + enter 向下换行
 - com + shift + enter 向上换行
+- writeFlow.state 获取, 现在的 state 并不是实时的？直接用有问题?
+- writeFlow.dispatch, 现在的 dispatch 并不是实时的？直接用有问题?
 
 ## 表格扩展
 

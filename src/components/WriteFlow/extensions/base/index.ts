@@ -18,10 +18,10 @@ export const Base = Extendable.create({
 
   addKeymap: ({ writeFlow }) => {
     const isMac = globalThis.navigator?.userAgent.includes('Mac');
-    const modKey = isMac ? 'Mod-' : 'Ctrl-';
+    const modKey = isMac ? 'Mod' : 'Ctrl';
     return {
-      [`${modKey}z`]: () => writeFlow.commands.undo(), // 撤销
-      [`${modKey}Shift-z`]: () => writeFlow.commands.redo(), // 重做
+      [`${modKey}-z`]: () => writeFlow.commands.undo(), // 撤销
+      [`${modKey}-Shift-z`]: () => writeFlow.commands.redo(), // 重做
     };
   },
 
