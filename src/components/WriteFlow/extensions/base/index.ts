@@ -1,6 +1,6 @@
-import { redo, undo } from 'prosemirror-history';
 import { Extendable } from '@/components/WriteFlow/core/Extendable';
 import { gapCursor } from 'prosemirror-gapcursor';
+import { redo, undo } from './commands';
 
 /**
  * This extension allows you to create blockquote.
@@ -9,12 +9,19 @@ import { gapCursor } from 'prosemirror-gapcursor';
 export const Base = Extendable.create({
   name: 'base',
 
-  addKeymap(...rest) {
+  addCommands: ({ writeFlow }) => {
+    return {
+      undo: () => undo(writeFlow), // 撤销
+      redo: () => redo(writeFlow), // 重做
+    };
+  },
+
+  addKeymap: ({ writeFlow }) => {
     const isMac = globalThis.navigator?.userAgent.includes('Mac');
     const modKey = isMac ? 'Mod-' : 'Ctrl-';
     return {
-      [`${modKey}z`]: undo, // 撤销
-      [`${modKey}Shift-z`]: redo, // 重做
+      [`${modKey}z`]: () => writeFlow.commands.undo(), // 撤销
+      [`${modKey}Shift-z`]: () => writeFlow.commands.redo(), // 重做
     };
   },
 

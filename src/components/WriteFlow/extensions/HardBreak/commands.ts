@@ -1,12 +1,10 @@
-import { WriteFlow, WFCommand } from '../../types';
+import { WFCommand } from '../../types';
 
 /**
  * 插入硬换行命令
- * @param {object} state - 编辑器状态
- * @param {function} dispatch - 调度函数
- * @return {function} 命令函数
+ * @param {object} writeFlow - 编辑器实例
+ * @return boolean - 命令执行结果
  */
-
 export const insertHardBreak: WFCommand = (writeFlow) => {
   if (!writeFlow.view) {
     return false;

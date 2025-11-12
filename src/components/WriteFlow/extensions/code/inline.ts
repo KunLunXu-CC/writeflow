@@ -1,6 +1,6 @@
 import { Mark } from '@/components/WriteFlow/core/Mark';
 import { InputRule } from 'prosemirror-inputrules';
-import { MarkType } from 'prosemirror-model';
+import { MarkType, NodeSpec } from 'prosemirror-model';
 import {
   isEndInParagraph,
   isStartInParagraph,
@@ -47,7 +47,7 @@ export const InlineCode = Mark.create({
       toDOM() {
         return ['code', {}, 0];
       },
-    };
+    } as NodeSpec;
   },
 
   addInputRules({ type }) {

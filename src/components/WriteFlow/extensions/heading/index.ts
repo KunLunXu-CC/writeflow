@@ -1,6 +1,6 @@
 import { Node } from '@/components/WriteFlow/core/Node';
 import { textblockTypeInputRule } from 'prosemirror-inputrules';
-import { NodeType } from 'prosemirror-model';
+import { NodeSpec, NodeType } from 'prosemirror-model';
 
 /**
  * The heading level options.
@@ -61,7 +61,7 @@ export const Heading = Node.create<HeadingOptions>({
         tag: `h${level}`,
         attrs: { level },
       })),
-    };
+    } as NodeSpec;
   },
 
   // addCommands() {
