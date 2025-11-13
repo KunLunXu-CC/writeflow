@@ -7,12 +7,9 @@ import { Selection } from 'prosemirror-state';
  * @return boolean - 命令执行结果
  */
 export const insertParagraphBelow: WFCommand = (writeFlow) => {
-  if (!writeFlow.view) {
-    return false;
-  }
-  const { state, dispatch } = writeFlow.view;
+  const { state, dispatch, schema } = writeFlow;
+  const { paragraph: paragraphType } = schema.nodes;
   const { selection } = state;
-  const { paragraph: paragraphType } = state.schema.nodes;
 
   if (!paragraphType) {
     return false;
@@ -42,12 +39,9 @@ export const insertParagraphBelow: WFCommand = (writeFlow) => {
  * @return boolean - 命令执行结果
  */
 export const insertParagraphAbove: WFCommand = (writeFlow) => {
-  if (!writeFlow.view) {
-    return false;
-  }
-  const { state, dispatch } = writeFlow.view;
+  const { state, dispatch, schema } = writeFlow;
+  const { paragraph: paragraphType } = schema.nodes;
   const { selection } = state;
-  const { paragraph: paragraphType } = state.schema.nodes;
 
   if (!paragraphType) {
     return false;

@@ -7,11 +7,9 @@ import { WFCommand } from '../../types';
  * @return boolean - 命令执行结果
  */
 export const redo: WFCommand = (writeFlow) => {
-  if (!writeFlow.view) {
-    return false;
-  }
+  const { state, dispatch } = writeFlow;
 
-  return pmRedo(writeFlow.view.state, writeFlow.view.dispatch);
+  return pmRedo(state, dispatch);
 };
 
 /**
@@ -20,9 +18,7 @@ export const redo: WFCommand = (writeFlow) => {
  * @return boolean - 命令执行结果
  */
 export const undo: WFCommand = (writeFlow) => {
-  if (!writeFlow.view) {
-    return false;
-  }
+  const { state, dispatch } = writeFlow;
 
-  return pmUndo(writeFlow.view.state, writeFlow.view.dispatch);
+  return pmUndo(state, dispatch);
 };

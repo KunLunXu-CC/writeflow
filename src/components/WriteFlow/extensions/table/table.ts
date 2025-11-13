@@ -55,6 +55,7 @@ export const Table = Node.create({
 
   addCommands: ({ writeFlow }) => {
     return {
+      // TODO: 下面几个方法需求统一下, 参考 src/components/WriteFlow/extensions/paragraph/commands.ts
       mergeTableCells: () => {
         return mergeTableCells(writeFlow.view);
       },

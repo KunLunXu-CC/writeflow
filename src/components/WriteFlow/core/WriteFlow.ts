@@ -9,8 +9,8 @@ export class WriteFlow {
 
   private extensionManager!: ExtensionManager;
 
-  public state!: EditorState;
-  public view: EditorView | null = null;
+  public editorState!: EditorState;
+  public editorView!: EditorView;
 
   constructor(options: WriteFlowOptions) {
     this.setOptions(options);
@@ -42,7 +42,7 @@ export class WriteFlow {
    * 创建 PM 视图。
    */
   private createView(el: WriteFlowOptions['element']) {
-    this.view = new EditorView(el, {
+    this.editorView = new EditorView(el, {
       nodeViews: {
         ...this.extensionManager.nodeViews,
       },
@@ -59,37 +59,7 @@ export class WriteFlow {
       state: this.createState(),
     });
 
-    return this.view;
-
-    // editorRef.current = new EditorView(editorDom.current, {
-    //   nodeViews: {
-    //     code_block: codeBlockNodeView,
-    //   },
-    //   state: EditorState.create({
-    //     plugins,
-    //     doc: DOMParser.fromSchema(mySchema).parse(
-    //       document.createElement('div'),
-    //     ),
-    //   }),
-    // });
-
-    // `editor.view` is not yet available at this time.
-    // Therefore we will add all plugins and node views directly afterwards.
-    // const newState = this.state.reconfigure({
-    //   plugins: this.extensionManager.plugins,
-    // });
-
-    // this.view.updateState(newState);
-
-    // this.createNodeViews();
-    // this.prependClass();
-    // this.injectCSS();
-
-    // Let’s store the editor instance in the DOM element.
-    // So we’ll have access to it for tests.
-    // const dom = this.view.dom as TiptapEditorHTMLElement;
-
-    // dom.editor = this;
+    return this.editorView;
   }
 
   /**
@@ -105,12 +75,12 @@ export class WriteFlow {
       );
     }
 
-    this.state = EditorState.create({
+    this.editorState = EditorState.create({
       plugins,
       doc: DOMParser.fromSchema(schema).parse(document.createElement('div')),
     });
 
-    return this.state;
+    return this.editorState;
   }
 
   // private createCommandManager() {
@@ -135,22 +105,23 @@ export class WriteFlow {
     plugin: Plugin,
     handlePlugins?: (newPlugin: Plugin, plugins: Plugin[]) => Plugin[],
   ): EditorState {
-    if (!this.view) {
+    if (!this.editorView) {
       throw new Error('[WriteFlow error]: no view.');
     }
 
-    const plugins = handlePlugins?.(plugin, [...this.state.plugins]) ?? [
-      ...this.state.plugins,
+    const plugins = handlePlugins?.(plugin, [...this.editorState.plugins]) ?? [
+      ...this.editorState.plugins,
       plugin,
     ];
 
-    const newState = this.state.reconfigure({ plugins });
+    const newState = this.editorState.reconfigure({ plugins });
 
-    this.view.updateState(newState);
+    this.editorView.updateState(newState);
 
     return newState;
   }
 
+  // #region Getters
   public get helpers(): AnyHelpers {
     return this.extensionManager.helpers;
   }
@@ -159,52 +130,25 @@ export class WriteFlow {
     return this.extensionManager.commands;
   }
 
-  /**
-   * 取消注册 PM 插件
-   *
-   * @param nameOrPluginKeyToRemove 插件名称或插件键
-   * @returns 新的编辑器状态或 undefined
-   */
-  // public unregisterPlugin(
-  //   nameOrPluginKeyToRemove: string | PluginKey | (string | PluginKey)[],
-  // ): EditorState | undefined {
-  //   if (!this.view) {
-  //     throw new Error('[WriteFlow error]: no view.');
-  //   }
+  public get view(): EditorView {
+    if (!this.editorView) {
+      throw new Error('[WriteFlow error]: no view.');
+    }
 
-  //   const prevPlugins = this.state.plugins;
-  //   let plugins = prevPlugins;
+    return this.editorView;
+  }
 
-  //   const targetNames = ([] as (string | PluginKey)[])
-  //     .concat(nameOrPluginKeyToRemove)
-  //     .map((nameOrPluginKey) => {
-  //       if (typeof nameOrPluginKey === 'string') {
-  //         return `${nameOrPluginKey}$`;
-  //       }
-  //       // PluginKey doesn't expose its internal name in types; cast to any
-  //       return ((nameOrPluginKey as unknown as { key?: string })?.key ||
-  //         '') as string;
-  //     })
-  //     .filter((n): n is string => Boolean(n));
+  public get state(): EditorState {
+    return this.view.state;
+  }
 
-  //   plugins = plugins.filter((plugin) => {
-  //     const currentKeyName = (plugin.spec.key as unknown as { key?: string })
-  //       ?.key;
-  //     if (!currentKeyName) return true;
-  //     return !targetNames.some((name) => currentKeyName.startsWith(name));
-  //   });
+  public get schema(): EditorState['schema'] {
+    return this.state.schema;
+  }
 
-  //   if (prevPlugins.length === plugins.length) {
-  //     // No plugin was removed, so we don’t need to update the state
-  //     return undefined;
-  //   }
+  public get dispatch(): EditorView['dispatch'] {
+    return this.view.dispatch;
+  }
 
-  //   const state = this.state.reconfigure({
-  //     plugins,
-  //   });
-
-  //   this.view.updateState(state);
-
-  //   return state;
-  // }
+  // #endregion
 }
