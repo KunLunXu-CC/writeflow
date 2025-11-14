@@ -1,8 +1,16 @@
 
 
 [ ] 扩展目录改为大写? 或者驼峰
-[ ] 所有插件扩展, 通过命令、helper 抽离, 类型严格按要求来
+[ ] 命令的调用报错了, 提示 insertParagraphBelow 需要一个参数
 
+```js
+addKeymap: ({ writeFlow }) => {
+    return {
+      'Mod-Enter': () => writeFlow.commands.insertParagraphBelow(), // Ctrl/Cmd + Enter: 在下方插入段落
+      'Mod-Shift-Enter': () => writeFlow.commands.insertParagraphAbove(), // Ctrl/Cmd + Shift + Enter: 在上方插入段落
+    };
+  },
+```
 
 ## base 扩展
 

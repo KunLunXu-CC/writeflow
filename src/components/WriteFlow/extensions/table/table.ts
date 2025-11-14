@@ -67,7 +67,7 @@ export const Table = Node.create({
 
   addHelpers: ({ writeFlow }) => {
     return {
-      getTableSelectedCells: () => getTableSelectedCells(writeFlow.view),
+      getTableSelectedCells: () => getTableSelectedCells(writeFlow),
     };
   },
 

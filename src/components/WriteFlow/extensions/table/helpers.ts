@@ -1,7 +1,6 @@
 import { CellSelection } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
-import { EditorView } from 'prosemirror-view';
-
+import { WFHelper } from '../../types';
 export interface SelectedCell {
   node: Node;
   pos: number;
@@ -12,12 +11,10 @@ export interface SelectedCell {
  * @param view - 编辑器视图
  * @returns 获取选中的单元格信息
  */
-export const getTableSelectedCells = (
-  view: EditorView | null,
-): SelectedCell[] => {
-  if (!view) return [];
+export const getTableSelectedCells: WFHelper<SelectedCell[]> = (writeFlow) => {
+  const { state } = writeFlow;
 
-  const { selection } = view.state;
+  const { selection } = state;
 
   const isSelected = selection instanceof CellSelection;
 

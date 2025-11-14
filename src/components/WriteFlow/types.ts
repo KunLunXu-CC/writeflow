@@ -41,6 +41,19 @@ export enum EXTENSIONS_TYPE {
  */
 export type WFCommand = (wf: WriteFlow) => boolean;
 
+/**
+ * WFHelper(辅助函数)
+ * 它们接收当前的编辑器状态和一个可选的派发函数作为参数,并返回任意类型的值
+ */
+export type WFHelper<Return = any, Options = any> = (
+  wf: WriteFlow,
+  options?: Options,
+) => Return;
+
+export type AnyHelpers = Record<string, WFHelper>;
+
+export type AnyCommands = Record<string, WFCommand>;
+
 export type AnyExtensionConfig = NodeConfig | MarkConfig | ExtendableConfig;
 
 export type AnyExtension<Options = any> =
@@ -63,11 +76,3 @@ export interface WriteFlowOptions extends EditorProps {
   element: Element;
   extensions?: AnyExtension[];
 }
-
-export type HelperFunction = (...args: any[]) => any;
-
-export type CommandFunction = (...args: any[]) => any;
-
-export type AnyHelpers = Record<string, HelperFunction>;
-
-export type AnyCommands = Record<string, CommandFunction>;
