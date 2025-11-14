@@ -5,19 +5,17 @@ import {
   deleteRow,
   deleteColumn,
 } from 'prosemirror-tables';
-import { EditorView } from 'prosemirror-view';
+import { WFCommand } from '../../types';
 
 /**
  * 合并选中的单元格
  * @param view - 编辑器视图
  * @returns 合并选中的单元格信息
  */
-export const mergeTableCells = (view: EditorView | null): boolean => {
-  if (!view) {
-    return false;
-  }
+export const mergeTableCells: WFCommand = (writeFlow) => {
+  const { dispatch, state } = writeFlow;
 
-  return mergeCells(view.state, view.dispatch);
+  return mergeCells(state, dispatch);
 };
 
 /**
@@ -25,12 +23,10 @@ export const mergeTableCells = (view: EditorView | null): boolean => {
  * @param view - 编辑器视图
  * @returns 插入行信息
  */
-export const addTableRowAfter = (view: EditorView | null): boolean => {
-  if (!view) {
-    return false;
-  }
+export const addTableRowAfter: WFCommand = (writeFlow) => {
+  const { dispatch, state } = writeFlow;
 
-  return addRowAfter(view.state, view.dispatch);
+  return addRowAfter(state, dispatch);
 };
 
 /**
@@ -38,12 +34,10 @@ export const addTableRowAfter = (view: EditorView | null): boolean => {
  * @param view - 编辑器视图
  * @returns 插入列信息
  */
-export const addTableColumnAfter = (view: EditorView | null): boolean => {
-  if (!view) {
-    return false;
-  }
+export const addTableColumnAfter: WFCommand = (writeFlow) => {
+  const { dispatch, state } = writeFlow;
 
-  return addColumnAfter(view.state, view.dispatch);
+  return addColumnAfter(state, dispatch);
 };
 
 /**
@@ -51,12 +45,10 @@ export const addTableColumnAfter = (view: EditorView | null): boolean => {
  * @param view - 编辑器视图
  * @returns 删除行信息
  */
-export const deleteTableRow = (view: EditorView | null): boolean => {
-  if (!view) {
-    return false;
-  }
+export const deleteTableRow: WFCommand = (writeFlow) => {
+  const { dispatch, state } = writeFlow;
 
-  return deleteRow(view.state, view.dispatch);
+  return deleteRow(state, dispatch);
 };
 
 /**
@@ -64,10 +56,8 @@ export const deleteTableRow = (view: EditorView | null): boolean => {
  * @param view - 编辑器视图
  * @returns 删除列信息
  */
-export const deleteTableColumn = (view: EditorView | null): boolean => {
-  if (!view) {
-    return false;
-  }
+export const deleteTableColumn: WFCommand = (writeFlow) => {
+  const { dispatch, state } = writeFlow;
 
-  return deleteColumn(view.state, view.dispatch);
+  return deleteColumn(state, dispatch);
 };

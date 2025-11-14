@@ -55,24 +55,13 @@ export const Table = Node.create({
 
   addCommands: ({ writeFlow }) => {
     return {
-      // TODO: 下面几个方法需求统一下, 参考 src/components/WriteFlow/extensions/paragraph/commands.ts
-      mergeTableCells: () => {
-        return mergeTableCells(writeFlow.view);
-      },
+      mergeTableCells: () => mergeTableCells(writeFlow),
 
-      addTableRowAfter: () => {
-        return addTableRowAfter(writeFlow.view);
-      },
-      addTableColumnAfter: () => {
-        return addTableColumnAfter(writeFlow.view);
-      },
+      addTableRowAfter: () => addTableRowAfter(writeFlow),
+      addTableColumnAfter: () => addTableColumnAfter(writeFlow),
 
-      deleteTableRow: () => {
-        return deleteTableRow(writeFlow.view);
-      },
-      deleteTableColumn: () => {
-        return deleteTableColumn(writeFlow.view);
-      },
+      deleteTableRow: () => deleteTableRow(writeFlow),
+      deleteTableColumn: () => deleteTableColumn(writeFlow),
     };
   },
 
