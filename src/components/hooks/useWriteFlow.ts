@@ -16,7 +16,7 @@ import {
 } from '@/components/WriteFlow/extensions/table';
 import { Base } from '@/components/WriteFlow/extensions/base';
 import { Paragraph } from '@/components/WriteFlow/extensions/paragraph';
-import { HardBreak } from '@/components/WriteFlow/extensions/HardBreak';
+import { HardBreak } from '@/components/WriteFlow/extensions/hard-break';
 import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
 import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
 
