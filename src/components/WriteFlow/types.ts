@@ -25,7 +25,7 @@ export enum EXTENSIONS_TYPE {
 }
 
 /**
- * WFCommand(命令) 没直接用 prosemirror-state 中的 Command 类型, 是因为想要直接传入 WriteFlow 实例。但作用基本一致
+ * WFCommand(内部约定的命令) 没直接用 prosemirror-state 中的 Command 类型, 是因为想要直接传入 WriteFlow 实例。但作用基本一致
  * 它们接收当前的编辑器状态和一个可选的派发函数作为参数,并返回一个布尔值表示命令是否成功执行
  * 返回值的含义如下:
  *
@@ -39,10 +39,13 @@ export enum EXTENSIONS_TYPE {
  * - 继续传播 - 允许尝试执行下一个命令(在快捷键链中)
  * - 不修改状态 - 编辑器状态保持不变
  */
-export type WFCommand = (wf: WriteFlow) => boolean;
+export type WFCommand<Options = any> = (
+  wf: WriteFlow,
+  options?: Options,
+) => boolean;
 
 /**
- * WFHelper(辅助函数)
+ * WFHelper(内部约定的辅助函数)
  * 它们接收当前的编辑器状态和一个可选的派发函数作为参数,并返回任意类型的值
  */
 export type WFHelper<Return = any, Options = any> = (
@@ -50,9 +53,15 @@ export type WFHelper<Return = any, Options = any> = (
   options?: Options,
 ) => Return;
 
-export type AnyHelpers = Record<string, WFHelper>;
+/**
+ * 对外暴露的辅助函数
+ */
+export type AnyHelpers = Record<string, (opts?: Record<string, any>) => any>;
 
-export type AnyCommands = Record<string, WFCommand>;
+/**
+ * 对外暴露的命令
+ */
+export type AnyCommands = Record<string, (opts?: Record<string, any>) => any>;
 
 export type AnyExtensionConfig = NodeConfig | MarkConfig | ExtendableConfig;
 
