@@ -17,39 +17,50 @@
 
   /* 字体大小 */
   --wf-text-base: 16px;
-  --wf-font-family: "DM Sans", sans-serif;
+  --wf-font-family: system-ui, -apple-system, "system-ui", "segoe ui", roboto, helvetica, arial, sans-serif, "apple color emoji", "segoe ui emoji", "segoe ui symbol", monospace;
 
   // 圆角
   --wf-rounded-sm: 0.25em;
   --wf-rounded: var(--wf-rounded-sm);
   --wf-motion-duration-fast: 0.4s;
 
+
   // fontSizeHeading1	H1 标签所使用的字号	number	38
   // fontSizeHeading2	h2 标签所使用的字号	number	30
   // fontSizeHeading3	h3 标签使用的字号	number	24
   // fontSizeHeading4	h4 标签使用的字号	number	20
   // fontSizeHeading5	h5 标签使用的字号
+  --wf-block-gap-vertical: 1em; // 块之间的垂直间距
+}
+
+// 重置首尾元素的外边距
+@mixin reset-edge-spacing {
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
 }
 
 // 整体设置
 .wf-light {
-  line-height: 1.6;
+  line-height: 1.5;
   font-weight: 400;
   background: var(--wf-color-bg);
   color: hsl(var(--wf-color-text));
   font-size: var(--wf-text-base);
   font-family: var(--wf-font-family);
 
-  > *:first-child {
-    margin-top: 0;
-  }
+  @include reset-edge-spacing;
 
   // #region 段落
   p {
     font-size: 1em;
 
     &:not(:first-child) {
-      margin-top: 1.25em;
+      margin-top: 0.4em;
     }
   }
 
@@ -62,6 +73,7 @@
   h4,
   h5,
   h6 {
+    margin: var(--wf-block-gap-vertical) 0;
     border-bottom: 1px dashed hsl(var(--wf-color-text-quaternary));
 
     &::before {
@@ -75,42 +87,42 @@
 
   h1 {
     font-size: 1.5em;
-    margin-top: 3em;
     font-weight: 700;
   }
 
   h2 {
     font-size: 1.25em;
-    margin-top: 2.5em;
     font-weight: 700;
   }
 
   h3 {
     font-size: 1.125em;
     font-weight: 600;
-    margin-top: 2em;
   }
 
   h4 {
     font-size: 1em;
     font-weight: 600;
-    margin-top: 2em;
   }
 
   h5,
   h6 {
     font-size: 1em;
     font-weight: 400;
-    margin-top: 1.25em;
   }
 
   // #endregion
   
   // #region 列表
+  li::marker {
+    color: hsl(var(--wf-color-text-secondary));
+  }
+
+  // 无序列表
   ul {
-    margin-top: 1.25em;
     padding-left: 1.5em;
     list-style: disc outside none;
+    margin: var(--wf-block-gap-vertical) 0;
 
     ul {
       margin-block: 0;
@@ -122,11 +134,12 @@
     }
   }
 
+  // 有序列表
   ol {
-    margin-top: 1.25em;
     padding-left: 1.5em;
     list-style: decimal outside none;
-
+    margin: var(--wf-block-gap-vertical) 0;
+    
     ol {
       margin-block: 0;
       list-style: lower-roman outside none;
@@ -139,84 +152,92 @@
 
   // 任务列表
   ul[data-type='taskList'] {
-    padding-left: 0 !important;
-  }
+    padding-left: 0;
 
-  li[data-type='taskItem'] {
-    gap: 0.5em;
-    width: 100%;
-    display: flex;
-
-    > div {
-      flex: 1;
-    }
-
-    > p {
-      overflow-x: hidden;
-      word-break:break-all;
-    }
-
-    label {
-      height: 1em;
-      margin-top: 0.34em;
-      position: relative;
-    }
-
-    input[type="checkbox"] {
-      width: 0;
-      height: 0;
-      opacity: 0;
-      position: absolute;
-    }
-
-    label span {
-      width: 1em;
-      height: 1em;
-      position: relative;
-      cursor: pointer;
-      border-radius: 4px;
+    li {
+      gap: 0.5em;
+      width: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
-      background-color: hsl(var(--wf-color-text-quaternary) / 10%);
-      transition: all var(--wf-motion-duration-fast);
-    }
 
-    label span::before {
-      content: "";
-      width: 0.35em;
-      height: 0.57em;
-      margin-bottom: 0.1em;
-      border: 0.125em solid hsl(var(--wf-color-bg));
-      border-top: 0;
-      border-left: 0;
-      transform: rotate(45deg);
-    }
+      > div {
+        flex: 1;
+      }
 
-    label input[type="checkbox"]:checked+span {
-      opacity: 1;
-      border-color: hsl(var(--wf-color-primary));
-      background-color: hsl(var(--wf-color-primary));
+      > p {
+        overflow-x: hidden;
+        word-break:break-all;
+      }
+
+      label {
+        height: 1.5em;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      input[type="checkbox"] {
+        width: 0;
+        height: 0;
+        opacity: 0;
+        position: absolute;
+      }
+
+      label span {
+        width: 1em;
+        height: 1em;
+        position: relative;
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
+        background-color: hsl(var(--wf-color-text-quaternary) / 10%);
+        transition: all var(--wf-motion-duration-fast);
+      }
+
+      label span::before {
+        content: "";
+        width: 0.35em;
+        height: 0.57em;
+        margin-bottom: 0.1em;
+        border: 0.125em solid hsl(var(--wf-color-bg));
+        border-top: 0;
+        border-left: 0;
+        transform: rotate(45deg);
+      }
+
+      label input[type="checkbox"]:checked+span {
+        opacity: 1;
+        border-color: hsl(var(--wf-color-primary));
+        background-color: hsl(var(--wf-color-primary));
+      }
     }
   }
 
   // #endregion
 
-  // 图片设置 
+  // #region 图片设置 
   img {
     max-width: 100%;
   }
 
-  // 快引用
+  // #endregion
+
+  // #region 快引用
   blockquote {
-    margin-top: 1.25em;
     padding: 0.375em 0.75em;
+    margin: var(--wf-block-gap-vertical) 0;
     background: hsl(var(--wf-color-text-quaternary) / 10%);
     border-left: 0.25em solid hsl(var(--wf-color-primary));
+
+    @include reset-edge-spacing;
   }
 
-  // code `` 提示内容 
+  // #endregion
+
+
+  //  #region code `` 提示内容 
   code {
     font-size: 0.87em;
     padding: 0.065em 0.4em;
@@ -225,10 +246,13 @@
     background-color: hsl(var(--wf-color-primary) / 8%);
   }
 
-  // 代码块部分
+  // #endregion
+
+  // #region 代码块部分
   .writer-flow-code-block {
     overflow: hidden;
     border-radius: var(--wf-rounded);
+    margin: var(--wf-block-gap-vertical) 0;
     background: hsl(var(--wf-code-block-bg));
 
     &-header {
@@ -278,52 +302,58 @@
     }
   }
 
-  
+  // #endregion
   
 
-  // 空隙光标样式
+  //  #region 空隙光标样式
   .ProseMirror-gapcursor {
     width: 100%;
     height: 1.6em;
     margin-top: 1.25em;
   }
-}
 
-// 表格 
-.writer-flow-table {
-  margin-top: 1.25em;
-  
-  table {
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
-  }
+  //  #endregion
 
-  th, td{
-    position: relative;
-    padding: 0.375em 0.625em;
-    text-align: left;
-    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
-  }
+  // #region 表格 
+  .writer-flow-table {
+    margin: var(--wf-block-gap-vertical) 0;
+    
+    table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
+    }
 
-  // 表格选中样式 
-  .selectedCell {
-    background-color: hsl(var(--wf-color-primary) / 20%);
+    th, td{
+      position: relative;
+      padding: 0.375em 0.625em;
+      text-align: left;
+      border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
 
-    *::selection {
-      background: none;
+      @include reset-edge-spacing;
+    }
+
+    // 表格选中样式 
+    .selectedCell {
+      background-color: hsl(var(--wf-color-primary) / 20%);
+
+      *::selection {
+        background: none;
+      }
+    }
+
+    // 表格列宽调整
+    .column-resize-handle {
+      top: 0;
+      bottom: 0;
+      position: absolute;
+      width: 0.25em;
+      right: -0.125em;
+      cursor: col-resize;
+      background-color: hsl(var(--wf-color-primary));
     }
   }
 
-  // 表格列宽调整
-  .column-resize-handle {
-    top: 0;
-    bottom: 0;
-    position: absolute;
-    width: 0.25em;
-    right: -0.125em;
-    cursor: col-resize;
-    background-color: hsl(var(--wf-color-primary));
-  }
+  // #endregion
 }
