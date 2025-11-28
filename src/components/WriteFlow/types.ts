@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Extendable } from './core/Extendable';
 import type { WriteFlow } from './core/WriteFlow';
 import type { Node, NodeConfig } from './core/Node';
@@ -6,7 +5,6 @@ import type { Mark, MarkConfig } from './core/Mark';
 import type { ExtendableConfig } from './core/Extendable';
 import { MarkType, NodeType, Schema } from 'prosemirror-model';
 import { EditorProps } from 'prosemirror-view';
-import { Command } from 'prosemirror-state';
 export { WriteFlow, ExtendableConfig, NodeConfig };
 
 export type Primitive =
@@ -42,7 +40,7 @@ export enum EXTENSIONS_TYPE {
 export type WFCommand<Options = any> = (
   wf: WriteFlow,
   options?: Options,
-) => boolean;
+) => Promise<boolean> | boolean;
 
 /**
  * WFHelper(内部约定的辅助函数)
