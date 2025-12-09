@@ -45,11 +45,11 @@ export const Image = Node.create({
     } as NodeSpec;
   },
 
-  addCommands: ({ writeFlow }) => {
+  addCommands: ({ writeFlow, extension }) => {
     return {
-      insertImageByUrl: (options) => insertImageByUrl(writeFlow, options),
-      insertImageByFile: (options) => insertImageByFile(writeFlow, options),
-      setImageByUploadId: (options) => setImageByUploadId(writeFlow, options),
+      insertImageByUrl: (options) => insertImageByUrl({ writeFlow, extension }, options),
+      insertImageByFile: (options) => insertImageByFile({ writeFlow, extension }, options),
+      setImageByUploadId: (options) => setImageByUploadId({ writeFlow, extension }, options),
     };
   },
 

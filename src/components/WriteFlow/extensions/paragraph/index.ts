@@ -15,10 +15,10 @@ export const Paragraph = Node.create({
   },
 
   // 注册命令, 供外部调用: writeFlow.commands.insertParagraphAfter()
-  addCommands: ({ writeFlow }) => {
+  addCommands: ({ writeFlow, extension }) => {
     return {
-      insertParagraphBelow: () => insertParagraphBelow(writeFlow),
-      insertParagraphAbove: () => insertParagraphAbove(writeFlow),
+      insertParagraphBelow: () => insertParagraphBelow({ writeFlow, extension }),
+      insertParagraphAbove: () => insertParagraphAbove({ writeFlow, extension }),
     };
   },
 

@@ -3,10 +3,11 @@ import { Selection } from 'prosemirror-state';
 
 /**
  * 在下方插入段落
- * @param {object} writeFlow - 编辑器实例
+ * @param {object} content - 命令上下文
+ * @param {object} content.writeFlow - 编辑器实例
  * @return boolean - 命令执行结果
  */
-export const insertParagraphBelow: WFCommand = (writeFlow) => {
+export const insertParagraphBelow: WFCommand = ({ writeFlow }) => {
   const { state, dispatch, schema } = writeFlow;
   const { paragraph: paragraphType } = schema.nodes;
   const { selection } = state;
@@ -35,10 +36,11 @@ export const insertParagraphBelow: WFCommand = (writeFlow) => {
 
 /**
  * 在上方插入段落
- * @param {object} writeFlow - 编辑器实例
+ * @param {object} content - 命令上下文
+ * @param {object} content.writeFlow - 编辑器实例
  * @return boolean - 命令执行结果
  */
-export const insertParagraphAbove: WFCommand = (writeFlow) => {
+export const insertParagraphAbove: WFCommand = ({ writeFlow }) => {
   const { state, dispatch, schema } = writeFlow;
   const { paragraph: paragraphType } = schema.nodes;
   const { selection } = state;

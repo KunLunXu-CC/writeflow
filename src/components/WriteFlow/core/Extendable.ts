@@ -80,9 +80,7 @@ export interface ExtendableConfig<Options = unknown> {
    *   }
    * },
    */
-  addKeymap?: (
-    context: ExtendableFunContext<Options>,
-  ) => Record<string, Command>;
+  addKeymap?: (context: ExtendableFunContext<Options>) => Record<string, Command>;
 
   /**
    * This function adds a plugin to the editor.
@@ -133,15 +131,24 @@ export interface ExtendableConfig<Options = unknown> {
 
 export class Extendable<Options = unknown> {
   name: string;
+  #options?: Options;
   type = EXTENSIONS_TYPE.EXTENDABLE;
-  options?: Options;
   config?: ExtendableConfig<Options>;
+
+  get options() {
+    return this.#options as Options;
+  }
 
   constructor(config: ExtendableConfig<Options>) {
     this.config = config;
-    this.name = this.config.name;
-    this.options = config.options;
+    this.name = config.name;
+    this.#options = config.options;
   }
+
+  /** 添加配置选项 */
+  addOptions = (newOptions: Partial<Options>) => {
+    this.#options = { ...this.#options, ...newOptions } as Options;
+  };
 
   /**
    * 创建一个新的 Extendable 实例

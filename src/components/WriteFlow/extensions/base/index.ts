@@ -9,10 +9,10 @@ import { redo, undo } from './commands';
 export const Base = Extendable.create({
   name: 'base',
 
-  addCommands: ({ writeFlow }) => {
+  addCommands: ({ writeFlow, extension }) => {
     return {
-      undo: () => undo(writeFlow), // 撤销
-      redo: () => redo(writeFlow), // 重做
+      undo: () => undo({ writeFlow, extension }), // 撤销
+      redo: () => redo({ writeFlow, extension }), // 重做
     };
   },
 

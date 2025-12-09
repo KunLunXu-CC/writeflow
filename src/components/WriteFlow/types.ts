@@ -16,7 +16,7 @@ export enum EXTENSIONS_TYPE {
 }
 
 export type WFCommand<Options = any, ReturnData = Promise<boolean> | boolean> = (
-  wf: WriteFlow,
+  context: { writeFlow: WriteFlow; extension: AnyExtension },
   options?: Options,
 ) => ReturnData;
 

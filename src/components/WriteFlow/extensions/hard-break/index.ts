@@ -14,9 +14,9 @@ export const HardBreak = Node.create({
       parseDOM: [{ tag: 'br' }],
     }) as NodeSpec,
 
-  addCommands: ({ writeFlow }) => {
+  addCommands: ({ writeFlow, extension }) => {
     return {
-      insertHardBreak: insertHardBreak.bind(null, writeFlow),
+      insertHardBreak: () => insertHardBreak({ writeFlow, extension }),
     };
   },
 

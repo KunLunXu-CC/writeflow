@@ -4,7 +4,8 @@ import { UPLOAD_STATUS } from './types';
 
 /**
  * 更新图片节点属性 - 通过 uploadId
- * @param {object} writeFlow - 编辑器实例
+ * @param {object} content - 命令上下文
+ * @param {object} content.writeFlow - 编辑器实例
  * @param {object} options - 命令选项
  * @param {string} options.uploadId - 上传 ID
  * @param {object} options.newAttrs - 新的节点属性
@@ -13,7 +14,7 @@ import { UPLOAD_STATUS } from './types';
 export const setImageByUploadId: WFCommand<{
   uploadId: string;
   newAttrs: any;
-}> = async (writeFlow, options) => {
+}> = async ({ writeFlow }, options) => {
   const { uploadId, newAttrs } = options || {};
 
   if (!uploadId || !newAttrs) {
@@ -46,10 +47,11 @@ export const setImageByUploadId: WFCommand<{
 
 /**
  * 插入图片命令 - 通过文件
- * @param {object} writeFlow - 编辑器实例
+ * @param {object} content - 命令上下文
+ * @param {object} content.writeFlow - 编辑器实例
  * @return boolean - 命令执行结果
  */
-export const insertImageByFile: WFCommand<{ file?: File }> = async (writeFlow, options) => {
+export const insertImageByFile: WFCommand<{ file?: File }> = async ({ writeFlow }, options) => {
   const { file } = options || {};
   const uploadId = uuid();
   const { state, dispatch, schema } = writeFlow;
@@ -88,10 +90,11 @@ export const insertImageByFile: WFCommand<{ file?: File }> = async (writeFlow, o
 
 /**
  * 插入图片命令 - 通过 URL
- * @param {object} writeFlow - 编辑器实例
+ * @param {object} content - 命令上下文
+ * @param {object} content.writeFlow - 编辑器实例
  * @return boolean - 命令执行结果
  */
-export const insertImageByUrl: WFCommand<{ url?: string }> = async (writeFlow, options) => {
+export const insertImageByUrl: WFCommand<{ url?: string }> = async ({ writeFlow }, options) => {
   const { url } = options || {};
   const { dispatch, state, schema } = writeFlow;
 

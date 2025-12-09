@@ -53,15 +53,15 @@ export const Table = Node.create({
     ];
   },
 
-  addCommands: ({ writeFlow }) => {
+  addCommands: ({ writeFlow, extension }) => {
     return {
-      mergeTableCells: () => mergeTableCells(writeFlow),
+      mergeTableCells: () => mergeTableCells({ writeFlow, extension }),
 
-      addTableRowAfter: () => addTableRowAfter(writeFlow),
-      addTableColumnAfter: () => addTableColumnAfter(writeFlow),
+      addTableRowAfter: () => addTableRowAfter({ writeFlow, extension }),
+      addTableColumnAfter: () => addTableColumnAfter({ writeFlow, extension }),
 
-      deleteTableRow: () => deleteTableRow(writeFlow),
-      deleteTableColumn: () => deleteTableColumn(writeFlow),
+      deleteTableRow: () => deleteTableRow({ writeFlow, extension }),
+      deleteTableColumn: () => deleteTableColumn({ writeFlow, extension }),
     };
   },
 

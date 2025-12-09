@@ -8,18 +8,27 @@ import {
   BulletList,
   OrderedList,
 } from '@/components/WriteFlow/extensions/list';
-import {
-  Table,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from '@/components/WriteFlow/extensions/table';
+import { Table, TableCell, TableHeader, TableRow } from '@/components/WriteFlow/extensions/table';
 import { Base } from '@/components/WriteFlow/extensions/base';
 import { Image } from '@/components/WriteFlow/extensions/image';
 import { Paragraph } from '@/components/WriteFlow/extensions/paragraph';
 import { HardBreak } from '@/components/WriteFlow/extensions/hard-break';
 import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
 import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
+
+Image.addOptions({
+  upload: async (file: File) => {
+    // 模拟上传延迟
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    // 返回模拟的图片 URL
+    return {
+      alt: file.name,
+      title: file.name,
+      url: URL.createObjectURL(file),
+    };
+  },
+});
 
 export const useWriteFlow = () => {
   const writeFlowDomRef = useRef(null);
