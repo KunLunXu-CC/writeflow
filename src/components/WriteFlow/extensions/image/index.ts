@@ -1,5 +1,5 @@
 import { Node } from '@/components/WriteFlow/core/Node';
-import { ImageDropPastePlugin } from './createImageDropPastePlugin';
+import { ImageDropPastePlugin } from './ImageDropPastePlugin';
 import { insertImageByFile, insertImageByUrl, setImageByUploadId } from './commands';
 import { NodeSpec } from 'prosemirror-model';
 
