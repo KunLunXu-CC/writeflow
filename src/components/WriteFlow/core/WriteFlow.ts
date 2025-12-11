@@ -9,8 +9,7 @@ export class WriteFlow {
 
   private extensionManager!: ExtensionManager;
 
-  public editorState!: EditorState;
-  public editorView!: EditorView;
+  public view!: EditorView;
 
   constructor(options: WriteFlowOptions) {
     this.setOptions(options);
@@ -31,9 +30,7 @@ export class WriteFlow {
    */
   private mount(el: WriteFlowOptions['element']) {
     if (typeof el === 'undefined') {
-      throw new Error(
-        '[WriteFlow error]: 无法挂载编辑器, 因为在此环境中没有定义挂载点(element)。',
-      );
+      throw new Error('[WriteFlow error]: 无法挂载编辑器, 因为在此环境中没有定义挂载点(element)。');
     }
     this.createView(el);
   }
@@ -42,7 +39,7 @@ export class WriteFlow {
    * 创建 PM 视图。
    */
   private createView(el: WriteFlowOptions['element']) {
-    this.editorView = new EditorView(el, {
+    this.view = new EditorView(el, {
       nodeViews: {
         ...this.extensionManager.nodeViews,
       },
@@ -59,7 +56,7 @@ export class WriteFlow {
       state: this.createState(),
     });
 
-    return this.editorView;
+    return this.view;
   }
 
   /**
@@ -75,12 +72,10 @@ export class WriteFlow {
       );
     }
 
-    this.editorState = EditorState.create({
+    return EditorState.create({
       plugins,
       doc: DOMParser.fromSchema(schema).parse(document.createElement('div')),
     });
-
-    return this.editorState;
   }
 
   // private createCommandManager() {
@@ -88,10 +83,7 @@ export class WriteFlow {
   // }
 
   private createExtensionManager() {
-    this.extensionManager = new ExtensionManager(
-      this.options.extensions || [],
-      this,
-    );
+    this.extensionManager = new ExtensionManager(this.options.extensions || [], this);
   }
 
   /**
@@ -105,18 +97,38 @@ export class WriteFlow {
     plugin: Plugin,
     handlePlugins?: (newPlugin: Plugin, plugins: Plugin[]) => Plugin[],
   ): EditorState {
-    if (!this.editorView) {
+    if (!this.view) {
       throw new Error('[WriteFlow error]: no view.');
     }
 
-    const plugins = handlePlugins?.(plugin, [...this.editorState.plugins]) ?? [
-      ...this.editorState.plugins,
+    const plugins = handlePlugins?.(plugin, [...this.state.plugins]) ?? [
+      ...this.state.plugins,
       plugin,
     ];
 
-    const newState = this.editorState.reconfigure({ plugins });
+    const newState = this.state.reconfigure({ plugins });
 
-    this.editorView.updateState(newState);
+    this.view.updateState(newState);
+
+    return newState;
+  }
+
+  /**
+   * 注销 PM 插件
+   *
+   * @param plugin PM 插件
+   * @returns 新的编辑器状态
+   */
+  public unregisterPlugin(plugin: Plugin): EditorState {
+    if (!this.view) {
+      throw new Error('[WriteFlow error]: no view.');
+    }
+
+    const plugins = this.state.plugins.filter((p) => p !== plugin);
+
+    const newState = this.state.reconfigure({ plugins });
+
+    this.view.updateState(newState);
 
     return newState;
   }
@@ -128,14 +140,6 @@ export class WriteFlow {
 
   public get commands(): AnyCommands {
     return this.extensionManager.commands;
-  }
-
-  public get view(): EditorView {
-    if (!this.editorView) {
-      throw new Error('[WriteFlow error]: no view.');
-    }
-
-    return this.editorView;
   }
 
   public get state(): EditorState {

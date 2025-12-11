@@ -3,8 +3,7 @@ import { BubbleMenuPluginView, BubbleMenuPluginViewParams } from './PluginView';
 
 import { Plugin, PluginKey } from 'prosemirror-state';
 
-interface BuildBubbleMenuPluginParams
-  extends Omit<BubbleMenuPluginViewParams, 'view'> {
+interface BuildBubbleMenuPluginParams extends Omit<BubbleMenuPluginViewParams, 'view'> {
   pluginKey?: PluginKey | string;
 }
 

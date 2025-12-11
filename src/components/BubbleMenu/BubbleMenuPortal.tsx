@@ -1,10 +1,4 @@
-import {
-  useRef,
-  useState,
-  useEffect,
-  cloneElement,
-  useLayoutEffect,
-} from 'react';
+import { useRef, useState, useEffect, cloneElement, useLayoutEffect } from 'react';
 import { BubbleMenuPortalProps } from '.';
 import { createPortal } from 'react-dom';
 import { Plugin } from 'prosemirror-state';
@@ -29,6 +23,10 @@ export const BubbleMenuPortal: React.FC<BubbleMenuPortalProps> = (props) => {
   // 在客户端首次渲染时创建插件
   useEffect(() => {
     if (!writeFlow || !bubbleMenuElementRef.current) return;
+
+    if (bubbleMenuPluginRef.current) {
+      writeFlow.unregisterPlugin(bubbleMenuPluginRef.current);
+    }
 
     bubbleMenuPluginRef.current = buildBubbleMenuPlugin({
       element: bubbleMenuElementRef.current,
@@ -60,8 +58,5 @@ export const BubbleMenuPortal: React.FC<BubbleMenuPortalProps> = (props) => {
   // 在客户端首次渲染时创建 DOM 元素
   if (!bubbleMenuElementRef.current) return null;
 
-  return createPortal(
-    cloneElement(children, { key: range }),
-    bubbleMenuElementRef.current,
-  );
+  return createPortal(cloneElement(children, { key: range }), bubbleMenuElementRef.current);
 };

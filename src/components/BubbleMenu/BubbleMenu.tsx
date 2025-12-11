@@ -1,12 +1,10 @@
 import clsx from 'clsx';
 import { Card } from '@heroui/react';
-import { FC, useEffect, useMemo } from 'react';
-import { useWriteFlowContext } from '../WriteFlowContext';
+import { FC, useMemo } from 'react';
 import { BubbleMenuProps, BubbleMenuPortal, BubbleMenuItem } from '.';
 
 const BubbleMenuContent: FC<BubbleMenuProps> = (props) => {
   const { className, items, children } = props;
-  const writeFlow = useWriteFlowContext();
 
   const handledItems = useMemo(() => {
     if (!items) return [];
@@ -20,17 +18,14 @@ const BubbleMenuContent: FC<BubbleMenuProps> = (props) => {
       });
   }, [items]);
 
-  useEffect(() => {
-    if (!writeFlow) return;
-  }, [writeFlow]);
+  if (handledItems.length === 0 && !children) {
+    return null;
+  }
 
   return (
     <Card
       radius="sm"
-      className={clsx(
-        'inline-flex flex-row items-center gap-1 p-1',
-        className,
-      )}>
+      className={clsx('inline-flex flex-row items-center gap-1 p-1', className)}>
       {handledItems.map((item) => (
         <BubbleMenuItem
           {...item}

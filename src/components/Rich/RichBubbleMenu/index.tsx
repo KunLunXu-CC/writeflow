@@ -49,7 +49,7 @@ export const RichBubbleMenu = () => {
         onClick: writeFlow.commands.addTableColumnAfter,
       },
       {
-        tooltip: '删除列',
+        tooltip: '删除行',
         key: 'deleteRow',
         icon: 'icon-delete-row',
         shouldShow: isSelectedTable,
