@@ -222,6 +222,14 @@
     max-width: 100%;
   }
 
+  p img {
+    margin: var(--wf-block-gap-vertical) 0;
+  }
+
+  p img:first-child {
+    margin-top: 0;
+  }
+
   // #endregion
 
   // #region 快引用

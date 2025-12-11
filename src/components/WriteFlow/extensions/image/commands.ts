@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { WFCommand } from '../../types';
 import { UPLOAD_STATUS } from './types';
+import { readFileAsDataURL } from './utils';
 
 /**
  * 更新图片节点属性 - 通过 uploadId
@@ -38,7 +39,12 @@ export const setImageByUploadId: WFCommand<{
   }
 
   // 3. 更新节点属性
-  const tr = state.tr.setNodeMarkup(foundPos, null, newAttrs).setMeta('addToHistory', false);
+  const tr = state.tr
+    .setNodeMarkup(foundPos, null, {
+      ...state.doc.nodeAt(foundPos)?.attrs,
+      ...newAttrs,
+    })
+    .setMeta('addToHistory', false);
 
   dispatch(tr);
 
@@ -51,7 +57,10 @@ export const setImageByUploadId: WFCommand<{
  * @param {object} content.writeFlow - 编辑器实例
  * @return boolean - 命令执行结果
  */
-export const insertImageByFile: WFCommand<{ file?: File }> = async ({ writeFlow }, options) => {
+export const insertImageByFile: WFCommand<{ file?: File }> = async (
+  { writeFlow, extension },
+  options,
+) => {
   const { file } = options || {};
   const uploadId = uuid();
   const { state, dispatch, schema } = writeFlow;
@@ -60,30 +69,37 @@ export const insertImageByFile: WFCommand<{ file?: File }> = async ({ writeFlow 
     return false;
   }
 
+  const { upload } = extension.options || {};
+
   // 1. 先插入一个占位符图片节点
   const initNode = schema.nodes.image.create({
     uploadId,
-    status: UPLOAD_STATUS.READING,
+    status: UPLOAD_STATUS.UPLOAD_ING,
   });
   dispatch(state.tr.insert(state.selection.from, initNode));
 
-  // await new Promise((resolve) => setTimeout(resolve, 1000 * 10));
-
   // 2. 读取文件内容, 转成 base64 URL
-  const reader = new FileReader();
-  reader.onload = () => {
-    const base64Url = reader.result as string;
+  readFileAsDataURL(file).then((src) => {
     writeFlow.commands.setImageByUploadId({
       uploadId,
       newAttrs: {
-        src: base64Url,
-        status: UPLOAD_STATUS.UPLOADING,
+        src,
+        status: upload ? UPLOAD_STATUS.UPLOAD_ING : UPLOAD_STATUS.UPLOAD_DONE,
       },
     });
-  };
-  reader.readAsDataURL(file);
+  });
 
   // 3. 调用上传接口上传图片文件
+  if (upload) {
+    const { url } = await upload({ file });
+    writeFlow.commands.setImageByUploadId({
+      uploadId,
+      newAttrs: {
+        src: url,
+        status: UPLOAD_STATUS.UPLOAD_DONE,
+      },
+    });
+  }
 
   return true;
 };

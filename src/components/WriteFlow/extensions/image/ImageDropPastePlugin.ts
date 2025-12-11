@@ -1,17 +1,7 @@
-import { Plugin, PluginKey } from 'prosemirror-state';
+import { Plugin } from 'prosemirror-state';
 import { WriteFlow } from '../../types';
 import { EditorProps } from 'prosemirror-view';
-
-/** 过滤出图片文件 */
-const filterImageFiles = (files?: FileList): File[] => {
-  if (!files) {
-    return [];
-  }
-
-  const imageFiles = Array.from(files).filter((file) => file.type.startsWith('image/'));
-
-  return imageFiles;
-};
+import { filterImageFiles } from './utils';
 
 /** 图片拖拽粘贴插件 */
 export class ImageDropPastePlugin extends Plugin {

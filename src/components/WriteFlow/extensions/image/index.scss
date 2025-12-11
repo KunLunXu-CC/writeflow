@@ -1,0 +1,10 @@
+
+.wf-image {
+  display: block;
+  border-radius: 2px;
+  transition: filter 0.3s ease;
+
+  &[status="upload_ing"] {
+    filter: blur(3px) brightness(0.95);
+  }
+}

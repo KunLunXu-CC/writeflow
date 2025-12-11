@@ -2,12 +2,17 @@ import { Node } from '@/components/WriteFlow/core/Node';
 import { ImageDropPastePlugin } from './ImageDropPastePlugin';
 import { insertImageByFile, insertImageByUrl, setImageByUploadId } from './commands';
 import { NodeSpec } from 'prosemirror-model';
+import './index.scss';
+
+export interface ImageExtensionOptions {
+  upload?: (args: { file: File }) => Promise<{ url: string }>;
+}
 
 /**
  * This extension allows you to create images.
  * @see https://www.tiptap.dev/api/nodes/image
  */
-export const Image = Node.create({
+export const Image = Node.create<ImageExtensionOptions>({
   name: 'image',
 
   // 决定了如果渲染节点
@@ -17,6 +22,10 @@ export const Image = Node.create({
       group: 'inline',
       // 定义节点属性
       attrs: {
+        status: {
+          default: null,
+          validate: 'string|null',
+        },
         uploadId: {
           default: null,
           validate: 'string|null',
@@ -40,7 +49,7 @@ export const Image = Node.create({
         },
       ],
       toDOM: (node) => {
-        return ['div', { 'data-image-wrapper': true }, ['img', { ...node.attrs }]];
+        return ['img', { ...node.attrs, class: 'wf-image' }];
       },
     } as NodeSpec;
   },
