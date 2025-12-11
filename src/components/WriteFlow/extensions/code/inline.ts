@@ -1,10 +1,7 @@
 import { Mark } from '@/components/WriteFlow/core/Mark';
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkType, NodeSpec } from 'prosemirror-model';
-import {
-  isEndInParagraph,
-  isStartInParagraph,
-} from '@/components/WriteFlow/helpers/selection';
+import { isEndInParagraph, isStartInParagraph } from '@/components/WriteFlow/helpers/selection';
 import { Command, TextSelection } from 'prosemirror-state';
 
 const inputRegex = /(^|[^`])`([^`]+)`(?!`)/;
@@ -36,42 +33,36 @@ const maybeEscape =
 export const InlineCode = Mark.create({
   name: 'inline_code',
 
-  addSchema() {
-    return {
-      excludes: '_',
+  addSchema: (): NodeSpec => ({
+    excludes: '_',
 
-      code: true,
+    code: true,
 
-      exitable: true,
+    exitable: true,
 
-      toDOM() {
-        return ['code', {}, 0];
-      },
-    } as NodeSpec;
-  },
+    toDOM() {
+      return ['code', {}, 0];
+    },
+  }),
 
-  addInputRules({ type }) {
-    return [
-      new InputRule(inputRegex, (state, match, start, end) => {
-        const { tr } = state;
-        const codeMark = type as MarkType; // 使用 code mark 作为 mask
+  addInputRules: ({ type }) => [
+    new InputRule(inputRegex, (state, match, start, end) => {
+      const { tr } = state;
+      const codeMark = type as MarkType; // 使用 code mark 作为 mask
 
-        if (codeMark) {
-          tr.delete(start, start + 1); // 删除开始的反引号
-          tr.delete(end - 1, end); // 删除结束的反引号
-          tr.addMark(start, end - 1, codeMark.create()); // 为匹配的文本添加 mask mark（注意位置已经调整）
-          tr.removeStoredMark(codeMark); // 移除 storedMark
-        }
+      if (codeMark) {
+        tr.delete(start, start + 1); // 删除开始的反引号
+        tr.delete(end - 1, end); // 删除结束的反引号
+        tr.addMark(start, end - 1, codeMark.create()); // 为匹配的文本添加 mask mark（注意位置已经调整）
+        tr.removeStoredMark(codeMark); // 移除 storedMark
+      }
 
-        return tr;
-      }),
-    ];
-  },
+      return tr;
+    }),
+  ],
 
-  addKeymap({ type }) {
-    return {
-      ArrowRight: maybeEscape('left', type as MarkType),
-      ArrowLeft: maybeEscape('right', type as MarkType),
-    };
-  },
+  addKeymap: ({ type }) => ({
+    ArrowRight: maybeEscape('left', type as MarkType),
+    ArrowLeft: maybeEscape('right', type as MarkType),
+  }),
 });

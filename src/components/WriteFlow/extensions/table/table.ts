@@ -13,6 +13,7 @@ import {
   deleteTableColumn,
   addTableColumnAfter,
 } from './commands';
+import { NodeSpec } from 'prosemirror-model';
 
 const ROW_COUNT_INPUT_RULE = 2;
 const COL_COUNT_INPUT_RULE = 3;
@@ -20,80 +21,66 @@ const COL_COUNT_INPUT_RULE = 3;
 export const Table = Node.create({
   name: 'table',
 
-  addSchema: () => {
-    return baseTableNodes.table;
-  },
+  addSchema: (): NodeSpec => baseTableNodes.table,
 
-  addPlugins: () => {
-    // WARNING: 顺序很重要, 若把 tableEditing 放在前面, 调整宽度是会选中单元格
-    return [columnResizing(), tableEditing()];
-  },
+  // WARNING: 顺序很重要, 若把 tableEditing 放在前面, 调整宽度是会选中单元格
+  addPlugins: () => [columnResizing(), tableEditing()],
 
-  addNodeView: () => {
-    return (node) => new TableView(node, 25);
-  },
+  addNodeView: () => (node) => new TableView(node, 25),
 
-  addInputRules: ({ schema }) => {
-    return [
-      new InputRule(/^\|-\s$/, (state, match, start, end) => {
-        const cellNodes = Array.from(
-          { length: COL_COUNT_INPUT_RULE },
-          () => schema.nodes.table_cell.createAndFill()!,
-        );
+  addInputRules: ({ schema }) => [
+    new InputRule(/^\|-\s$/, (state, match, start, end) => {
+      const cellNodes = Array.from(
+        { length: COL_COUNT_INPUT_RULE },
+        () => schema.nodes.table_cell.createAndFill()!,
+      );
 
-        const rowNodes = Array.from(
-          { length: ROW_COUNT_INPUT_RULE },
-          () => schema.nodes.table_row.createAndFill(null, cellNodes)!,
-        );
+      const rowNodes = Array.from(
+        { length: ROW_COUNT_INPUT_RULE },
+        () => schema.nodes.table_row.createAndFill(null, cellNodes)!,
+      );
 
-        const tableNode = schema.nodes.table.createAndFill(null, rowNodes)!;
-        const tr = state.tr.delete(start, end).replaceSelectionWith(tableNode);
-        return tr.setSelection(TextSelection.create(tr.doc, start));
-      }),
-    ];
-  },
+      const tableNode = schema.nodes.table.createAndFill(null, rowNodes)!;
+      const tr = state.tr.delete(start, end).replaceSelectionWith(tableNode);
+      return tr.setSelection(TextSelection.create(tr.doc, start));
+    }),
+  ],
 
-  addCommands: ({ writeFlow, extension }) => {
-    return {
-      mergeTableCells: () => mergeTableCells({ writeFlow, extension }),
+  addCommands: ({ writeFlow, extension }) => ({
+    mergeTableCells: () => mergeTableCells({ writeFlow, extension }),
 
-      addTableRowAfter: () => addTableRowAfter({ writeFlow, extension }),
-      addTableColumnAfter: () => addTableColumnAfter({ writeFlow, extension }),
+    addTableRowAfter: () => addTableRowAfter({ writeFlow, extension }),
+    addTableColumnAfter: () => addTableColumnAfter({ writeFlow, extension }),
 
-      deleteTableRow: () => deleteTableRow({ writeFlow, extension }),
-      deleteTableColumn: () => deleteTableColumn({ writeFlow, extension }),
-    };
-  },
+    deleteTableRow: () => deleteTableRow({ writeFlow, extension }),
+    deleteTableColumn: () => deleteTableColumn({ writeFlow, extension }),
+  }),
 
-  addHelpers: ({ writeFlow }) => {
-    return {
-      getTableSelectedCells: () => getTableSelectedCells(writeFlow),
-    };
-  },
+  addHelpers: ({ writeFlow }) => ({
+    getTableSelectedCells: () => getTableSelectedCells(writeFlow),
+  }),
 
-  addKeymap: () => {
-    return {
-      Tab: goToNextCell(1),
-      'Shift-Tab': goToNextCell(-1),
+  addKeymap: () => ({
+    Tab: goToNextCell(1),
+    'Shift-Tab': goToNextCell(-1),
 
-      // Tab: () => {
-      //   if (this.editor.commands.goToNextCell()) {
-      //     return true
-      //   }
+    // Tab: () => {
+    //   if (this.editor.commands.goToNextCell()) {
+    //     return true
+    //   }
 
-      //   if (!this.editor.can().addRowAfter()) {
-      //     return false
-      //   }
+    //   if (!this.editor.can().addRowAfter()) {
+    //     return false
+    //   }
 
-      //   return this.editor.chain().addRowAfter().goToNextCell().run()
-      // },
-      // 'Shift-Tab': () => this.editor.commands.goToPreviousCell(),
-      // Backspace: deleteTableWhenAllCellsSelected,
-      // 'Mod-Backspace': deleteTableWhenAllCellsSelected,
-      // Delete: deleteTableWhenAllCellsSelected,
-      // 'Mod-Delete': deleteTableWhenAllCellsSelected,
-    };
-  },
+    //   return this.editor.chain().addRowAfter().goToNextCell().run()
+    // },
+    // 'Shift-Tab': () => this.editor.commands.goToPreviousCell(),
+    // Backspace: deleteTableWhenAllCellsSelected,
+    // 'Mod-Backspace': deleteTableWhenAllCellsSelected,
+    // Delete: deleteTableWhenAllCellsSelected,
+    // 'Mod-Delete': deleteTableWhenAllCellsSelected,
+  }),
 
   // addHelpers: () => {
   //   return {

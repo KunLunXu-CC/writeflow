@@ -16,37 +16,35 @@ export const CodeBlock = Node.create({
 
   // 决定了如果渲染节点, 比如: 渲染 heading 节点时, 会渲染成 <h1> 标签
   // 用于往 schema 中注册节点, 会根据 this.name 注册成对应的节点
-  addSchema() {
-    return {
-      content: 'text*',
+  addSchema: (): NodeSpec => ({
+    content: 'text*',
 
-      marks: '',
+    marks: '',
 
-      isolating: true,
+    isolating: true,
 
-      group: 'block',
+    group: 'block',
 
-      code: true,
+    code: true,
 
-      defining: true,
+    defining: true,
 
-      toDOM() {
-        return [
-          'pre',
-          {},
-          [
-            'code',
-            {
-              // class: node.attrs.language
-              //   ? this.options.languageClassPrefix + node.attrs.language
-              //   : null,
-            },
-            0,
-          ],
-        ];
-      },
-    } as NodeSpec;
-  },
+    toDOM() {
+      return [
+        'pre',
+        {},
+        [
+          'code',
+          {
+            // class: node.attrs.language
+            //   ? this.options.languageClassPrefix + node.attrs.language
+            //   : null,
+          },
+          0,
+        ],
+      ];
+    },
+  }),
 
   // options: {
   //   HTMLAttributes: {},
@@ -89,15 +87,11 @@ export const CodeBlock = Node.create({
   //   );
   // },
 
-  addInputRules({ type }) {
-    return [
-      textblockTypeInputRule(/^```(\w+)?\s$/, type as NodeType, (match) => ({
-        language: match[1],
-      })),
-    ];
-  },
+  addInputRules: ({ type }) => [
+    textblockTypeInputRule(/^```(\w+)?\s$/, type as NodeType, (match) => ({
+      language: match[1],
+    })),
+  ],
 
-  addNodeView() {
-    return (node, view, getPos) => new CodeBlockNodeView(node, view, getPos);
-  },
+  addNodeView: () => (node, view, getPos) => new CodeBlockNodeView(node, view, getPos),
 });

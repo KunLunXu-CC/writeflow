@@ -37,7 +37,7 @@ export const Heading = Node.create<HeadingOptions>({
 
   // 决定了如果渲染节点, 比如: 渲染 heading 节点时, 会渲染成 <h1> 标签
   // 用于往 schema 中注册节点, 会根据 this.name 注册成对应的节点
-  addSchema({ extension }) {
+  addSchema: ({ extension }): NodeSpec => {
     const levels = extension?.options?.levels || [1, 2, 3, 4, 5, 6];
 
     return {
@@ -61,7 +61,7 @@ export const Heading = Node.create<HeadingOptions>({
         tag: `h${level}`,
         attrs: { level },
       })),
-    } as NodeSpec;
+    };
   },
 
   // addCommands() {
@@ -101,7 +101,7 @@ export const Heading = Node.create<HeadingOptions>({
   // },
 
   // 返回 InputRule 对象 { find, handler }[] 的数组
-  addInputRules({ type, extension }) {
+  addInputRules: ({ type, extension }) => {
     const level: Level[] = extension.options?.levels || [];
     const first = level[0];
     const last = level[level.length - 1];

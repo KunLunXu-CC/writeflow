@@ -16,53 +16,47 @@ export const Image = Node.create<ImageExtensionOptions>({
   name: 'image',
 
   // 决定了如果渲染节点
-  addSchema: () => {
-    return {
-      inline: true,
-      group: 'inline',
-      // 定义节点属性
-      attrs: {
-        status: {
-          default: null,
-          validate: 'string|null',
-        },
-        uploadId: {
-          default: null,
-          validate: 'string|null',
-        },
-        src: {
-          default: null,
-          validate: 'string|null',
-        },
-        alt: {
-          default: null,
-          validate: 'string|null',
-        },
-        title: {
-          default: null,
-          validate: 'string|null',
-        },
+  addSchema: (): NodeSpec => ({
+    inline: true,
+    group: 'inline',
+    // 定义节点属性
+    attrs: {
+      status: {
+        default: null,
+        validate: 'string|null',
       },
-      parseDOM: [
-        {
-          tag: 'img[src]',
-        },
-      ],
-      toDOM: (node) => {
-        return ['img', { ...node.attrs, class: 'wf-image' }];
+      uploadId: {
+        default: null,
+        validate: 'string|null',
       },
-    } as NodeSpec;
-  },
+      src: {
+        default: null,
+        validate: 'string|null',
+      },
+      alt: {
+        default: null,
+        validate: 'string|null',
+      },
+      title: {
+        default: null,
+        validate: 'string|null',
+      },
+    },
+    parseDOM: [
+      {
+        tag: 'img[src]',
+      },
+    ],
+    toDOM: (node) => {
+      return ['img', { ...node.attrs, class: 'wf-image' }];
+    },
+  }),
 
-  addCommands: ({ writeFlow, extension }) => {
-    return {
-      insertImageByUrl: (options) => insertImageByUrl({ writeFlow, extension }, options),
-      insertImageByFile: (options) => insertImageByFile({ writeFlow, extension }, options),
-      setImageByUploadId: (options) => setImageByUploadId({ writeFlow, extension }, options),
-    };
-  },
+  addCommands: ({ writeFlow, extension }) => ({
+    insertImageByUrl: (options) => insertImageByUrl({ writeFlow, extension }, options),
+    insertImageByFile: (options) => insertImageByFile({ writeFlow, extension }, options),
+    setImageByUploadId: (options) => setImageByUploadId({ writeFlow, extension }, options),
+  }),
 
-  addPlugins: ({ writeFlow }) => {
-    return [new ImageDropPastePlugin({ writeFlow })];
-  },
+  addPlugins: ({ writeFlow }) => [new ImageDropPastePlugin({ writeFlow })],
 });

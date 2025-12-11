@@ -1,4 +1,4 @@
-import { NodeType } from 'prosemirror-model';
+import { NodeSpec, NodeType } from 'prosemirror-model';
 import { Node } from '@/components/WriteFlow/core/Node';
 import { wrappingInputRule } from 'prosemirror-inputrules';
 
@@ -9,21 +9,19 @@ import { wrappingInputRule } from 'prosemirror-inputrules';
 export const Blockquote = Node.create({
   name: 'blockquote',
 
-  addSchema() {
-    return {
-      content: 'block+',
+  addSchema: (): NodeSpec => ({
+    content: 'block+',
 
-      group: 'block',
+    group: 'block',
 
-      defining: true,
+    defining: true,
 
-      toDOM: () => {
-        return ['blockquote', {}, 0];
-      },
-    };
-  },
+    toDOM: () => {
+      return ['blockquote', {}, 0];
+    },
+  }),
 
-  addInputRules({ type }) {
+  addInputRules: ({ type }) => {
     return [wrappingInputRule(/^\s*>\s$/, type as NodeType)];
   },
 });

@@ -5,25 +5,20 @@ import { insertHardBreak } from './commands';
 export const HardBreak = Node.create({
   name: 'hard_break',
 
-  addSchema: () =>
-    ({
-      inline: true,
-      group: 'inline',
-      selectable: false,
-      toDOM: () => ['br'],
-      parseDOM: [{ tag: 'br' }],
-    }) as NodeSpec,
+  addSchema: (): NodeSpec => ({
+    inline: true,
+    group: 'inline',
+    selectable: false,
+    toDOM: () => ['br'],
+    parseDOM: [{ tag: 'br' }],
+  }),
 
-  addCommands: ({ writeFlow, extension }) => {
-    return {
-      insertHardBreak: () => insertHardBreak({ writeFlow, extension }),
-    };
-  },
+  addCommands: ({ writeFlow, extension }) => ({
+    insertHardBreak: () => insertHardBreak({ writeFlow, extension }),
+  }),
 
-  addKeymap: ({ writeFlow }) => {
-    return {
-      // Shift + Enter: 在段落内插入换行符
-      'Shift-Enter': () => writeFlow.commands.insertHardBreak(),
-    };
-  },
+  addKeymap: ({ writeFlow }) => ({
+    // Shift + Enter: 在段落内插入换行符
+    'Shift-Enter': () => writeFlow.commands.insertHardBreak(),
+  }),
 });

@@ -1,11 +1,6 @@
-import {
-  listItem,
-  sinkListItem,
-  liftListItem,
-  splitListItem,
-} from 'prosemirror-schema-list';
+import { listItem, sinkListItem, liftListItem, splitListItem } from 'prosemirror-schema-list';
 import { Node } from '@/components/WriteFlow/core/Node';
-import { NodeType } from 'prosemirror-model';
+import { NodeSpec, NodeType } from 'prosemirror-model';
 
 /**
  * 任务列表项
@@ -13,44 +8,40 @@ import { NodeType } from 'prosemirror-model';
 export const TaskItem = Node.create({
   name: 'task_item',
 
-  addSchema() {
-    return {
-      ...listItem,
-      // 定义节点属性, 只有定义了才能正确传递获取到该属性值
-      attrs: {
-        checked: { default: false },
-      },
-      content: 'paragraph block*',
-      toDOM(node) {
-        const { checked } = node.attrs;
-        return [
-          'li',
-          {
-            'data-type': 'taskItem',
-            'data-done': checked.toString(),
-          },
+  addSchema: (): NodeSpec => ({
+    ...listItem,
+    // 定义节点属性, 只有定义了才能正确传递获取到该属性值
+    attrs: {
+      checked: { default: false },
+    },
+    content: 'paragraph block*',
+    toDOM(node) {
+      const { checked } = node.attrs;
+      return [
+        'li',
+        {
+          'data-type': 'taskItem',
+          'data-done': checked.toString(),
+        },
+        [
+          'label',
           [
-            'label',
-            [
-              'input',
-              {
-                type: 'checkbox',
-                checked: checked ? 'checked' : null,
-              },
-            ],
-            ['span'],
+            'input',
+            {
+              type: 'checkbox',
+              checked: checked ? 'checked' : null,
+            },
           ],
-          ['div', 0],
-        ];
-      },
-    };
-  },
+          ['span'],
+        ],
+        ['div', 0],
+      ];
+    },
+  }),
 
-  addKeymap({ type }) {
-    return {
-      Enter: splitListItem(type as NodeType, { checked: false }), // 按 enter 键, 会拆分列表项
-      Tab: sinkListItem(type as NodeType), // 按 tab 键, 会下沉列表项
-      'Shift-Tab': liftListItem(type as NodeType), // 按 shift + tab 键, 会上移列表项
-    };
-  },
+  addKeymap: ({ type }) => ({
+    Enter: splitListItem(type as NodeType, { checked: false }), // 按 enter 键, 会拆分列表项
+    Tab: sinkListItem(type as NodeType), // 按 tab 键, 会下沉列表项
+    'Shift-Tab': liftListItem(type as NodeType), // 按 shift + tab 键, 会上移列表项
+  }),
 });
