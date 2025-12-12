@@ -21,7 +21,5 @@ export const Blockquote = Node.create({
     },
   }),
 
-  addInputRules: ({ type }) => {
-    return [wrappingInputRule(/^\s*>\s$/, type as NodeType)];
-  },
+  addInputRules: ({ type }) => [wrappingInputRule(/^\s*>\s$/, type as NodeType)],
 });

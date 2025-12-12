@@ -9,12 +9,10 @@ import { redo, undo } from './commands';
 export const Base = Extendable.create({
   name: 'base',
 
-  addCommands: ({ writeFlow, extension }) => {
-    return {
-      undo: () => undo({ writeFlow, extension }), // 撤销
-      redo: () => redo({ writeFlow, extension }), // 重做
-    };
-  },
+  addCommands: ({ writeFlow, extension }) => ({
+    undo: () => undo({ writeFlow, extension }), // 撤销
+    redo: () => redo({ writeFlow, extension }), // 重做
+  }),
 
   addKeymap: ({ writeFlow }) => {
     const isMac = globalThis.navigator?.userAgent.includes('Mac');
@@ -25,7 +23,5 @@ export const Base = Extendable.create({
     };
   },
 
-  addPlugins() {
-    return [gapCursor()];
-  },
+  addPlugins: () => [gapCursor()],
 });
