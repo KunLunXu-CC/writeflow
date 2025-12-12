@@ -17,8 +17,7 @@ export const Image = Node.create<ImageExtensionOptions>({
 
   // 决定了如果渲染节点
   addSchema: (): NodeSpec => ({
-    inline: true,
-    group: 'inline',
+    group: 'block',
     // 定义节点属性
     attrs: {
       status: {

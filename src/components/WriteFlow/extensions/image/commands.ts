@@ -72,11 +72,11 @@ export const insertImageByFile: WFCommand<{ file?: File }> = async (
   const { upload } = extension.options || {};
 
   // 1. 先插入一个占位符图片节点
-  const initNode = schema.nodes.image.create({
+  const imageNode = schema.nodes.image.create({
     uploadId,
     status: UPLOAD_STATUS.UPLOAD_ING,
   });
-  dispatch(state.tr.insert(state.selection.from, initNode));
+  dispatch(state.tr.replaceSelectionWith(imageNode));
 
   // 2. 读取文件内容, 转成 base64 URL
   readFileAsDataURL(file).then((src) => {
@@ -118,9 +118,8 @@ export const insertImageByUrl: WFCommand<{ url?: string }> = async ({ writeFlow 
     return false;
   }
 
-  const node = schema.nodes.image.create({ src: url });
-  const transaction = state.tr.insert(state.selection.from, node);
-  dispatch(transaction);
+  const imageNode = schema.nodes.image.create({ src: url });
+  dispatch(state.tr.replaceSelectionWith(imageNode));
 
   return true;
 };
