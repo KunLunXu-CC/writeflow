@@ -11,7 +11,7 @@ export interface SelectedCell {
  * @param view - 编辑器视图
  * @returns 获取选中的单元格信息
  */
-export const getTableSelectedCells: WFHelper<SelectedCell[]> = (writeFlow) => {
+export const getTableSelectedCells: WFHelper<SelectedCell[]> = ({ writeFlow }) => {
   const { state } = writeFlow;
 
   const { selection } = state;

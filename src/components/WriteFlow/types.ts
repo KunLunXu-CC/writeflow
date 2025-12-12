@@ -24,7 +24,10 @@ export type WFCommand<Options = any, ReturnData = Promise<boolean> | boolean> = 
  * WFHelper(内部约定的辅助函数)
  * 它们接收当前的编辑器状态和一个可选的派发函数作为参数,并返回任意类型的值
  */
-export type WFHelper<Return = any, Options = any> = (wf: WriteFlow, options?: Options) => Return;
+export type WFHelper<Return = any, Options = any> = (
+  context: { writeFlow: WriteFlow; extension: AnyExtension },
+  options?: Options,
+) => Return;
 
 /**
  * 对外暴露的辅助函数

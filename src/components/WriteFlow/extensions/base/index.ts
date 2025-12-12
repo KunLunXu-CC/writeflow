@@ -1,6 +1,7 @@
 import { Extendable } from '@/components/WriteFlow/core/Extendable';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { redo, undo } from './commands';
+import { isAtEndOfDoc } from './helpers';
 
 /**
  * This extension allows you to create blockquote.
@@ -12,6 +13,10 @@ export const Base = Extendable.create({
   addCommands: ({ writeFlow, extension }) => ({
     undo: () => undo({ writeFlow, extension }), // 撤销
     redo: () => redo({ writeFlow, extension }), // 重做
+  }),
+
+  addHelpers: ({ writeFlow, extension }) => ({
+    isAtEndOfDoc: () => isAtEndOfDoc({ writeFlow, extension }),
   }),
 
   addKeymap: ({ writeFlow }) => {

@@ -56,8 +56,8 @@ export const Table = Node.create({
     deleteTableColumn: () => deleteTableColumn({ writeFlow, extension }),
   }),
 
-  addHelpers: ({ writeFlow }) => ({
-    getTableSelectedCells: () => getTableSelectedCells(writeFlow),
+  addHelpers: ({ writeFlow, extension }) => ({
+    getTableSelectedCells: () => getTableSelectedCells({ writeFlow, extension }),
   }),
 
   addKeymap: () => ({

@@ -1,6 +1,6 @@
 import { Node } from '@/components/WriteFlow/core/Node';
 import { ImageDropPastePlugin } from './ImageDropPastePlugin';
-import { insertImageByFile, insertImageByUrl, setImageByUploadId } from './commands';
+import { insertImageByFile, insertImage, setImageByUploadId } from './commands';
 import { NodeSpec } from 'prosemirror-model';
 import './index.scss';
 
@@ -52,7 +52,7 @@ export const Image = Node.create<ImageExtensionOptions>({
   }),
 
   addCommands: ({ writeFlow, extension }) => ({
-    insertImageByUrl: (options) => insertImageByUrl({ writeFlow, extension }, options),
+    insertImage: (options) => insertImage({ writeFlow, extension }, options),
     insertImageByFile: (options) => insertImageByFile({ writeFlow, extension }, options),
     setImageByUploadId: (options) => setImageByUploadId({ writeFlow, extension }, options),
   }),

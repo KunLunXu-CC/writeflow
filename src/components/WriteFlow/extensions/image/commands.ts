@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 import { WFCommand } from '../../types';
 import { UPLOAD_STATUS } from './types';
 import { readFileAsDataURL } from './utils';
+import { Attrs } from 'prosemirror-model';
 
 /**
  * 更新图片节点属性 - 通过 uploadId
@@ -61,9 +62,8 @@ export const insertImageByFile: WFCommand<{ file?: File }> = async (
   { writeFlow, extension },
   options,
 ) => {
-  const { file } = options || {};
   const uploadId = uuid();
-  const { state, dispatch, schema } = writeFlow;
+  const { file } = options || {};
 
   if (!file) {
     return false;
@@ -72,11 +72,12 @@ export const insertImageByFile: WFCommand<{ file?: File }> = async (
   const { upload } = extension.options || {};
 
   // 1. 先插入一个占位符图片节点
-  const imageNode = schema.nodes.image.create({
-    uploadId,
-    status: UPLOAD_STATUS.UPLOAD_ING,
+  writeFlow.commands.insertImage({
+    attrs: {
+      uploadId,
+      status: UPLOAD_STATUS.UPLOAD_ING,
+    },
   });
-  dispatch(state.tr.replaceSelectionWith(imageNode));
 
   // 2. 读取文件内容, 转成 base64 URL
   readFileAsDataURL(file).then((src) => {
@@ -105,21 +106,31 @@ export const insertImageByFile: WFCommand<{ file?: File }> = async (
 };
 
 /**
- * 插入图片命令 - 通过 URL
+ * 插入图片
  * @param {object} content - 命令上下文
  * @param {object} content.writeFlow - 编辑器实例
+ * @param {object} options - 命令选项
+ * @param {object} options.attrs - 图片节点属性
  * @return boolean - 命令执行结果
  */
-export const insertImageByUrl: WFCommand<{ url?: string }> = async ({ writeFlow }, options) => {
-  const { url } = options || {};
+export const insertImage: WFCommand<{ attrs: Attrs }> = async ({ writeFlow }, options) => {
+  const { attrs } = options || {};
   const { dispatch, state, schema } = writeFlow;
 
-  if (!url) {
+  if (!attrs) {
     return false;
   }
 
-  const imageNode = schema.nodes.image.create({ src: url });
-  dispatch(state.tr.replaceSelectionWith(imageNode));
+  const isEnd = writeFlow.helpers.isAtEndOfDoc();
+  const imageNode = schema.nodes.image.create(attrs);
+
+  let newTr = state.tr;
+
+  if (isEnd) {
+    newTr = newTr.insert(state.doc.content.size, schema.nodes.paragraph.create());
+  }
+
+  dispatch(newTr.replaceSelectionWith(imageNode));
 
   return true;
 };
