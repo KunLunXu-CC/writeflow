@@ -4,6 +4,7 @@
 
   position: relative;
   width: fit-content;
+  vertical-align: top; // 解决幽灵空白
   display: inline-block;
 
   .wf-image {
