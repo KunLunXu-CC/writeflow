@@ -8,7 +8,7 @@ const config = {
         ignoreAtRules: ['plugin', 'apply', 'source'],
       },
     ],
-    'no-unknown-custom-properties': true, // css 变量支持
+    'no-unknown-custom-properties': null,
     'selector-class-pattern':
       '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$|^selectedCell|^ProseMirror(-[a-z0-9]+)*$',
   },

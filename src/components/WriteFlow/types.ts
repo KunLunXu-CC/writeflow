@@ -12,7 +12,7 @@ export type Primitive = null | undefined | string | number | boolean | symbol | 
 export enum EXTENSIONS_TYPE {
   NODE = 'node',
   MARK = 'mark',
-  EXTENDABLE = 'extendable',
+  EXTENDABLE = 'extendable'
 }
 
 export type WFCommand<Options = any, ReturnData = Promise<boolean> | boolean> = (

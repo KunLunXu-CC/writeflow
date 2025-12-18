@@ -1,10 +1,30 @@
 
-.wf-image {
-  display: block;
-  border-radius: 2px;
-  transition: filter 0.3s ease;
+.wf-image-wrapper {
+  --radius: 4px;
 
-  &[status="upload_ing"] {
-    filter: blur(3px) brightness(0.95);
+  position: relative;
+  width: fit-content;
+  display: inline-block;
+
+  .wf-image {
+    border-radius: var(--radius);
+  }
+
+  // 上传中状态
+  &[status="upload_ing"] .wf-image-mask {
+    inset: 0;
+    position: absolute;
+    border-radius: var(--radius);
+    background-color: hsl(var(--wf-color-primary) / 20%);
+    backdrop-filter: blur(4px);
+  }
+
+  // 选中状态
+  &.ProseMirror-selectednode .wf-image-mask {
+    inset: 0;
+    position: absolute;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--wf-color-primary));
+    background-color: hsl(var(--wf-color-primary) / 10%);
   }
 }

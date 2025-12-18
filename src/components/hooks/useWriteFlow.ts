@@ -27,7 +27,7 @@ Image.addOptions({
     return {
       alt: file.name,
       title: file.name,
-      url: 'https://p9-xtjj-sign.byteimg.com/tos-cn-i-73owjymdk6/60a8242d5d09473c848de82682de5a7c~tplv-73owjymdk6-jj-mark-v1:0:0:0:0:5o6Y6YeR5oqA5pyv56S-5Yy6IEAgQ29kZVNoZWVw:q75.awebp?rk3s=f64ab15b&x-expires=1765934489&x-signature=%2Bko1Y7YF7xTzFYWEGp2k1O0YIkQ%3D',
+      url: URL.createObjectURL(file),
     };
   },
 });

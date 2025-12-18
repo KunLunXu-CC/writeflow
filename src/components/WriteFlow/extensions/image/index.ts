@@ -47,7 +47,14 @@ export const Image = Node.create<ImageExtensionOptions>({
       },
     ],
     toDOM: (node) => {
-      return ['img', { ...node.attrs, class: 'wf-image' }];
+      const { src, ...restAttrs } = node.attrs;
+
+      return [
+        'div',
+        { ...restAttrs, class: 'wf-image-wrapper' },
+        ['img', { src, class: 'wf-image' }],
+        ['div', { class: 'wf-image-mask' }],
+      ];
     },
   }),
 
