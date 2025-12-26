@@ -1,10 +1,11 @@
 import { EditorView } from 'prosemirror-view';
 import { DOMParser } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
-import { AnyCommands, AnyHelpers, WriteFlowOptions } from '../types';
+import { AnyCommands, AnyHelpers, WriteFlowOptions, WFEvents } from '../types';
 import ExtensionManager from './ExtensionManager';
+import { EventEmitter } from './EventEmitter';
 
-export class WriteFlow {
+export class WriteFlow extends EventEmitter<WFEvents> {
   private options!: WriteFlowOptions;
 
   private extensionManager!: ExtensionManager;
@@ -12,6 +13,7 @@ export class WriteFlow {
   public view!: EditorView;
 
   constructor(options: WriteFlowOptions) {
+    super();
     this.setOptions(options);
     this.createExtensionManager();
     // this.createCommandManager();
@@ -19,26 +21,26 @@ export class WriteFlow {
     this.mount(options.element);
   }
 
-  private setOptions(options: WriteFlowOptions) {
+  private setOptions = (options: WriteFlowOptions) => {
     this.options = {
       ...options,
     };
-  }
+  };
 
   /**
    * 将编辑器附加到 DOM, 最终创建一个新的编辑器视图(view)
    */
-  private mount(el: WriteFlowOptions['element']) {
+  private mount = (el: WriteFlowOptions['element']) => {
     if (typeof el === 'undefined') {
       throw new Error('[WriteFlow error]: 无法挂载编辑器, 因为在此环境中没有定义挂载点(element)。');
     }
     this.createView(el);
-  }
+  };
 
   /**
    * 创建 PM 视图。
    */
-  private createView(el: WriteFlowOptions['element']) {
+  private createView = (el: WriteFlowOptions['element']) => {
     this.view = new EditorView(el, {
       nodeViews: {
         ...this.extensionManager.nodeViews,
@@ -57,12 +59,12 @@ export class WriteFlow {
     });
 
     return this.view;
-  }
+  };
 
   /**
    * 创建编辑器状态
    */
-  private createState(): EditorState {
+  private createState = (): EditorState => {
     const plugins = this.extensionManager.plugins;
     const schema = this.extensionManager.schema;
 
@@ -76,15 +78,15 @@ export class WriteFlow {
       plugins,
       doc: DOMParser.fromSchema(schema).parse(document.createElement('div')),
     });
-  }
+  };
 
   // private createCommandManager() {
   //   this.commandManager = new CommandManager();
   // }
 
-  private createExtensionManager() {
+  private createExtensionManager = () => {
     this.extensionManager = new ExtensionManager(this.options.extensions || [], this);
-  }
+  };
 
   /**
    * 注册 PM 插件
@@ -93,10 +95,10 @@ export class WriteFlow {
    * @param handlePlugins 控制如何将插件合并到现有插件中, 可二次处理、过滤插件
    * @returns 新的编辑器状态
    */
-  public registerPlugin(
+  public registerPlugin = (
     plugin: Plugin,
     handlePlugins?: (newPlugin: Plugin, plugins: Plugin[]) => Plugin[],
-  ): EditorState {
+  ): EditorState => {
     if (!this.view) {
       throw new Error('[WriteFlow error]: no view.');
     }
@@ -111,7 +113,7 @@ export class WriteFlow {
     this.view.updateState(newState);
 
     return newState;
-  }
+  };
 
   /**
    * 注销 PM 插件
@@ -119,7 +121,7 @@ export class WriteFlow {
    * @param plugin PM 插件
    * @returns 新的编辑器状态
    */
-  public unregisterPlugin(plugin: Plugin): EditorState {
+  public unregisterPlugin = (plugin: Plugin): EditorState => {
     if (!this.view) {
       throw new Error('[WriteFlow error]: no view.');
     }
@@ -131,7 +133,13 @@ export class WriteFlow {
     this.view.updateState(newState);
 
     return newState;
-  }
+  };
+
+  // #region get doc
+  public getJSON = () => {
+    return this.state.doc.toJSON();
+  };
+  // #endregion
 
   // #region Getters
   public get helpers(): AnyHelpers {
