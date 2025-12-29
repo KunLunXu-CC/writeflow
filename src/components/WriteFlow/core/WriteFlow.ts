@@ -135,12 +135,6 @@ export class WriteFlow extends EventEmitter<WFEvents> {
     return newState;
   };
 
-  // #region get doc
-  public getJSON = () => {
-    return this.state.doc.toJSON();
-  };
-  // #endregion
-
   // #region Getters
   public get helpers(): AnyHelpers {
     return this.extensionManager.helpers;

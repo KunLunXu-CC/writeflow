@@ -3,7 +3,7 @@ import type { WriteFlow } from './core/WriteFlow';
 import type { Node, NodeConfig } from './core/Node';
 import type { Mark, MarkConfig } from './core/Mark';
 import type { ExtendableConfig } from './core/Extendable';
-import { MarkType, NodeType, Schema } from 'prosemirror-model';
+import { MarkType, NodeType, Schema, Node as PMNode } from 'prosemirror-model';
 import { EditorProps } from 'prosemirror-view';
 export { WriteFlow, ExtendableConfig, NodeConfig };
 
@@ -60,8 +60,14 @@ export interface WriteFlowOptions extends EditorProps {
 }
 
 /** 事件 */
+export enum WFEventKeys {
+  /** 文档内容变更 */
+  docChange = 'docChange',
+}
+
 export type WFEvents = {
-  update: {
-    doc: Node;
+  [WFEventKeys.docChange]: {
+    doc: PMNode;
+    writeFlow: WriteFlow;
   };
 };

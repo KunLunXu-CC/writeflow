@@ -2,6 +2,7 @@ import { Extendable } from '@/components/WriteFlow/core/Extendable';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { redo, undo } from './commands';
 import { isAtEndOfDoc } from './helpers';
+import { buildDocChangeListenerPlugin } from './buildChangeListenerPlugin';
 
 /**
  * This extension allows you to create blockquote.
@@ -28,5 +29,5 @@ export const Base = Extendable.create({
     };
   },
 
-  addPlugins: () => [gapCursor()],
+  addPlugins: ({ writeFlow }) => [gapCursor(), buildDocChangeListenerPlugin({ writeFlow })],
 });
