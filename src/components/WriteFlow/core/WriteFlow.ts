@@ -1,5 +1,5 @@
 import { EditorView } from 'prosemirror-view';
-import { DOMParser } from 'prosemirror-model';
+import { DOMParser, Node } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
 import { AnyCommands, AnyHelpers, WriteFlowOptions, WFEvents } from '../types';
 import ExtensionManager from './ExtensionManager';
@@ -62,6 +62,20 @@ export class WriteFlow extends EventEmitter<WFEvents> {
   };
 
   /**
+   * 初始化文档节点
+   */
+  private initDoc = (): Node => {
+    const { initValue } = this.options;
+    const schema = this.extensionManager.schema;
+
+    if (!initValue) {
+      return DOMParser.fromSchema(schema).parse(document.createElement('div'));
+    }
+
+    return Node.fromJSON(schema, initValue);
+  };
+
+  /**
    * 创建编辑器状态
    */
   private createState = (): EditorState => {
@@ -76,7 +90,7 @@ export class WriteFlow extends EventEmitter<WFEvents> {
 
     return EditorState.create({
       plugins,
-      doc: DOMParser.fromSchema(schema).parse(document.createElement('div')),
+      doc: this.initDoc(),
     });
   };
 

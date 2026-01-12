@@ -16,6 +16,7 @@ export const buildDocChangeListenerPlugin = (args: { writeFlow: WriteFlow }) => 
       writeFlow.emit(WFEventKeys.docChange, {
         writeFlow,
         doc: newState.doc,
+        value: newState.doc.toJSON(),
       });
     },
   });

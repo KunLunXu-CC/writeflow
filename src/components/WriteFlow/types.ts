@@ -54,9 +54,19 @@ export type RemoveThis<T> = T extends (...args: any) => any
   ? (...args: Parameters<T>) => ReturnType<T>
   : T;
 
+export interface WriteFlowValue {
+  type?: string;
+  marks?: WriteFlowValue[];
+  content?: WriteFlowValue[];
+
+  text?: string;
+  attrs?: Record<string, any>;
+}
+
 export interface WriteFlowOptions extends EditorProps {
   element: Element;
   extensions?: AnyExtension[];
+  initValue?: WriteFlowValue; // 初始内容, 字符串格式的 JSON
 }
 
 /** 事件 */
@@ -69,5 +79,6 @@ export type WFEvents = {
   [WFEventKeys.docChange]: {
     doc: PMNode;
     writeFlow: WriteFlow;
+    value: WriteFlowValue;
   };
 };

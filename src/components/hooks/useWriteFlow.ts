@@ -15,6 +15,7 @@ import { Paragraph } from '@/components/WriteFlow/extensions/paragraph';
 import { HardBreak } from '@/components/WriteFlow/extensions/hard-break';
 import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
 import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
+import { WriteFlowValue } from '../WriteFlow/types';
 
 Image.addOptions({
   upload: async (args) => {
@@ -32,6 +33,168 @@ Image.addOptions({
   },
 });
 
+const initValue = {
+  type: 'doc',
+  content: [
+    {
+      type: 'paragraph',
+      content: [
+        {
+          type: 'text',
+          text: '1231',
+        },
+      ],
+    },
+    {
+      type: 'table',
+      content: [
+        {
+          type: 'table_row',
+          content: [
+            {
+              type: 'table_cell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'name',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'table_cell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'user',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'table_cell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'title',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'table_row',
+          content: [
+            {
+              type: 'table_cell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+              },
+              content: [
+                {
+                  type: 'bullet_list',
+                  content: [
+                    {
+                      type: 'list_item',
+                      content: [
+                        {
+                          type: 'paragraph',
+                          content: [
+                            {
+                              type: 'text',
+                              text: 'nams',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      type: 'list_item',
+                      content: [
+                        {
+                          type: 'paragraph',
+                          content: [
+                            {
+                              type: 'text',
+                              text: 'uasd',
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'table_cell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: '123',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'table_cell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+} as WriteFlowValue;
+
 export const useWriteFlow = () => {
   const writeFlowDomRef = useRef(null);
   const [writeFlow, setWriteFlow] = useState<WriteFlow | null>(null);
@@ -40,6 +203,7 @@ export const useWriteFlow = () => {
     if (!writeFlowDomRef.current) return;
 
     const newWriteFlow = new WriteFlow({
+      initValue,
       element: writeFlowDomRef.current!,
       attributes: {
         class: 'wf-light',
