@@ -1,4 +1,4 @@
-// @use '../../theme/mixins';
+@use '../../theme/mixins';
 
 // #region 表格 
 .wf-table {
@@ -17,12 +17,11 @@
     text-align: left;
     border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
 
-    > p {
-      margin: 0;
-
-      &:has(~ p) {
-        margin-bottom: var(--wf-block-gap-vertical);
-      }
+    @include mixins.wf-reset-edge-spacing;
+    
+    // 如果后面跟着拖拽锚点, 则需要移除当前元素的 margin-bottom
+    > *:has(~ .column-resize-handle) {
+      margin-bottom: 0;
     }
   }
 

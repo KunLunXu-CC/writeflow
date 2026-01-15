@@ -26,6 +26,8 @@
   --wf-rounded: var(--wf-rounded-sm);
   --wf-motion-duration-fast: 0.4s;
 
+  // 行高
+  --wf-line-height-default: 1.6;
 
   // fontSizeHeading1	H1 标签所使用的字号	number	38
   // fontSizeHeading2	h2 标签所使用的字号	number	30
@@ -37,12 +39,12 @@
 
 // 整体设置
 .wf-light {
-  line-height: 1.5;
   font-weight: 400;
   background: var(--wf-color-bg);
   color: hsl(var(--wf-color-text));
   font-size: var(--wf-text-base);
   font-family: var(--wf-font-family);
+  line-height: var(--wf-line-height-default);
 
   @include mixins.wf-reset-edge-spacing;
 
@@ -102,6 +104,14 @@
   // #endregion
   
   // #region 列表
+  li {
+    @include mixins.wf-reset-edge-spacing;
+
+    p {
+      margin: 0;
+    }
+  }
+
   li::marker {
     color: hsl(var(--wf-color-text-secondary));
   }
@@ -157,10 +167,10 @@
       }
 
       label {
-        height: 1.5em;
-        position: relative;
         display: flex;
+        position: relative;
         align-items: center;
+        height: calc(var(--wf-line-height-default) * 1em);
       }
 
       input[type="checkbox"] {
@@ -227,8 +237,10 @@
 
   //  #region code `` 提示内容 
   code {
-    font-size: 0.87em;
+    font-size: 0.9em;
     padding: 0.065em 0.4em;
+    margin-left: 0.4em;
+    margin-right: 0.4em;
     border-radius: var(--wf-rounded);
     color: hsl(var(--wf-color-primary));
     background-color: hsl(var(--wf-color-primary) / 8%);
@@ -296,11 +308,25 @@
   //  #region 空隙光标样式
   .ProseMirror-gapcursor {
     width: 100%;
-    height: 1.5em;
     margin: var(--wf-block-gap-vertical) 0;
+    height: calc(var(--wf-line-height-default) * 1em);
 
     &:first-child {
       margin-top: 0;
     }
   }
+
+  // #endregion
+
+  //  #region 水平分隔线
+  hr {
+    margin: calc(var(--wf-block-gap-vertical) * 2) 0;
+    border-color: hsl(var(--wf-color-text-quaternary));
+
+    &.ProseMirror-selectednode {
+      border-color: hsl(var(--wf-color-primary));
+    }
+  }
+
+  // #endregion
 }

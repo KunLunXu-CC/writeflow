@@ -11,6 +11,7 @@ import {
 import { Table, TableCell, TableHeader, TableRow } from '@/components/WriteFlow/extensions/table';
 import { Base } from '@/components/WriteFlow/extensions/base';
 import { Image } from '@/components/WriteFlow/extensions/image';
+import { HorizontalRule } from '@/components/WriteFlow/extensions/horizontal-rule';
 import { Paragraph } from '@/components/WriteFlow/extensions/paragraph';
 import { HardBreak } from '@/components/WriteFlow/extensions/hard-break';
 import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
@@ -210,6 +211,7 @@ export const useWriteFlow = () => {
       },
       extensions: [
         Base,
+        HorizontalRule,
         Heading,
         Blockquote,
         ListItem,
