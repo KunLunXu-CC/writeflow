@@ -21,11 +21,7 @@ import { javascript } from '@codemirror/lang-javascript';
 import { diff } from '@codemirror/legacy-modes/mode/diff';
 import { shell } from '@codemirror/legacy-modes/mode/shell';
 import { Selection, TextSelection } from 'prosemirror-state';
-import {
-  defaultHighlightStyle,
-  StreamLanguage,
-  syntaxHighlighting,
-} from '@codemirror/language';
+import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting } from '@codemirror/language';
 
 // 语言支持映射
 const LANGUAGE_MAP: { [key: string]: () => Extension } = {
@@ -82,9 +78,7 @@ export class CodeBlockNodeView implements NodeView {
         // 当多个命令绑定到同一个快捷键时, 会按照它们在数组中的顺序执行, 并且一旦某个命令返回 true 后续的命令就不会执行了
         cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
         languageExtension,
-        CodeMirrorView.updateListener.of((update) =>
-          this.forwardUpdate(update),
-        ),
+        CodeMirrorView.updateListener.of((update) => this.forwardUpdate(update)),
       ],
     });
 
@@ -94,11 +88,11 @@ export class CodeBlockNodeView implements NodeView {
 
   createDom(): HTMLElement {
     const wrap = document.createElement('div');
-    wrap.className = 'writer-flow-code-block';
+    wrap.className = 'wf-code-block';
 
     const header = document.createElement('div');
-    header.className = 'writer-flow-code-block-header';
-    header.innerHTML = `<div class="writer-flow-code-block-point"/>`;
+    header.className = 'wf-code-block-header';
+    header.innerHTML = `<div class="wf-code-block-point"/>`;
 
     wrap.appendChild(header);
     wrap.appendChild(this.cm.dom);
@@ -119,13 +113,7 @@ export class CodeBlockNodeView implements NodeView {
     if (update.docChanged || pmSel.from !== selFrom || pmSel.to !== selTo) {
       const tr = this.view.state.tr;
       update.changes.iterChanges(
-        (
-          fromA: number,
-          toA: number,
-          fromB: number,
-          toB: number,
-          inserted: Text,
-        ) => {
+        (fromA: number, toA: number, fromB: number, toB: number, inserted: Text) => {
           if (inserted.length)
             tr.replaceWith(
               offset + fromA,
@@ -169,10 +157,7 @@ export class CodeBlockNodeView implements NodeView {
       let start = 0;
       let curEnd = curText.length;
       let newEnd = newText.length;
-      while (
-        start < curEnd &&
-        curText.charCodeAt(start) == newText.charCodeAt(start)
-      ) {
+      while (start < curEnd && curText.charCodeAt(start) == newText.charCodeAt(start)) {
         ++start;
       }
       while (

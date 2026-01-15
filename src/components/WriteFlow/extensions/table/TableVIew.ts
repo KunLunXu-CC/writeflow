@@ -16,15 +16,12 @@ export class TableView implements NodeView {
     public defaultCellMinWidth: number,
   ) {
     this.dom = document.createElement('div');
-    this.dom.className = 'writer-flow-table';
+    this.dom.className = 'wf-table';
     this.table = this.dom.appendChild(document.createElement('table'));
     this.colgroup = this.table.appendChild(document.createElement('colgroup'));
     this.contentDOM = this.table.appendChild(document.createElement('tbody'));
 
-    this.table.style.setProperty(
-      '--default-cell-min-width',
-      `${defaultCellMinWidth}px`,
-    );
+    this.table.style.setProperty('--default-cell-min-width', `${defaultCellMinWidth}px`);
 
     updateColumnsOnResize(node, this.colgroup, this.table, defaultCellMinWidth);
   }
@@ -32,12 +29,7 @@ export class TableView implements NodeView {
   update(node: Node): boolean {
     if (node.type != this.node.type) return false;
     this.node = node;
-    updateColumnsOnResize(
-      node,
-      this.colgroup,
-      this.table,
-      this.defaultCellMinWidth,
-    );
+    updateColumnsOnResize(node, this.colgroup, this.table, this.defaultCellMinWidth);
     return true;
   }
 

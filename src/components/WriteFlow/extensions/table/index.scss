@@ -1,0 +1,48 @@
+// @use '../../theme/mixins';
+
+// #region 表格 
+.wf-table {
+  margin: var(--wf-block-gap-vertical) 0;
+  
+  table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
+  }
+
+  th, td{
+    position: relative;
+    padding: 0.375em 0.625em;
+    text-align: left;
+    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
+
+    > p {
+      margin: 0;
+
+      &:has(~ p) {
+        margin-bottom: var(--wf-block-gap-vertical);
+      }
+    }
+  }
+
+  // 表格选中样式 
+  .selectedCell {
+    background-color: hsl(var(--wf-color-primary) / 20%);
+
+    *::selection {
+      background: none;
+    }
+  }
+
+  // 表格列宽调整
+  .column-resize-handle {
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    width: 0.25em;
+    right: -0.125em;
+    cursor: col-resize;
+    background-color: hsl(var(--wf-color-primary));
+  }
+}

@@ -1,3 +1,5 @@
+@use './mixins';
+
 :root {
   --wf-color-primary: 0 100% 71%;
   --wf-color-bg: 0 0% 100%;
@@ -33,17 +35,6 @@
   --wf-block-gap-vertical: 1em; // 块之间的垂直间距
 }
 
-// 重置首尾元素的外边距
-@mixin reset-edge-spacing {
-  > *:first-child {
-    margin-top: 0;
-  }
-
-  > *:last-child {
-    margin-bottom: 0;
-  }
-}
-
 // 整体设置
 .wf-light {
   line-height: 1.5;
@@ -53,7 +44,7 @@
   font-size: var(--wf-text-base);
   font-family: var(--wf-font-family);
 
-  @include reset-edge-spacing;
+  @include mixins.wf-reset-edge-spacing;
 
   // #region 段落
   p {
@@ -228,7 +219,7 @@
     background: hsl(var(--wf-color-text-quaternary) / 10%);
     border-left: 0.25em solid hsl(var(--wf-color-primary));
 
-    @include reset-edge-spacing;
+    @include mixins.wf-reset-edge-spacing;
   }
 
   // #endregion
@@ -246,7 +237,7 @@
   // #endregion
 
   // #region 代码块部分
-  .writer-flow-code-block {
+  .wf-code-block {
     overflow: hidden;
     border-radius: var(--wf-rounded);
     margin: var(--wf-block-gap-vertical) 0;
@@ -259,7 +250,7 @@
       position: relative;
       background: hsl(var(--wf-code-block-header-bg));
 
-      .writer-flow-code-block-point {
+      .wf-code-block-point {
         $gap: 1em;
 
         @mixin point($color, $left) {
@@ -312,49 +303,4 @@
       margin-top: 0;
     }
   }
-
-  //  #endregion
-
-  // #region 表格 
-  .writer-flow-table {
-    margin: var(--wf-block-gap-vertical) 0;
-    
-    table {
-      width: 100%;
-      table-layout: fixed;
-      border-collapse: collapse;
-      border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
-    }
-
-    th, td{
-      position: relative;
-      padding: 0.375em 0.625em;
-      text-align: left;
-      border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
-
-      @include reset-edge-spacing;
-    }
-
-    // 表格选中样式 
-    .selectedCell {
-      background-color: hsl(var(--wf-color-primary) / 20%);
-
-      *::selection {
-        background: none;
-      }
-    }
-
-    // 表格列宽调整
-    .column-resize-handle {
-      top: 0;
-      bottom: 0;
-      position: absolute;
-      width: 0.25em;
-      right: -0.125em;
-      cursor: col-resize;
-      background-color: hsl(var(--wf-color-primary));
-    }
-  }
-
-  // #endregion
 }
