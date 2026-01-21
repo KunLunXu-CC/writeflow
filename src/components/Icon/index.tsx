@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Script from 'next/script';
 import clsx from 'clsx';
 
-const CDN = '//at.alicdn.com/t/c/font_5034983_eouhxxm8eb.js';
+const CDN = '//at.alicdn.com/t/c/font_5034983_fdxtdsdypdo.js';
 
 interface IconProps {
   name: string;
@@ -15,10 +15,7 @@ const Icon: FC<IconProps> = ({ name, className }) => {
       <Script src={CDN} />
       <svg
         aria-hidden="true"
-        className={clsx(
-          'size-[1em] overflow-hidden fill-current align-[-0.15em]',
-          className,
-        )}>
+        className={clsx('size-[1em] overflow-hidden fill-current align-[-0.15em]', className)}>
         <use xlinkHref={`#${name}`} />
       </svg>
     </>

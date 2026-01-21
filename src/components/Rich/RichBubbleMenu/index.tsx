@@ -28,6 +28,13 @@ export const RichBubbleMenu = () => {
 
     return [
       {
+        tooltip: '拆分',
+        key: 'splitCell',
+        icon: 'icon-split-cells',
+        shouldShow: isSelectedTable,
+        onClick: writeFlow?.commands.splitTableCell,
+      },
+      {
         tooltip: '合并',
         key: 'mergeCells',
         icon: 'icon-merge-cells',

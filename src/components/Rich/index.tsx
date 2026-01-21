@@ -13,7 +13,7 @@ export const WriteFlow = (props: EditorProps) => {
   const { writeFlow, writeFlowDomRef } = useWriteFlow();
 
   writeFlow?.on(WFEventKeys.docChange, (data) => {
-    console.log('Editor content updated 12313:', data.value);
+    console.log('Editor content updated:', data.value);
   });
 
   return (

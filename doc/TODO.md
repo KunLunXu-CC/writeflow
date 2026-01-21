@@ -3,8 +3,7 @@
 [ ] 扩展目录改为大写? 或者驼峰
 [ ] 每个扩展, 个性化的样式, 移到对应的扩展内(参考 image)
 [ ] 加粗、删除线、下划线...
-[ ] 表格内, list 按 tab 无效
-[ ] 表格合并单元格后, 无法取消合并
+[ ] 表格内, list 按 tab 无效, 需要为命令设置优先级 priority
 
 ## base 扩展
 
@@ -27,3 +26,8 @@
 - 通过 stylelint 的 selector-class-pattern 限制 class
 - 定义主题变量, 需要考虑基于 css 变量(颜色需要支持透明度计算)
 
+
+## 图标
+
+直接 iconfont 找
+https://www.iconfont.cn/manage/index?manage_type=myprojects&projectId=5034983

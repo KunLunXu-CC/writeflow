@@ -1,4 +1,5 @@
 import {
+  splitCell,
   mergeCells,
   addRowAfter,
   addColumnAfter,
@@ -17,6 +18,17 @@ export const mergeTableCells: WFCommand = ({ writeFlow }) => {
   const { dispatch, state } = writeFlow;
 
   return mergeCells(state, dispatch);
+};
+
+/**
+ * 拆分合并的单元格
+ * @param {object} content - 命令上下文
+ * @param {object} content.writeFlow - 编辑器实例
+ */
+export const splitTableCell: WFCommand = ({ writeFlow }) => {
+  const { dispatch, state } = writeFlow;
+
+  return splitCell(state, dispatch);
 };
 
 /**

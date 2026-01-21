@@ -12,6 +12,7 @@ import { NodeViewConstructor } from 'prosemirror-view';
 export interface ExtendableConfig<Options = unknown> {
   name: string;
   options?: Options;
+  priority?: number; // 优先级, 数值越大优先级越高, 优先级越高快捷键等越先被触发、处理
   type?: EXTENSIONS_TYPE;
 
   /*
@@ -131,6 +132,7 @@ export interface ExtendableConfig<Options = unknown> {
 
 export class Extendable<Options = unknown> {
   name: string;
+  priority: number;
   #options?: Options;
   type = EXTENSIONS_TYPE.EXTENDABLE;
   config?: ExtendableConfig<Options>;
@@ -143,6 +145,7 @@ export class Extendable<Options = unknown> {
     this.config = config;
     this.name = config.name;
     this.#options = config.options;
+    this.priority = config.priority ?? 0;
   }
 
   /** 添加配置选项 */

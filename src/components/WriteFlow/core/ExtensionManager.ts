@@ -1,5 +1,3 @@
-import type { WriteFlow } from './WriteFlow.js';
-import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
 import {
   AnyHelpers,
   AnyCommands,
@@ -7,18 +5,18 @@ import {
   EXTENSIONS_TYPE,
   ExtendableFunContext,
 } from '../types';
+import { sortBy } from 'lodash-es';
 import { Plugin } from 'prosemirror-state';
+import { keymap } from 'prosemirror-keymap';
+import { history } from 'prosemirror-history';
+import type { WriteFlow } from './WriteFlow.js';
+import { baseKeymap } from 'prosemirror-commands';
+import { NodeViewConstructor } from 'prosemirror-view';
+import { InputRule, inputRules } from 'prosemirror-inputrules';
+import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
-import { keymap } from 'prosemirror-keymap';
-import { baseKeymap } from 'prosemirror-commands';
-import { InputRule, inputRules } from 'prosemirror-inputrules';
-import { history } from 'prosemirror-history';
-import {
-  nodes as basicNodes,
-  marks as basicMarks,
-} from 'prosemirror-schema-basic';
-import { NodeViewConstructor } from 'prosemirror-view';
+import { nodes as basicNodes, marks as basicMarks } from 'prosemirror-schema-basic';
 
 /**
  * ExtensionManager 扩展管理器
@@ -46,7 +44,7 @@ export default class ExtensionManager {
 
   constructor(extensions: AnyExtension[], writeFlow: WriteFlow) {
     this.writeFlow = writeFlow;
-    this.extensions = extensions;
+    this.extensions = sortBy(extensions, (extension) => -extension.priority); // 根据扩展的优先级进行排序, 优先级高的扩展会先被处理
 
     this.createSchema();
     this.createPlugins();
@@ -154,18 +152,19 @@ export default class ExtensionManager {
    * @returns 一个包含所有扩展的 nodeView 对象的记录
    */
   private createNodeViews = () => {
-    this.nodeViews = this.extensions.reduce<
-      Record<string, NodeViewConstructor>
-    >((acc, extension) => {
-      const addNodeView = getExtensionField(extension, 'addNodeView');
-      const context = this.getContext(extension);
+    this.nodeViews = this.extensions.reduce<Record<string, NodeViewConstructor>>(
+      (acc, extension) => {
+        const addNodeView = getExtensionField(extension, 'addNodeView');
+        const context = this.getContext(extension);
 
-      if (addNodeView) {
-        acc[extension.name] = addNodeView(context);
-      }
+        if (addNodeView) {
+          acc[extension.name] = addNodeView(context);
+        }
 
-      return acc;
-    }, {});
+        return acc;
+      },
+      {},
+    );
   };
 
   /**

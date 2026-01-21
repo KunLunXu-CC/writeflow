@@ -8,6 +8,7 @@ import { TableView } from './TableVIew';
 import { getTableSelectedCells } from './helpers';
 import {
   deleteTableRow,
+  splitTableCell,
   mergeTableCells,
   addTableRowAfter,
   deleteTableColumn,
@@ -47,6 +48,7 @@ export const Table = Node.create({
   ],
 
   addCommands: ({ writeFlow, extension }) => ({
+    splitTableCell: () => splitTableCell({ writeFlow, extension }),
     mergeTableCells: () => mergeTableCells({ writeFlow, extension }),
 
     addTableRowAfter: () => addTableRowAfter({ writeFlow, extension }),
