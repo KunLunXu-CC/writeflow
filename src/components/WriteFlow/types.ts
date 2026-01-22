@@ -15,6 +15,18 @@ export enum EXTENSIONS_TYPE {
   EXTENDABLE = 'extendable',
 }
 
+/**
+ * 扩展优先级
+ * 数值越大优先级越高, 优先级越高快捷键等越先被触发、处理
+ * 默认为 0, 数值尽可能按 100 的倍数递增
+ */
+export enum PRIORITY_LEVEL {
+  LOW = 0,
+  MEDIUM = 100,
+  HIGH = 200,
+  PREMIUM = 300,
+}
+
 export type WFCommand<Options = any, ReturnData = Promise<boolean> | boolean> = (
   context: { writeFlow: WriteFlow; extension: AnyExtension },
   options?: Options,

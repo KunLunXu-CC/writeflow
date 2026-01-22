@@ -1,6 +1,7 @@
 import {
   AnyCommands,
   AnyHelpers,
+  PRIORITY_LEVEL,
   EXTENSIONS_TYPE,
   ExtendableFunContext,
 } from '@/components/WriteFlow/types';
@@ -12,7 +13,7 @@ import { NodeViewConstructor } from 'prosemirror-view';
 export interface ExtendableConfig<Options = unknown> {
   name: string;
   options?: Options;
-  priority?: number; // 优先级, 数值越大优先级越高, 优先级越高快捷键等越先被触发、处理
+  priority?: PRIORITY_LEVEL;
   type?: EXTENSIONS_TYPE;
 
   /*
@@ -145,7 +146,7 @@ export class Extendable<Options = unknown> {
     this.config = config;
     this.name = config.name;
     this.#options = config.options;
-    this.priority = config.priority ?? 0;
+    this.priority = config.priority ?? PRIORITY_LEVEL.LOW;
   }
 
   /** 添加配置选项 */

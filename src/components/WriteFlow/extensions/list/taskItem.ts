@@ -1,12 +1,15 @@
-import { listItem, sinkListItem, liftListItem, splitListItem } from 'prosemirror-schema-list';
 import { Node } from '@/components/WriteFlow/core/Node';
 import { NodeSpec, NodeType } from 'prosemirror-model';
+import { PRIORITY_LEVEL } from '@/components/WriteFlow/types';
+import { listItem, sinkListItem, liftListItem, splitListItem } from 'prosemirror-schema-list';
 
 /**
  * 任务列表项
  */
 export const TaskItem = Node.create({
   name: 'task_item',
+
+  priority: PRIORITY_LEVEL.MEDIUM,
 
   addSchema: (): NodeSpec => ({
     ...listItem,
