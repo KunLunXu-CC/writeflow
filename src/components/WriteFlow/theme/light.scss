@@ -317,16 +317,4 @@
   }
 
   // #endregion
-
-  //  #region 水平分隔线
-  hr {
-    margin: calc(var(--wf-block-gap-vertical) * 2) 0;
-    border-color: hsl(var(--wf-color-text-quaternary));
-
-    &.ProseMirror-selectednode {
-      border-color: hsl(var(--wf-color-primary));
-    }
-  }
-
-  // #endregion
 }

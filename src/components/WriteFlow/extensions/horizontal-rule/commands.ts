@@ -21,5 +21,5 @@ export const insertHorizontalRule: WFCommand<InsertHorizontalRuleOptions> = (
   const hr = schema.nodes.horizontal_rule.create();
   tr.replaceSelectionWith(hr);
   dispatch(tr);
-  return false;
+  return true;
 };

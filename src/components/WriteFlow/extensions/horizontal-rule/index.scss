@@ -1,0 +1,16 @@
+@use '../../theme/mixins';
+
+.wf-horizontal-rule-wrapper {
+  display: flex;
+  align-items: center;
+
+  hr {
+    width: 100%;
+    margin: calc(var(--wf-block-gap-vertical) * 2) 0;
+    border-color: hsl(var(--wf-color-text-quaternary));
+  }
+
+  &.ProseMirror-selectednode hr {
+    border-color: hsl(var(--wf-color-primary));
+  }
+}
