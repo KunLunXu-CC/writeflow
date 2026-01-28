@@ -27,6 +27,11 @@ export enum PRIORITY_LEVEL {
   PREMIUM = 300,
 }
 
+/**
+ * WFCommand(内部约定的命令)
+ * 它们接收当前的编辑器状态和一个可选的派发函数作为参数,并返回一个布尔值或 Promise<boolean>, 表示命令是否成功执行
+ * 返回 boolean 表示命令是否适用/执行成功(是否被处理了)
+ */
 export type WFCommand<Options = any, ReturnData = Promise<boolean> | boolean> = (
   context: { writeFlow: WriteFlow; extension: AnyExtension },
   options?: Options,

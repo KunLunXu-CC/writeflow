@@ -19,9 +19,8 @@ export const HorizontalRule = Node.create({
   }),
 
   addCommands: ({ writeFlow, extension }) => ({
-    insertHorizontalRule: (options: InsertHorizontalRuleOptions) => {
-      insertHorizontalRule({ writeFlow, extension }, options);
-    },
+    insertHorizontalRule: (options: InsertHorizontalRuleOptions) =>
+      insertHorizontalRule({ writeFlow, extension }, options),
   }),
 
   addInputRules: ({ writeFlow }) => [
