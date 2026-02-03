@@ -50,7 +50,7 @@ export class BubbleMenuPluginView implements PluginView {
     // 计算 left 和 top
     const { from, to } = this.view.state.selection;
     const startPos = this.view.coordsAtPos(from);
-    const endPos = this.view.coordsAtPos(to);
+    const endPos = this.view.coordsAtPos(to, -1);
     const left = Math.min(startPos.left, endPos.left);
     const top = Math.min(startPos.top, endPos.top);
 
