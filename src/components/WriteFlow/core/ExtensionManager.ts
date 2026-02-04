@@ -5,7 +5,7 @@ import {
   EXTENSIONS_TYPE,
   ExtendableFunContext,
 } from '../types';
-import { sortBy } from 'lodash-es';
+import { pick, sortBy } from 'lodash-es';
 import { Plugin } from 'prosemirror-state';
 import { keymap } from 'prosemirror-keymap';
 import { history } from 'prosemirror-history';
@@ -13,10 +13,10 @@ import type { WriteFlow } from './WriteFlow.js';
 import { baseKeymap } from 'prosemirror-commands';
 import { NodeViewConstructor } from 'prosemirror-view';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
+import { nodes as basicNodes } from 'prosemirror-schema-basic';
 import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
 import { getExtensionField } from '../helpers/getExtensionField';
 import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
-import { nodes as basicNodes, marks as basicMarks } from 'prosemirror-schema-basic';
 
 /**
  * ExtensionManager 扩展管理器
@@ -100,8 +100,8 @@ export default class ExtensionManager {
         return acc;
       },
       {
-        nodes: { ...basicNodes },
-        marks: { ...basicMarks },
+        marks: {},
+        nodes: pick(basicNodes, ['doc', 'text', 'paragraph']), // 基础必要节点
       },
     );
 

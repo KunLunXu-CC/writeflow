@@ -49,7 +49,7 @@ export type WFHelper<Return = any, Options = any> = (
 /**
  * 对外暴露的辅助函数
  */
-export type AnyHelpers = Record<string, (opts?: Record<string, any>) => any>;
+export type AnyHelpers = Record<string, (opts?: any) => any>;
 
 /**
  * 对外暴露的命令

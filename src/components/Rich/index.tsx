@@ -14,6 +14,14 @@ export const WriteFlow = (props: EditorProps) => {
 
   writeFlow?.on(WFEventKeys.docChange, (data) => {
     console.log('Editor content updated:', data.value);
+
+    // const doc = writeFlow.helpers.parserMarkdownToDoc({
+    //   markdownText: '# Hello\n\nThis is **bold**.',
+    // });
+    // console.log('%c [ doc ]-19', 'font-size:13px; background:pink; color:#bf2c9f;', {
+    //   doc,
+    //   json: doc.toJSON(),
+    // });
   });
 
   return (
