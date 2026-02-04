@@ -1,7 +1,8 @@
 import MarkdownIt from 'markdown-it';
 import { WFHelper } from '../../types';
 import { MarkdownParser } from 'prosemirror-markdown';
-import { Node } from 'prosemirror-model';
+import { Node, Slice } from 'prosemirror-model';
+import { DOMParser } from 'prosemirror-model';
 
 const markdownIt = new MarkdownIt();
 
@@ -12,11 +13,11 @@ export interface ParserMarkdownToDocOptions {
 /**
  * 将 Markdown 文本解析为 ProseMirror 的文档结构（Node）
  */
-export const parserMarkdownToDoc: WFHelper<Node> = (
+export const parserMarkdownToDoc: WFHelper<Node, { markdownText: string }> = (
   { writeFlow },
-  opts: ParserMarkdownToDocOptions,
+  opts,
 ) => {
-  const { markdownText } = opts;
+  const { markdownText } = opts || { markdownText: '' };
   const parser = new MarkdownParser(writeFlow.schema, markdownIt, {
     // ========== Nodes 映射 ==========
 
@@ -67,4 +68,29 @@ export const parserMarkdownToDoc: WFHelper<Node> = (
   const doc = parser.parse(markdownText);
 
   return doc;
+};
+
+/** 将 MD 转为 ProseMirror Slice */
+export const getSliceFromMarkdown: WFHelper<Slice | null, { markdownText: string }> = (
+  { writeFlow },
+  opts,
+) => {
+  if (!opts) {
+    return null;
+  }
+
+  const { markdownText } = opts;
+  const { schema } = writeFlow;
+
+  // 1. Markdown -> HTML
+  const html = markdownIt.render(markdownText);
+
+  // 2. HTML -> DOM
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = html;
+
+  // 3. DOM -> ProseMirror Slice (自动根据 schema 匹配)
+  const slice = DOMParser.fromSchema(schema).parseSlice(tempDiv);
+
+  return slice;
 };
