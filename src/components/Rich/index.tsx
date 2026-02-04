@@ -2,7 +2,6 @@ import { WriteFlowContext } from '@/components/WriteFlowContext';
 import { useWriteFlow } from '../hooks/useWriteFlow';
 import { RichBubbleMenu } from './RichBubbleMenu';
 import { Input } from '@heroui/react';
-import { useState } from 'react';
 import '@/components/WriteFlow/theme';
 
 interface EditorProps {

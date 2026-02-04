@@ -44,6 +44,10 @@ export const Image = Node.create<ImageExtensionOptions>({
     parseDOM: [
       {
         tag: 'img[src]',
+        getAttrs: (dom) => {
+          const { src, alt, title } = dom as HTMLImageElement;
+          return { src, alt, title };
+        },
       },
     ],
     toDOM: (node) => {
