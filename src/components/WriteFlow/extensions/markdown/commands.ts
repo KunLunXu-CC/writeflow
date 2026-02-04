@@ -34,7 +34,7 @@ export const initDocFromMarkdown: WFCommand<InsertMarkdownOptions> = ({ writeFlo
   const { dispatch, state } = writeFlow;
 
   const slice = writeFlow.helpers.getSliceFromMarkdown({ markdownText });
-  const tr = state.tr.replaceWith(0, state.doc.content.size, slice);
+  const tr = state.tr.replaceWith(0, state.doc.content.size, slice.content);
 
   dispatch(tr);
 
