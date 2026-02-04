@@ -1,7 +1,8 @@
 import { WriteFlowContext } from '@/components/WriteFlowContext';
 import { useWriteFlow } from '../hooks/useWriteFlow';
 import { RichBubbleMenu } from './RichBubbleMenu';
-import { Input } from '@heroui/react';
+import { Textarea } from '@heroui/react';
+
 import '@/components/WriteFlow/theme';
 
 interface EditorProps {
@@ -21,7 +22,7 @@ export const WriteFlow = (props: EditorProps) => {
   return (
     <>
       <div className="w-full max-w-[600px] py-6">
-        <Input onValueChange={handleChange} />
+        <Textarea onValueChange={handleChange} />
       </div>
       <WriteFlowContext.Provider value={writeFlow}>
         <div

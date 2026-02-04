@@ -44,6 +44,12 @@ export const CodeBlock = Node.create({
         ],
       ];
     },
+
+    parseDOM: [
+      {
+        tag: 'pre > code', // 只匹配 pre 内的 code 标签, 即代码块
+      },
+    ],
   }),
 
   // options: {

@@ -17,6 +17,12 @@ export const InlineCode = Mark.create({
     toDOM() {
       return ['code', {}, 0];
     },
+
+    parseDOM: [
+      {
+        tag: 'code:not(pre > code)', // 匹配非 pre 内的 code 标签, 即行内代码
+      },
+    ],
   }),
 
   addInputRules: ({ type }) => [
