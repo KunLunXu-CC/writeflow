@@ -18,7 +18,7 @@
   --wf-code-block-point-color-3: 129 60% 51%;
 
   /* 字体大小 */
-  --wf-text-base: 16px;
+  --wf-text-base: 14px;
   --wf-font-family: system-ui, -apple-system, "system-ui", "segoe ui", roboto, helvetica, arial, sans-serif, "apple color emoji", "segoe ui emoji", "segoe ui symbol", monospace;
 
   // 圆角
@@ -63,6 +63,8 @@
   h4,
   h5,
   h6 {
+    font-size: 1em;
+    font-weight: 600;
     margin: var(--wf-block-gap-vertical) 0;
     border-bottom: 1px dashed hsl(var(--wf-color-text-quaternary));
 
@@ -77,27 +79,18 @@
 
   h1 {
     font-size: 1.5em;
-    font-weight: 700;
   }
 
   h2 {
     font-size: 1.25em;
-    font-weight: 700;
   }
 
   h3 {
     font-size: 1.125em;
-    font-weight: 600;
-  }
-
-  h4 {
-    font-size: 1em;
-    font-weight: 600;
   }
 
   h5,
   h6 {
-    font-size: 1em;
     font-weight: 400;
   }
 
@@ -245,65 +238,6 @@
     color: hsl(var(--wf-color-primary));
     background-color: hsl(var(--wf-color-primary) / 8%);
   }
-
-  // #endregion
-
-  // #region 代码块部分
-  .wf-code-block {
-    overflow: hidden;
-    border-radius: var(--wf-rounded);
-    margin: var(--wf-block-gap-vertical) 0;
-    background: hsl(var(--wf-code-block-bg));
-
-    &-header {
-      display: flex;
-      height: 1.875em;
-      align-items: center;
-      position: relative;
-      background: hsl(var(--wf-code-block-header-bg));
-
-      .wf-code-block-point {
-        $gap: 1em;
-
-        @mixin point($color, $left) {
-          left: $left;
-          position: absolute;
-          width: 0.625em;
-          height: 0.625em;
-          border-radius: 50%;
-          background-color: $color;
-        }
-
-        top: 50%;
-        transform: translateY(-50%);
-        
-        @include point(hsl(var(--wf-code-block-point-color-1)), 12px);
-
-        &::after,
-        &::before {
-          content: '';
-          display: block;
-        }
-
-        &::after {
-          @include point(hsl(var(--wf-code-block-point-color-2)), $gap);
-        }
-
-        &::before {
-          @include point(hsl(var(--wf-code-block-point-color-3)), $gap * 2);
-        }
-      }
-    }
-
-    .cm-editor {
-      padding: 0.75em;
-      outline: none !important;
-      background-color: transparent;
-    }
-  }
-
-  // #endregion
-  
 
   //  #region 空隙光标样式
   .ProseMirror-gapcursor {

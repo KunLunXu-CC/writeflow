@@ -3,10 +3,11 @@
 .wf-horizontal-rule-wrapper {
   display: flex;
   align-items: center;
+  height: calc(var(--wf-line-height-default) * 1em);
 
   hr {
+    margin: 0;
     width: 100%;
-    margin: calc(var(--wf-block-gap-vertical) * 2) 0;
     border-color: hsl(var(--wf-color-text-quaternary));
   }
 

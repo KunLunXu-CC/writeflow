@@ -87,7 +87,7 @@ export class CodeBlockNodeView implements NodeView {
   }
 
   createDom(): HTMLElement {
-    const wrap = document.createElement('div');
+    const wrap = document.createElement('p');
     wrap.className = 'wf-code-block';
 
     const header = document.createElement('div');

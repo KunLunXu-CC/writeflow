@@ -1,0 +1,53 @@
+
+.wf-code-block {
+  overflow: hidden;
+  border-radius: var(--wf-rounded);
+  margin: var(--wf-block-gap-vertical) 0;
+  background: hsl(var(--wf-code-block-bg));
+
+  &-header {
+    display: flex;
+    height: 1.875em;
+    align-items: center;
+    position: relative;
+    background: hsl(var(--wf-code-block-header-bg));
+
+    .wf-code-block-point {
+      $gap: 1em;
+
+      @mixin point($color, $left) {
+        left: $left;
+        position: absolute;
+        width: 0.625em;
+        height: 0.625em;
+        border-radius: 50%;
+        background-color: $color;
+      }
+
+      top: 50%;
+      transform: translateY(-50%);
+      
+      @include point(hsl(var(--wf-code-block-point-color-1)), 12px);
+
+      &::after,
+      &::before {
+        content: '';
+        display: block;
+      }
+
+      &::after {
+        @include point(hsl(var(--wf-code-block-point-color-2)), $gap);
+      }
+
+      &::before {
+        @include point(hsl(var(--wf-code-block-point-color-3)), $gap * 2);
+      }
+    }
+  }
+
+  .cm-editor {
+    padding: 0.75em;
+    outline: none !important;
+    background-color: transparent;
+  }
+}

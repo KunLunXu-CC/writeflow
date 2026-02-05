@@ -5,7 +5,6 @@
 [ ] 加粗、删除线、下划线...
 [ ] prosemirror-gapcursor 遇到表格光标有概率会落在表格前后
 [ ] 链接
-[ ] 字体还是偏大
 [ ] md code 转换 
 
 ## base 扩展
