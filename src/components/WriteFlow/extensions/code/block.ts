@@ -29,69 +29,31 @@ export const CodeBlock = Node.create({
 
     defining: true,
 
-    toDOM() {
-      return [
-        'pre',
-        {},
-        [
-          'code',
-          {
-            // class: node.attrs.language
-            //   ? this.options.languageClassPrefix + node.attrs.language
-            //   : null,
-          },
-          0,
-        ],
-      ];
+    // 定义节点属性
+    attrs: {
+      language: {
+        default: null,
+        validate: 'string|null',
+      },
+    },
+
+    toDOM: (node) => {
+      const { language } = node.attrs;
+      return ['pre', {}, ['code', { language }, 0]];
     },
 
     parseDOM: [
       {
         tag: 'pre > code', // 只匹配 pre 内的 code 标签, 即代码块
+        getAttrs(dom) {
+          // 从 class 属性中提取语言信息, class 可能包含类似 "language-js" 的值
+          const classAttr = dom?.getAttribute('class') || '';
+          const { language } = classAttr.match(/language-(?<language>\w+)/)?.groups ?? {};
+          return { language };
+        },
       },
     ],
   }),
-
-  // options: {
-  //   HTMLAttributes: {},
-  //   levels: [1, 2, 3, 4, 5, 6],
-  // },
-
-  // addCommands() {
-  //   return {
-  //     setHeading:
-  //       (attributes) =>
-  //       ({ commands }) => {
-  //         if (!this.options.levels.includes(attributes.level)) {
-  //           return false;
-  //         }
-
-  //         return commands.setNode(this.name, attributes);
-  //       },
-  //     toggleHeading:
-  //       (attributes) =>
-  //       ({ commands }) => {
-  //         if (!this.options.levels.includes(attributes.level)) {
-  //           return false;
-  //         }
-
-  //         return commands.toggleNode(this.name, 'paragraph', attributes);
-  //       },
-  //   };
-  // },
-
-  // addKeyboardShortcuts() {
-  //   return this.options.levels.reduce(
-  //     (items, level) => ({
-  //       ...items,
-  //       ...{
-  //         [`Mod-Alt-${level}`]: () =>
-  //           this.editor.commands.toggleHeading({ level }),
-  //       },
-  //     }),
-  //     {},
-  //   );
-  // },
 
   addInputRules: ({ type }) => [
     textblockTypeInputRule(/^```(\w+)?\s$/, type as NodeType, (match) => ({
