@@ -37,6 +37,11 @@ export const Link = Mark.create({
     parseDOM: [
       {
         tag: 'a[href]',
+        getAttrs: (dom) => {
+          const href = dom.getAttribute('href');
+          const title = dom.getAttribute('title');
+          return { href, title };
+        },
       },
     ],
   }),
