@@ -17,6 +17,7 @@ import { HardBreak } from '@/components/WriteFlow/extensions/hard-break';
 import { Blockquote } from '@/components/WriteFlow/extensions/blockquote';
 import { CodeBlock, InlineCode } from '@/components/WriteFlow/extensions/code';
 import { WriteFlowValue } from '../WriteFlow/types';
+import { Link } from '@/components/WriteFlow/extensions/link';
 import { Markdown } from '@/components/WriteFlow/extensions/markdown';
 
 Image.addOptions({
@@ -230,6 +231,7 @@ export const useWriteFlow = () => {
         Paragraph,
         Image,
         Markdown,
+        Link,
       ],
     });
 

@@ -1,0 +1,8 @@
+.wf-link {
+  transition: opacity 0.4s;
+  color: hsl(var(--wf-color-link), 80%);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

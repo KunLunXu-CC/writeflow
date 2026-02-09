@@ -1,13 +1,13 @@
 import { Mark } from '@/components/WriteFlow/core/Mark';
 import { InputRule } from 'prosemirror-inputrules';
-import { MarkType, NodeSpec } from 'prosemirror-model';
+import { MarkType, MarkSpec } from 'prosemirror-model';
 
 const inputRegex = /`([^`]+)`$/;
 
 export const InlineCode = Mark.create({
   name: 'inline_code',
 
-  addSchema: (): NodeSpec => ({
+  addSchema: (): MarkSpec => ({
     excludes: '_',
 
     code: true,
