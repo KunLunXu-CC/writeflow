@@ -8,6 +8,16 @@
   .cm-scroller {
     opacity: 0.9;
     line-height: var(--wf-line-height-default);
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+  }
+
+  .cm-editor {
+    outline: none;
+    padding: 0.75em;
+    background-color: transparent;
   }
 
   &-header {
@@ -48,11 +58,5 @@
         @include point(hsl(var(--wf-code-block-point-color-3)), $gap * 2);
       }
     }
-  }
-
-  .cm-editor {
-    padding: 0.75em;
-    outline: none !important;
-    background-color: transparent;
   }
 }
