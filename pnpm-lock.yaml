@@ -38,6 +38,9 @@ importers:
       '@heroui/react':
         specifier: ^2.8.4
         version: 2.8.4(@types/react@19.1.14)(framer-motion@12.23.22(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(tailwindcss@4.1.13)
+      '@mdit/plugin-tasklist':
+        specifier: ^0.22.3
+        version: 0.22.3(markdown-it@14.1.0)
       '@uiw/codemirror-theme-dracula':
         specifier: ^4.25.2
         version: 4.25.2(@codemirror/language@6.11.3)(@codemirror/state@6.5.2)(@codemirror/view@6.38.3)
@@ -71,9 +74,6 @@ importers:
       prosemirror-keymap:
         specifier: ^1.2.3
         version: 1.2.3
-      prosemirror-markdown:
-        specifier: ^1.13.3
-        version: 1.13.3
       prosemirror-model:
         specifier: ^1.25.3
         version: 1.25.3
@@ -1159,6 +1159,15 @@ packages:
 
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
+
+  '@mdit/plugin-tasklist@0.22.3':
+    resolution: {integrity: sha512-AeOp0OzjzBNnd3Oxe9CpSgjA6pXHMPQvTN5GvxkoHiLpF+vIdn8tvAVFWqC78OVAZR6HM4F3mtP+Ty9ByeDikw==, tarball: https://artifactory.devops.xiaohongshu.com/artifactory/api/npm/npm-public/@mdit/plugin-tasklist/-/plugin-tasklist-0.22.3.tgz}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      markdown-it: ^14.1.0
+    peerDependenciesMeta:
+      markdown-it:
+        optional: true
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==, tarball: https://artifactory.devops.xiaohongshu.com/artifactory/api/npm/npm-public/@napi-rs/wasm-runtime/-/wasm-runtime-0.2.12.tgz}
@@ -3921,9 +3930,6 @@ packages:
   prosemirror-keymap@1.2.3:
     resolution: {integrity: sha512-4HucRlpiLd1IPQQXNqeo81BGtkY8Ai5smHhKW9jjPKRc2wQIxksg7Hl1tTI2IfT2B/LgX6bfYvXxEpJl7aKYKw==}
 
-  prosemirror-markdown@1.13.3:
-    resolution: {integrity: sha512-3E+Et6cdXIH0EgN2tGYQ+EBT7N4kMiZFsW+hzx+aPtOmADDHWCdd2uUQb7yklJrfUYUOjEEu22BiN6UFgPe4cQ==, tarball: https://artifactory.devops.xiaohongshu.com/artifactory/api/npm/npm-public/prosemirror-markdown/-/prosemirror-markdown-1.13.3.tgz}
-
   prosemirror-model@1.25.3:
     resolution: {integrity: sha512-dY2HdaNXlARknJbrManZ1WyUtos+AP97AmvqdOQtWtrrC5g4mohVX5DTi9rXNFSk09eczLq9GuNTtq3EfMeMGA==}
 
@@ -6153,6 +6159,12 @@ snapshots:
       '@lezer/common': 1.2.3
 
   '@marijn/find-cluster-break@1.0.2': {}
+
+  '@mdit/plugin-tasklist@0.22.3(markdown-it@14.1.0)':
+    dependencies:
+      '@types/markdown-it': 14.1.2
+    optionalDependencies:
+      markdown-it: 14.1.0
 
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:
@@ -9298,12 +9310,6 @@ snapshots:
     dependencies:
       prosemirror-state: 1.4.3
       w3c-keyname: 2.2.8
-
-  prosemirror-markdown@1.13.3:
-    dependencies:
-      '@types/markdown-it': 14.1.2
-      markdown-it: 14.1.0
-      prosemirror-model: 1.25.3
 
   prosemirror-model@1.25.3:
     dependencies:

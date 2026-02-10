@@ -8,8 +8,7 @@ import { listItem, sinkListItem, liftListItem, splitListItem } from 'prosemirror
  */
 export const TaskItem = Node.create({
   name: 'task_item',
-
-  priority: PRIORITY_LEVEL.MEDIUM,
+  priority: PRIORITY_LEVEL.HIGH,
 
   addSchema: (): NodeSpec => ({
     ...listItem,
@@ -40,6 +39,16 @@ export const TaskItem = Node.create({
         ['div', 0],
       ];
     },
+
+    parseDOM: [
+      {
+        tag: 'li.task-list-item',
+        getAttrs(dom) {
+          const checked = !!dom.querySelector('.task-list-item-checkbox')?.getAttribute('checked');
+          return { checked };
+        },
+      },
+    ],
   }),
 
   addKeymap: ({ type }) => ({

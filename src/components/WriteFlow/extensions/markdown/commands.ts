@@ -1,8 +1,4 @@
-import MarkdownIt from 'markdown-it';
 import { WFCommand } from '../../types';
-import { DOMParser } from 'prosemirror-model';
-
-const markdownIt = new MarkdownIt();
 
 export interface InsertMarkdownOptions {
   markdownText: string;

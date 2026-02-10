@@ -1,5 +1,5 @@
 import { Extendable } from '@/components/WriteFlow/core/Extendable';
-import { parserMarkdownToDoc, getSliceFromMarkdown } from './helpers';
+import { getSliceFromMarkdown } from './helpers';
 import { insertMarkdown, initDocFromMarkdown } from './commands';
 
 /**
@@ -9,7 +9,6 @@ import { insertMarkdown, initDocFromMarkdown } from './commands';
 export const Markdown = Extendable.create({
   name: 'markdown',
   addHelpers: ({ writeFlow, extension }) => ({
-    parserMarkdownToDoc: parserMarkdownToDoc.bind(null, { writeFlow, extension }),
     getSliceFromMarkdown: getSliceFromMarkdown.bind(null, { writeFlow, extension }),
   }),
 

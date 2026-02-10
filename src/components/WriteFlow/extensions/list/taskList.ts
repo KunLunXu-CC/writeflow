@@ -1,5 +1,4 @@
 import { NodeSpec } from 'prosemirror-model';
-import { TextSelection } from 'prosemirror-state';
 import { bulletList } from 'prosemirror-schema-list';
 import { InputRule } from 'prosemirror-inputrules';
 import { Node } from '@/components/WriteFlow/core/Node';
@@ -21,6 +20,11 @@ export const TaskList = Node.create({
         'data-type': 'taskList',
       },
       0,
+    ],
+    parseDOM: [
+      {
+        tag: 'ul.task-list',
+      },
     ],
   }),
 
