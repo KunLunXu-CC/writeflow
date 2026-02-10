@@ -24,30 +24,29 @@ import { Selection, TextSelection } from 'prosemirror-state';
 import { defaultHighlightStyle, StreamLanguage, syntaxHighlighting } from '@codemirror/language';
 
 // 语言支持映射
-const LANGUAGE_MAP: { [key: string]: () => Extension } = {
-  // '正则': 语言
-  '^css': css,
-  '^html': html,
-  '^json': json,
-  '^diff': () => StreamLanguage.define(diff),
-  '^(shell|sh|bash)': () => StreamLanguage.define(shell),
-  '^(javascript|js|typescript|ts)': () => javascript({ typescript: true }),
-  '^(jsx|tsx)': () => javascript({ jsx: true, typescript: true }),
+const LANGUAGE_MAP_EXTENSION: { [key: string]: Extension[] } = {
+  // '正则': 语言扩展数组
+  '^css': [css()],
+  '^html': [html()],
+  '^json': [json()],
+  '^diff': [StreamLanguage.define(diff)],
+  '^(shell|sh|bash)': [StreamLanguage.define(shell)],
+  '^(javascript|js|typescript|ts)': [javascript({ typescript: true })],
+  '^(jsx|tsx)': [javascript({ jsx: true, typescript: true })],
 };
 
 // 获取语言扩展
-const getLanguageExtension = (language: string) => {
-  if (!language) {
-    return syntaxHighlighting(defaultHighlightStyle);
-  }
+const getLanguageExtensions = (language: string = '') => {
+  const result = [syntaxHighlighting(defaultHighlightStyle)];
 
-  for (const key in LANGUAGE_MAP) {
+  // 匹配语言并获取对应的扩展
+  for (const key in LANGUAGE_MAP_EXTENSION) {
     if (new RegExp(key, 'i').test(language)) {
-      return LANGUAGE_MAP[key]();
+      result.push(...LANGUAGE_MAP_EXTENSION[key]);
     }
   }
 
-  return syntaxHighlighting(defaultHighlightStyle);
+  return result;
 };
 
 export class CodeBlockNodeView implements NodeView {
@@ -66,7 +65,7 @@ export class CodeBlockNodeView implements NodeView {
 
     // 获取语言扩展
     const language = node.attrs.language;
-    const languageExtension = getLanguageExtension(language);
+    const languageExtensions = getLanguageExtensions(language);
 
     // 创建 CodeMirror 实例
     this.cm = new CodeMirrorView({
@@ -75,9 +74,9 @@ export class CodeBlockNodeView implements NodeView {
       extensions: [
         dracula,
         drawSelection(),
+        languageExtensions,
         // 当多个命令绑定到同一个快捷键时, 会按照它们在数组中的顺序执行, 并且一旦某个命令返回 true 后续的命令就不会执行了
         cmKeymap.of([...this.codeMirrorKeymap(), ...defaultKeymap]),
-        languageExtension,
         CodeMirrorView.updateListener.of((update) => this.forwardUpdate(update)),
       ],
     });

@@ -5,6 +5,11 @@
   margin: var(--wf-block-gap-vertical) 0;
   background: hsl(var(--wf-code-block-bg));
 
+  .cm-scroller {
+    opacity: 0.9;
+    line-height: var(--wf-line-height-default);
+  }
+
   &-header {
     display: flex;
     height: 1.875em;
