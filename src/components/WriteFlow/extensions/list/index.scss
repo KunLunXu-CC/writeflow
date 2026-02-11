@@ -1,11 +1,15 @@
 @use '../../theme/mixins';
 
+.wf-task-list,
+.wf-bullet-list,
+.wf-ordered-list {
+  margin: var(--wf-block-gap-vertical) 0;
+}
 
 // 无序列表
 .wf-bullet-list {
   padding-left: 1.5em;
   list-style: disc outside none;
-  margin: var(--wf-block-gap-vertical) 0;
 
   .wf-bullet-list {
     margin-block: 0;
@@ -21,7 +25,6 @@
 .wf-ordered-list {
   padding-left: 1.5em;
   list-style: decimal outside none;
-  margin: var(--wf-block-gap-vertical) 0;
   
   .wf-ordered-list {
     margin-block: 0;
@@ -33,24 +36,30 @@
   }
 }
 
-.wf-list-item {
-  @include mixins.wf-reset-edge-spacing;
-
-  p {
-    margin: 0;
-  }
-
-  &::marker {
-    color: hsl(var(--wf-color-text-secondary));
-  }
-}
-
 // 任务列表
 .wf-task-list {
   padding-left: 0;
 }
 
-.wf-task-list-item {
+li.wf-list-item,
+li.wf-task-list-item {
+  @include mixins.wf-reset-edge-spacing;
+
+  // 列表项内的段落和列表, 重置 margin 以避免嵌套时出现过大的间距
+  p, ul, ol {
+    margin: 0;
+  }
+}
+
+// 列表项
+li.wf-list-item {
+  &::marker {
+    color: hsl(var(--wf-color-text-secondary));
+  }
+}
+
+// 任务列表项
+li.wf-task-list-item {
   gap: 0.5em;
   width: 100%;
   display: flex;
