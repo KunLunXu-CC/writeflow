@@ -1,4 +1,4 @@
-import { listItem, liftListItem, sinkListItem, splitListItem } from 'prosemirror-schema-list';
+import { liftListItem, sinkListItem, splitListItem } from 'prosemirror-schema-list';
 import { Node } from '@/components/WriteFlow/core/Node';
 import { NodeSpec, NodeType } from 'prosemirror-model';
 import { PRIORITY_LEVEL } from '@/components/WriteFlow/types';
@@ -12,8 +12,20 @@ export const ListItem = Node.create({
   priority: PRIORITY_LEVEL.MEDIUM,
 
   addSchema: (): NodeSpec => ({
-    ...listItem,
+    defining: true,
     content: 'paragraph block*',
+    toDOM: () => [
+      'li',
+      {
+        class: 'wf-list-item',
+      },
+      0,
+    ],
+    parseDOM: [
+      {
+        tag: 'li',
+      },
+    ],
   }),
 
   addKeymap: ({ type }) => ({

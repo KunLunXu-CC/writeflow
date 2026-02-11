@@ -22,8 +22,7 @@ export const TaskItem = Node.create({
       return [
         'li',
         {
-          'data-type': 'taskItem',
-          'data-done': checked.toString(),
+          class: 'wf-task-list-item',
         },
         [
           'label',

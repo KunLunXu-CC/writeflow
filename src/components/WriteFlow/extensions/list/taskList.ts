@@ -17,7 +17,7 @@ export const TaskList = Node.create({
     toDOM: () => [
       'ul',
       {
-        'data-type': 'taskList',
+        class: 'wf-task-list',
       },
       0,
     ],

@@ -1,8 +1,7 @@
-import { orderedList } from 'prosemirror-schema-list';
+// import { orderedList } from 'prosemirror-schema-list';
 import { Node } from '@/components/WriteFlow/core/Node';
 import { wrappingInputRule } from 'prosemirror-inputrules';
 import { NodeSpec, NodeType } from 'prosemirror-model';
-
 /**
  * 有序列表
  */
@@ -10,9 +9,26 @@ export const OrderedList = Node.create({
   name: 'ordered_list',
 
   addSchema: (): NodeSpec => ({
-    ...orderedList,
-    content: 'list_item+',
     group: 'block',
+    content: 'list_item+',
+    attrs: {
+      order: {
+        default: 1,
+        validate: 'number',
+      },
+    },
+    toDOM: () => [
+      'ol',
+      {
+        class: 'wf-ordered-list',
+      },
+      0,
+    ],
+    parseDOM: [
+      {
+        tag: 'ol',
+      },
+    ],
   }),
 
   // 返回 InputRule 对象 { find, handler }[] 的数组
