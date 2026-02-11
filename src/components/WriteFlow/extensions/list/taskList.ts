@@ -1,8 +1,7 @@
-import { NodeSpec } from 'prosemirror-model';
+import { NodeSpec, NodeType } from 'prosemirror-model';
 import { bulletList } from 'prosemirror-schema-list';
 import { InputRule } from 'prosemirror-inputrules';
 import { Node } from '@/components/WriteFlow/core/Node';
-import { insertTaskList, InsertTaskItemOptions } from './commands';
 
 /**
  * 任务列表
@@ -28,18 +27,25 @@ export const TaskList = Node.create({
     ],
   }),
 
-  addCommands: ({ writeFlow, extension }) => ({
-    insertTaskList: (opts: InsertTaskItemOptions) => insertTaskList({ writeFlow, extension }, opts),
+  addCommands: ({ writeFlow, type }) => ({
+    insertTaskList: (opts: { end?: number; start?: number; checked?: boolean }) => {
+      const { end, start, checked } = opts;
+      writeFlow.commands.insertWrapping({
+        end,
+        start,
+        nodeType: type as NodeType,
+        wrappingAttrs: { task_item: { checked } },
+      });
+    },
   }),
 
   addInputRules: ({ writeFlow }) => [
-    new InputRule(/^\[([ |x])\]\s$/, (state, match, start, end) => {
+    new InputRule(/^\[([ |x])\]\s$/i, (state, match, start, end) => {
       writeFlow.commands.insertTaskList({
         end,
         start,
-        attrs: { checked: match[1] === 'x' },
+        checked: match[1].toLowerCase() === 'x',
       });
-
       return writeFlow.state.tr;
     }),
   ],

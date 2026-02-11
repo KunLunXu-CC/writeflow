@@ -89,6 +89,9 @@ importers:
       prosemirror-tables:
         specifier: ^1.8.1
         version: 1.8.1
+      prosemirror-transform:
+        specifier: ^1.11.0
+        version: 1.11.0
       prosemirror-view:
         specifier: ^1.41.1
         version: 1.41.1
@@ -3945,8 +3948,8 @@ packages:
   prosemirror-tables@1.8.1:
     resolution: {integrity: sha512-DAgDoUYHCcc6tOGpLVPSU1k84kCUWTWnfWX3UDy2Delv4ryH0KqTD6RBI6k4yi9j9I8gl3j8MkPpRD/vWPZbug==}
 
-  prosemirror-transform@1.10.4:
-    resolution: {integrity: sha512-pwDy22nAnGqNR1feOQKHxoFkkUtepoFAd3r2hbEDsnf4wp57kKA36hXsB3njA9FtONBEwSDnDeCiJe+ItD+ykw==}
+  prosemirror-transform@1.11.0:
+    resolution: {integrity: sha512-4I7Ce4KpygXb9bkiPS3hTEk4dSHorfRw8uI0pE8IhxlK2GXsqv5tIA7JUSxtSu7u8APVOTtbUBxTmnHIxVkIJw==, tarball: https://artifactory.devops.xiaohongshu.com/artifactory/api/npm/npm-public/prosemirror-transform/-/prosemirror-transform-1.11.0.tgz}
 
   prosemirror-view@1.41.1:
     resolution: {integrity: sha512-cViIhlt1/T5bQMINrmXh43JZcdIgdW1YkOABmIuH5gSt3/HiCZHsLN9d5GvsgzrXn2+zZ8il0kkghisusm7tSA==}
@@ -9285,7 +9288,7 @@ snapshots:
     dependencies:
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.10.4
+      prosemirror-transform: 1.11.0
 
   prosemirror-gapcursor@1.3.2:
     dependencies:
@@ -9297,14 +9300,14 @@ snapshots:
   prosemirror-history@1.4.1:
     dependencies:
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.10.4
+      prosemirror-transform: 1.11.0
       prosemirror-view: 1.41.1
       rope-sequence: 1.3.4
 
   prosemirror-inputrules@1.5.0:
     dependencies:
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.10.4
+      prosemirror-transform: 1.11.0
 
   prosemirror-keymap@1.2.3:
     dependencies:
@@ -9323,12 +9326,12 @@ snapshots:
     dependencies:
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.10.4
+      prosemirror-transform: 1.11.0
 
   prosemirror-state@1.4.3:
     dependencies:
       prosemirror-model: 1.25.3
-      prosemirror-transform: 1.10.4
+      prosemirror-transform: 1.11.0
       prosemirror-view: 1.41.1
 
   prosemirror-tables@1.8.1:
@@ -9336,10 +9339,10 @@ snapshots:
       prosemirror-keymap: 1.2.3
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.10.4
+      prosemirror-transform: 1.11.0
       prosemirror-view: 1.41.1
 
-  prosemirror-transform@1.10.4:
+  prosemirror-transform@1.11.0:
     dependencies:
       prosemirror-model: 1.25.3
 
@@ -9347,7 +9350,7 @@ snapshots:
     dependencies:
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
-      prosemirror-transform: 1.10.4
+      prosemirror-transform: 1.11.0
 
   punycode.js@2.3.1: {}
 
