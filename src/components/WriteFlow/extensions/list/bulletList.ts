@@ -1,6 +1,5 @@
-// import { bulletList } from 'prosemirror-schema-list';
+import { InputRule } from 'prosemirror-inputrules';
 import { Node } from '@/components/WriteFlow/core/Node';
-import { wrappingInputRule } from 'prosemirror-inputrules';
 import { NodeSpec, NodeType } from 'prosemirror-model';
 
 /**
@@ -25,5 +24,20 @@ export const BulletList = Node.create({
       },
     ],
   }),
-  addInputRules: ({ type }) => [wrappingInputRule(/^\s*([-+*])\s$/, type as NodeType)],
+  addCommands: ({ writeFlow, type }) => ({
+    insertBulletList: (opts: { end?: number; start?: number }) => {
+      const { end, start } = opts;
+      writeFlow.commands.insertWrapping({
+        end,
+        start,
+        nodeType: type as NodeType,
+      });
+    },
+  }),
+  addInputRules: ({ writeFlow }) => [
+    new InputRule(/^\s*([-+*])\s$/, (state, match, start, end) => {
+      writeFlow.commands.insertBulletList({ end, start });
+      return writeFlow.state.tr;
+    }),
+  ],
 });

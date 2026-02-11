@@ -5,7 +5,7 @@
 [ ] 加粗、删除线、下划线...
 [ ] prosemirror-gapcursor 遇到表格光标有概率会落在表格前后
 [ ] 主题设计: 亮色、暗色
-[ ] task list 先输入正常内容，然后触发 inputRule 之后光标位置不对(常规 list 可以)
+[ ] 使用到 wrappingInputRule 的地方, 可以参考 list 进行调整, 先注入命令, 然后直接使用
 [ ] 代码快: 撤销/恢复 命令好像有点卡, 而且光标的位置有点乱
 
 ## base 扩展

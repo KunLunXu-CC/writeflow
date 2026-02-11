@@ -8,9 +8,8 @@ interface InsertWrappingOpts {
 
   end?: number;
   start?: number;
-  attrs?: Attrs;
   /** wrapping node 的属性配置, key 是 node type name，value 是该 node 的属性, 例如: { task_item: { checked: true } } */
-  wrappingAttrs: Record<string, Attrs>;
+  attrs: Record<string, Attrs>;
 }
 
 /**
@@ -49,8 +48,7 @@ export const undo: WFCommand = ({ writeFlow }) => {
  * @param {NodeType} opts.nodeType - 要插入的节点类型
  * @param {number} [opts.start] - 插入位置的开始位置, 默认为当前选区的 from
  * @param {number} [opts.end] - 插入位置的结束位置, 默认为当前选区的 to
- * @param {Attrs} [opts.attrs] - 要插入的节点的属性
- * @param {Record<string, Attrs>} [opts.wrappingAttrs] - wrapping node 的属性配置, key 是 node type name，value 是该 node 的属性
+ * @param {Record<string, Attrs>} [opts.attrs] - wrapping node 的属性配置, key 是 node type name，value 是该 node 的属性
  * @return boolean - 命令执行结果
  * @example
  * // 插入 blockquote
@@ -65,25 +63,19 @@ export const insertWrapping: WFCommand<InsertWrappingOpts> = ({ writeFlow }, opt
     return false;
   }
 
-  const {
-    nodeType,
-    attrs = {},
-    wrappingAttrs = {},
-    end = state.selection.to,
-    start = state.selection.from,
-  } = opts;
+  const { nodeType, attrs = {}, end = state.selection.to, start = state.selection.from } = opts;
 
   const tr = state.tr.delete(start, end);
   const $start = tr.doc.resolve(start);
   const range = $start.blockRange();
-  const wrapping = range && findWrapping(range, nodeType, attrs);
+  const wrapping = range && findWrapping(range, nodeType);
 
   if (!wrapping || !range) {
     return false;
   }
 
   for (const w of wrapping) {
-    const nodeAttrs = wrappingAttrs[w.type.name];
+    const nodeAttrs = attrs[w.type.name];
     if (nodeAttrs) {
       w.attrs = { ...w.attrs, ...nodeAttrs };
     }

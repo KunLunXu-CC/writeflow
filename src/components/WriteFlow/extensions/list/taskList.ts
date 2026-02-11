@@ -34,7 +34,7 @@ export const TaskList = Node.create({
         end,
         start,
         nodeType: type as NodeType,
-        wrappingAttrs: { task_item: { checked } },
+        attrs: { task_item: { checked } },
       });
     },
   }),
