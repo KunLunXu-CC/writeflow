@@ -1,1 +1,1 @@
-import '@/components/WriteFlow/theme/light.scss';
+import '@/components/WriteFlow/theme/index.scss';

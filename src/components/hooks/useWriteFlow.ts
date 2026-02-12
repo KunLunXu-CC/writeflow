@@ -208,9 +208,6 @@ export const useWriteFlow = () => {
     const newWriteFlow = new WriteFlow({
       initValue,
       element: writeFlowDomRef.current!,
-      attributes: {
-        class: 'wf-light',
-      },
       extensions: [
         Base,
         HorizontalRule,

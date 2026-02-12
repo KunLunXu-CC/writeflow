@@ -47,14 +47,8 @@ export class WriteFlow extends EventEmitter<WFEvents> {
       },
       attributes: {
         ...this.options.attributes,
+        class: 'wf-container',
       },
-      // ...this.options.editorProps,
-      // attributes: {
-      //   // add `role="textbox"` to the editor element
-      //   role: 'textbox',
-      //   ...this.options.editorProps?.attributes,
-      // },
-      // dispatchTransaction: this.dispatchTransaction.bind(this),
       state: this.createState(),
     });
 
