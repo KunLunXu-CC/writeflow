@@ -27,6 +27,11 @@ export enum PRIORITY_LEVEL {
   PREMIUM = 300,
 }
 
+export enum THEME {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
+
 /**
  * WFCommand(内部约定的命令)
  * 它们接收当前的编辑器状态和一个可选的派发函数作为参数,并返回一个布尔值或 Promise<boolean>, 表示命令是否成功执行
@@ -80,8 +85,9 @@ export interface WriteFlowValue {
   attrs?: Record<string, any>;
 }
 
-export interface WriteFlowOptions extends EditorProps {
+export interface WriteFlowOptions {
   element: Element;
+  theme?: THEME;
   extensions?: AnyExtension[];
   initValue?: WriteFlowValue; // 初始内容, 字符串格式的 JSON
 }

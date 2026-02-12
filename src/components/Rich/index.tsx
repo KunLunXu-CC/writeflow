@@ -3,7 +3,7 @@ import { useWriteFlow } from '../hooks/useWriteFlow';
 import { RichBubbleMenu } from './RichBubbleMenu';
 import { Textarea } from '@heroui/react';
 
-import '@/components/WriteFlow/theme';
+import '@/components/WriteFlow/styles';
 
 interface EditorProps {
   className?: string;

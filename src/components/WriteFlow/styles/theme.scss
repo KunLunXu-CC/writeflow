@@ -1,0 +1,56 @@
+%wf-theme {
+  /* 字体大小 */
+  --wf-text-base: 14px;
+  --wf-font-family: system-ui, -apple-system, "system-ui", "segoe ui", roboto, helvetica, arial, sans-serif, "apple color emoji", "segoe ui emoji", "segoe ui symbol", monospace;
+
+  // 圆角
+  --wf-rounded-sm: 0.25em;
+  --wf-rounded: var(--wf-rounded-sm);
+  --wf-motion-duration-fast: 0.4s;
+
+  // 行高
+  --wf-line-height-default: 1.6;
+
+  // fontSizeHeading1	H1 标签所使用的字号	number	38
+  // fontSizeHeading2	h2 标签所使用的字号	number	30
+  // fontSizeHeading3	h3 标签使用的字号	number	24
+  // fontSizeHeading4	h4 标签使用的字号	number	20
+  // fontSizeHeading5	h5 标签使用的字号
+  --wf-block-gap-vertical: 1em; // 块之间的垂直间距
+
+  // 代码块颜色
+  --wf-code-block-bg: 233 11% 16%;
+  --wf-code-block-header-bg: 223 10% 14%;
+  --wf-code-block-point-color-1: 2 96% 68%;
+  --wf-code-block-point-color-2: 39 98% 62%;
+  --wf-code-block-point-color-3: 129 60% 51%;
+}
+
+
+.wf-light {
+  @extend %wf-theme;
+
+  --wf-color-primary: 0 100% 71%; // 主题色
+  --wf-color-bg: 0 0% 100%; // 背景色
+  --wf-color-link: 210, 100%, 54%; // 链接颜色
+  
+  // 文本颜色
+  --wf-color-text: 0 0% 15%; // 最深的文本色, 为了符合 W3C 标准, 默认的文本颜色使用了该色, 同时这个颜色也是最深的中性色
+  --wf-color-text-secondary: 0 0% 55%; // 作为第二梯度的文本色, 一般用在不那么需要强化文本颜色的场景, 例如 Label 文本、Menu 的文本选中态等场景
+  --wf-color-text-tertiary: 0 0% 75%; // 第三级文本色一般用于描述性文本, 例如表单的中的补充说明文本、列表的描述性文本等场景
+  --wf-color-text-quaternary: 0 0% 90%; // 第四级文本色是最浅的文本色, 例如表单的输入提示文本、禁用色文本等
+}
+
+.wf-dark {
+  @extend %wf-theme;
+
+  // 背景颜色
+  --wf-color-bg: 220 13% 13%;
+  --wf-color-link: 207 82% 66%;
+
+  // 文本颜色
+  --wf-color-text: 220 14% 96%;
+  --wf-color-text-secondary: 220 10% 70%;
+  --wf-color-text-tertiary: 220 7% 55%;
+  --wf-color-text-quaternary: 220 6% 40%;
+}

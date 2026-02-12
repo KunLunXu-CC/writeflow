@@ -1,7 +1,7 @@
 import { EditorView } from 'prosemirror-view';
 import { DOMParser, Node } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
-import { AnyCommands, AnyHelpers, WriteFlowOptions, WFEvents } from '../types';
+import { AnyCommands, AnyHelpers, WriteFlowOptions, WFEvents, THEME } from '../types';
 import ExtensionManager from './ExtensionManager';
 import { EventEmitter } from './EventEmitter';
 
@@ -19,6 +19,7 @@ export class WriteFlow extends EventEmitter<WFEvents> {
     // this.createCommandManager();
 
     this.mount(options.element);
+    this.setTheme(options.theme);
   }
 
   private setOptions = (options: WriteFlowOptions) => {
@@ -46,7 +47,6 @@ export class WriteFlow extends EventEmitter<WFEvents> {
         ...this.extensionManager.nodeViews,
       },
       attributes: {
-        ...this.options.attributes,
         class: 'wf-container',
       },
       state: this.createState(),
@@ -94,6 +94,20 @@ export class WriteFlow extends EventEmitter<WFEvents> {
 
   private createExtensionManager = () => {
     this.extensionManager = new ExtensionManager(this.options.extensions || [], this);
+  };
+
+  /** 设置主题 */
+  public setTheme = (theme: THEME = THEME.LIGHT) => {
+    if (!this.view) {
+      return false;
+    }
+
+    // 1. 移除所有主题相关的 class
+    const classesToRemove = Object.values(THEME).map((t) => `wf-${t}`);
+    this.view.dom.classList.remove(...classesToRemove);
+
+    // 2. 添加新的主题 class
+    this.view.dom.classList.add(`wf-${theme}`);
   };
 
   /**
