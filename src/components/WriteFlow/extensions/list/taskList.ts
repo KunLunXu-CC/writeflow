@@ -28,7 +28,7 @@ export const TaskList = Node.create({
   }),
 
   addCommands: ({ writeFlow, type }) => ({
-    insertTaskList: (opts: { end?: number; start?: number; checked?: boolean }) => {
+    insertTaskList: (opts: { end?: number; start?: number; checked?: boolean } = {}) => {
       const { end, start, checked } = opts;
       writeFlow.commands.insertWrapping({
         end,

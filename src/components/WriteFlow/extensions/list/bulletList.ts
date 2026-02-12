@@ -25,7 +25,7 @@ export const BulletList = Node.create({
     ],
   }),
   addCommands: ({ writeFlow, type }) => ({
-    insertBulletList: (opts: { end?: number; start?: number }) => {
+    insertBulletList: (opts: { end?: number; start?: number } = {}) => {
       const { end, start } = opts;
       writeFlow.commands.insertWrapping({
         end,

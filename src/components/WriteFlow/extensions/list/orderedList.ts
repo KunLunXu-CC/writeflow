@@ -35,7 +35,7 @@ export const OrderedList = Node.create({
   }),
 
   addCommands: ({ writeFlow, type }) => ({
-    insertOrderedList: (opts: { end?: number; start?: number; order?: number }) => {
+    insertOrderedList: (opts: { end?: number; start?: number; order?: number } = {}) => {
       const { end, start, order } = opts;
       writeFlow.commands.insertWrapping({
         end,

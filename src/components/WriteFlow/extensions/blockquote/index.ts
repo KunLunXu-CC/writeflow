@@ -1,6 +1,6 @@
+import { InputRule } from 'prosemirror-inputrules';
 import { NodeSpec, NodeType } from 'prosemirror-model';
 import { Node } from '@/components/WriteFlow/core/Node';
-import { wrappingInputRule } from 'prosemirror-inputrules';
 
 /**
  * This extension allows you to create blockquote.
@@ -21,5 +21,21 @@ export const Blockquote = Node.create({
     },
   }),
 
-  addInputRules: ({ type }) => [wrappingInputRule(/^\s*>\s$/, type as NodeType)],
+  addCommands: ({ writeFlow, type }) => ({
+    insertBlockquote: (opts: { end?: number; start?: number } = {}) => {
+      const { end, start } = opts;
+      writeFlow.commands.insertWrapping({
+        end,
+        start,
+        nodeType: type as NodeType,
+      });
+    },
+  }),
+
+  addInputRules: ({ writeFlow }) => [
+    new InputRule(/^\s*>\s$/, (state, match, start, end) => {
+      writeFlow.commands.insertBlockquote({ end, start });
+      return writeFlow.state.tr;
+    }),
+  ],
 });
