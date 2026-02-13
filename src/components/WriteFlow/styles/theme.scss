@@ -31,7 +31,6 @@
   @extend %wf-theme;
 
   --wf-color-primary: 0 100% 71%; // 主题色
-  --wf-color-bg: 0 0% 100%; // 背景色
   --wf-color-link: 210, 100%, 54%; // 链接颜色
   
   // 文本颜色
@@ -44,13 +43,12 @@
 .wf-dark {
   @extend %wf-theme;
 
-  // 背景颜色
-  --wf-color-bg: 220 13% 13%;
-  --wf-color-link: 207 82% 66%;
+  --wf-color-primary: 0 100% 71%; // 主题色
+  --wf-color-link: 210, 100%, 54%; // 链接颜色
 
   // 文本颜色
-  --wf-color-text: 220 14% 96%;
-  --wf-color-text-secondary: 220 10% 70%;
-  --wf-color-text-tertiary: 220 7% 55%;
-  --wf-color-text-quaternary: 220 6% 40%;
+  --wf-color-text: 40, 9%, 94%; // 常规文本色, 为了符合 W3C 标准, 默认的文本颜色使用了该色, 同时这个颜色也是最深的中性色
+  --wf-color-text-secondary: 219, 14%, 71% ; // 作为第二梯度的文本色, 一般用在不那么需要强化文本颜色的场景, 例如 Label 文本、Menu 的文本选中态等场景
+  --wf-color-text-tertiary: 220, 6%, 53% ; // 第三级文本色一般用于描述性文本, 例如表单的中的补充说明文本、列表的描述性文本等场景
+  --wf-color-text-quaternary: 0, 0%, 60%; // 第四级文本色是最浅的文本色, 例如表单的输入提示文本、禁用色文本等
 }
