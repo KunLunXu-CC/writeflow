@@ -101,20 +101,12 @@ li.wf-task-list-item {
     transition: all var(--wf-motion-duration-fast);
   }
 
-  label span::before {
-    content: "";
-    width: 0.35em;
-    height: 0.57em;
-    margin-bottom: 0.1em;
-    border: 0.125em solid hsl(var(--wf-color-bg));
-    border-top: 0;
-    border-left: 0;
-    transform: rotate(45deg);
-  }
-
   label input[type="checkbox"]:checked+span {
     opacity: 1;
     border-color: hsl(var(--wf-color-primary));
     background-color: hsl(var(--wf-color-primary));
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='white'/%3E%3Cpath d='M12 5.5L7 11L4.5 8.5' stroke='black' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
+    mask-size: 100%;
+    mask-mode: luminance;
   }
 }
