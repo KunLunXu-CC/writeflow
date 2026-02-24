@@ -1,0 +1,37 @@
+
+h1.wf-heading,
+h2.wf-heading,
+h3.wf-heading,
+h4.wf-heading,
+h5.wf-heading,
+h6.wf-heading {
+  font-size: 1em;
+  font-weight: 600;
+  margin: var(--wf-block-gap-vertical) 0;
+  border-bottom: 1px dashed hsl(var(--wf-color-border));
+
+  &::before {
+    content: '#';
+    color: hsl(var(--wf-color-primary));
+    padding: {
+      right: 0.5em;
+    };
+  }
+}
+
+h1.wf-heading {
+  font-size: 1.5em;
+}
+
+h2.wf-heading {
+  font-size: 1.25em;
+}
+
+h3.wf-heading {
+  font-size: 1.125em;
+}
+
+h5.wf-heading,
+h6.wf-heading {
+  font-weight: 400;
+}

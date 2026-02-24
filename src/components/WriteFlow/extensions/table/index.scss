@@ -8,15 +8,15 @@
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
+    border: 0.0625em solid hsl(var(--wf-color-border));
   }
 
-  th, td{
+  th, td {
     position: relative;
     padding: 0.375em 0.625em;
     text-align: left;
     vertical-align: top;
-    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
+    border: 0.0625em solid hsl(var(--wf-color-border));
 
     @include mixins.wf-reset-edge-spacing;
     

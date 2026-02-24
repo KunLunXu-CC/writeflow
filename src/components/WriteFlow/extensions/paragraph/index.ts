@@ -2,6 +2,7 @@ import { Node } from '@/components/WriteFlow/core/Node';
 import { nodes as basicNodes } from 'prosemirror-schema-basic';
 import { insertParagraphBelow, insertParagraphAbove } from './commands';
 import { NodeSpec } from 'prosemirror-model';
+import './index.scss';
 
 /**
  * This extension allows you to create paragraphs.
@@ -11,7 +12,10 @@ export const Paragraph = Node.create({
   name: 'paragraph',
 
   // 决定了如果渲染节点
-  addSchema: (): NodeSpec => basicNodes.paragraph,
+  addSchema: (): NodeSpec => ({
+    ...basicNodes.paragraph,
+    toDOM: () => ['p', { class: 'wf-paragraph' }, 0],
+  }),
 
   // 注册命令, 供外部调用: writeFlow.commands.insertParagraphAfter()
   addCommands: ({ writeFlow, extension }) => ({

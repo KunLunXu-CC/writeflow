@@ -1,6 +1,7 @@
 import { Node } from '@/components/WriteFlow/core/Node';
 import { textblockTypeInputRule } from 'prosemirror-inputrules';
 import { NodeSpec, NodeType } from 'prosemirror-model';
+import './index.scss';
 
 /**
  * The heading level options.
@@ -54,7 +55,7 @@ export const Heading = Node.create<HeadingOptions>({
       // 用于往 schema 中注册节点, 会根据 this.name 注册成对应的节点
       toDOM: (node) => {
         const { level } = node.attrs;
-        return [`h${level}`, {}, 0];
+        return [`h${level}`, { class: 'wf-heading' }, 0];
       },
 
       parseDOM: levels.map((level: Level) => ({

@@ -60,3 +60,14 @@
     }
   }
 }
+
+// `` 提示内容 
+.wf-inline-code {
+  font-size: 0.9em;
+  padding: 0.065em 0.4em;
+  margin-left: 0.4em;
+  margin-right: 0.4em;
+  border-radius: var(--wf-rounded);
+  color: hsl(var(--wf-color-primary));
+  background-color: hsl(var(--wf-color-primary) / 8%);
+}

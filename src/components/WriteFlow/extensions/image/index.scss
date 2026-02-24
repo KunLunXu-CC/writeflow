@@ -28,4 +28,8 @@
     border: 1px solid hsl(var(--wf-color-primary));
     background-color: hsl(var(--wf-color-primary) / 10%);
   }
+
+  img {
+    max-width: 100%;
+  }
 }

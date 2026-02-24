@@ -3,6 +3,7 @@ import { gapCursor } from 'prosemirror-gapcursor';
 import { redo, undo, insertWrapping } from './commands';
 import { isAtEndOfDoc } from './helpers';
 import { buildDocChangeListenerPlugin } from './buildChangeListenerPlugin';
+import './index.scss';
 
 /**
  * This extension allows you to create blockquote.

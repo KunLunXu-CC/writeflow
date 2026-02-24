@@ -1,6 +1,7 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeSpec, NodeType } from 'prosemirror-model';
 import { Node } from '@/components/WriteFlow/core/Node';
+import './index.scss';
 
 /**
  * This extension allows you to create blockquote.
@@ -17,7 +18,7 @@ export const Blockquote = Node.create({
     defining: true,
 
     toDOM: () => {
-      return ['blockquote', {}, 0];
+      return ['blockquote', { class: 'wf-blockquote' }, 0];
     },
   }),
 

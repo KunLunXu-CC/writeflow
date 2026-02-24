@@ -96,8 +96,8 @@ li.wf-task-list-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 0.0625em solid hsl(var(--wf-color-text-quaternary));
-    background-color: hsl(var(--wf-color-text-quaternary) / 10%);
+    background-color: hsl(var(--wf-color-text) / 10%);
+    border: 0.0625em solid hsl(var(--wf-color-border));
     transition: all var(--wf-motion-duration-fast);
   }
 

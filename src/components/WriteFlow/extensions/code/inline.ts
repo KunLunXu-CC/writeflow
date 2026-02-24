@@ -15,7 +15,7 @@ export const InlineCode = Mark.create({
     exitable: true,
 
     toDOM() {
-      return ['code', {}, 0];
+      return ['code', { class: 'wf-inline-code' }, 0];
     },
 
     parseDOM: [
