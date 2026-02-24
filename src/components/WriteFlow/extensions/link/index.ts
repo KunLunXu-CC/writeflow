@@ -1,12 +1,9 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkSpec, MarkType } from 'prosemirror-model';
 import { buildClickPlugin } from './buildClickPlugin';
-import { marks as basicMarks } from 'prosemirror-schema-basic';
 import { Mark } from '@/components/WriteFlow/core/Mark';
 
 import './index.scss';
-
-console.log('%c [ basicMarks ]-8', 'font-size:13px; background:pink; color:#bf2c9f;', basicMarks);
 
 const inputRegex = /\[(?<title>[^\]]+)\]\((?<href>https?:\/\/[^\s)]+)(?: "([^"]+)")?\)$/;
 

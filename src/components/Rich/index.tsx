@@ -1,54 +1,27 @@
-import { WriteFlowContext } from '@/components/WriteFlowContext';
-import { useWriteFlow } from '../hooks/useWriteFlow';
+import { FC, ReactNode } from 'react';
 import { RichBubbleMenu } from './RichBubbleMenu';
-import { Textarea } from '@heroui/react';
-import { THEME } from '../WriteFlow/types';
+import { useCreateWriteFlow } from '../hooks/useCreateWriteFlow';
+import { WriteFlowContext } from '@/components/WriteFlowContext';
 
 import '@/components/WriteFlow/styles';
-import './index.scss';
 
 interface EditorProps {
   className?: string;
+  children?: ReactNode;
 }
 
-export const WriteFlow = (props: EditorProps) => {
-  const { className } = props;
-  const { writeFlow, writeFlowDomRef } = useWriteFlow();
-
-  const handleChange = (value: string) => {
-    if (writeFlow) {
-      writeFlow.commands.initDocFromMarkdown({ markdownText: value });
-    }
-  };
-
-  const handDarkTheme = () => {
-    if (writeFlow) {
-      writeFlow.setTheme(THEME.DARK);
-    }
-  };
+export const WriteFlow: FC<EditorProps> = (props: EditorProps) => {
+  const { className, children } = props;
+  const { writeFlow, writeFlowDomRef } = useCreateWriteFlow();
 
   return (
-    <>
-      <div className="w-full max-w-[600px] py-6 flex gap-2">
-        <div className="flex-1">
-          <Textarea
-            minRows={1}
-            onValueChange={handleChange}
-          />
-        </div>
-        <div
-          className="flex-none"
-          onClick={handDarkTheme}>
-          123
-        </div>
-      </div>
-      <WriteFlowContext.Provider value={writeFlow}>
-        <div
-          ref={writeFlowDomRef}
-          className={className}
-        />
-        <RichBubbleMenu />
-      </WriteFlowContext.Provider>
-    </>
+    <WriteFlowContext.Provider value={writeFlow}>
+      <div
+        ref={writeFlowDomRef}
+        className={className}
+      />
+      <RichBubbleMenu />
+      {children}
+    </WriteFlowContext.Provider>
   );
 };

@@ -198,7 +198,7 @@ const initValue = {
   ],
 } as WriteFlowValue;
 
-export const useWriteFlow = () => {
+export const useCreateWriteFlow = () => {
   const writeFlowDomRef = useRef(null);
   const [writeFlow, setWriteFlow] = useState<WriteFlow | null>(null);
 
