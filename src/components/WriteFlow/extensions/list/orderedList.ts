@@ -30,6 +30,11 @@ export const OrderedList = Node.create({
     parseDOM: [
       {
         tag: 'ol',
+        getAttrs: (dom) => {
+          const startAttr = dom.getAttribute('start');
+          const order = startAttr ? parseInt(startAttr, 10) : 1;
+          return { order };
+        },
       },
     ],
   }),
