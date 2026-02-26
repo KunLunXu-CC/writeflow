@@ -20,6 +20,12 @@ export const Blockquote = Node.create({
     toDOM: () => {
       return ['blockquote', { class: 'wf-blockquote' }, 0];
     },
+
+    parseDOM: [
+      {
+        tag: 'blockquote',
+      },
+    ],
   }),
 
   addCommands: ({ writeFlow, type }) => ({

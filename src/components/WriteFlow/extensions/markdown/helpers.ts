@@ -42,11 +42,11 @@ export const getSliceFromMarkdown: WFHelper<Slice | null, { markdownText: string
 
   // 3. DOM -> ProseMirror Slice (自动根据 schema 匹配)
   const slice = DOMParser.fromSchema(schema).parseSlice(tempDiv);
-  console.log('%c [ getSliceFromMarkdown ]-96', 'font-size:13px; background:pink; color:#bf2c9f;', {
-    html,
-    slice,
-    markdownText,
-    processedMarkdown,
-  });
+  // console.log('%c [ getSliceFromMarkdown ]-96', 'font-size:13px; background:pink; color:#bf2c9f;', {
+  //   html,
+  //   slice,
+  //   markdownText,
+  //   processedMarkdown,
+  // });
   return slice;
 };
