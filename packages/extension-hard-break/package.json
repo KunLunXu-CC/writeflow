@@ -1,0 +1,8 @@
+{
+  "name": "@kunlunxu/wf-extension-hard-break",
+  "version": "0.1.1",
+  "type": "module",
+  "dependencies": {
+    "prosemirror-model": "^1.25.3"
+  }
+}

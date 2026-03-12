@@ -1,0 +1,9 @@
+{
+  "name": "@kunlunxu/wf-extension-bubble-menu",
+  "version": "0.1.1",
+  "type": "module",
+  "dependencies": {
+    "prosemirror-state": "^1.4.3",
+    "prosemirror-view": "^1.41.1"
+  }
+}

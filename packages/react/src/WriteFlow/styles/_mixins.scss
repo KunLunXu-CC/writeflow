@@ -1,0 +1,10 @@
+// 重置首尾元素的外边距
+@mixin wf-reset-edge-spacing {
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
+}

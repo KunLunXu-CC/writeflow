@@ -1,0 +1,9 @@
+{
+  "name": "@kunlunxu/wf-extension-heading",
+  "version": "0.1.1",
+  "type": "module",
+  "dependencies": {
+    "prosemirror-inputrules": "^1.5.0",
+    "prosemirror-model": "^1.25.3"
+  }
+}
