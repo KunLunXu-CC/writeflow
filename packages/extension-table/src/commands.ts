@@ -6,7 +6,7 @@ import {
   deleteRow,
   deleteColumn,
 } from 'prosemirror-tables';
-import { WFCommand } from '../../types';
+import { WFCommand } from '@kunlunxu/wf-core';
 
 /**
  * 合并选中的单元格

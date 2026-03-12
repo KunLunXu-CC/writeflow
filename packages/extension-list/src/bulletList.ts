@@ -1,5 +1,5 @@
 import { InputRule } from 'prosemirror-inputrules';
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 import { NodeSpec, NodeType } from 'prosemirror-model';
 
 /**

@@ -1,4 +1,4 @@
-import { WFCommand } from '../../types';
+import { WFCommand } from '@kunlunxu/wf-core';
 import { Selection } from 'prosemirror-state';
 
 /**

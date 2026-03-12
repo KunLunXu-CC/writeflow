@@ -1,12 +1,13 @@
 import { ReactElement, ReactNode } from 'react';
 
 export interface BubbleMenuItemProps {
-  key: string;
+  // Prefer `id`; keep `key` for backward compatibility.
+  id?: string;
+  key?: string;
   icon: string;
   tooltip?: ReactNode;
   onClick?: () => void;
   className?: string;
-
   shouldShow?: () => boolean;
 }
 

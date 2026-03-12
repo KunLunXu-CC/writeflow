@@ -1,6 +1,5 @@
 import { Plugin } from 'prosemirror-state';
-import { WriteFlow } from '@/components/WriteFlow/core/WriteFlow';
-import { WFEventKeys } from '../../types';
+import { WriteFlow, WFEventKeys } from '@kunlunxu/wf-core';
 
 export const buildDocChangeListenerPlugin = (args: { writeFlow: WriteFlow }) => {
   const { writeFlow } = args;

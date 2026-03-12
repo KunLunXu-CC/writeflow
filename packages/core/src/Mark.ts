@@ -1,11 +1,7 @@
-import { EXTENSIONS_TYPE } from '@/components/WriteFlow/types';
-import {
-  Extendable,
-  ExtendableConfig,
-} from '@/components/WriteFlow/core/Extendable';
+import { EXTENSIONS_TYPE } from './types';
+import { Extendable, ExtendableConfig } from './Extendable';
 
-export interface MarkConfig<Options = unknown>
-  extends ExtendableConfig<Options> {
+export interface MarkConfig<Options = unknown> extends ExtendableConfig<Options> {
   name: string;
 }
 
@@ -20,9 +16,7 @@ export class Mark<Options = unknown> extends Extendable<Options> {
    * 创建一个新的 Mark 实例
    * @param config - 标记配置对象或返回配置对象的函数
    */
-  static create<Options = unknown>(
-    config: MarkConfig<Options> | (() => MarkConfig<Options>),
-  ) {
+  static create<Options = unknown>(config: MarkConfig<Options> | (() => MarkConfig<Options>)) {
     const resolvedConfig = typeof config === 'function' ? config?.() : config;
     return new Mark<Options>(resolvedConfig);
   }

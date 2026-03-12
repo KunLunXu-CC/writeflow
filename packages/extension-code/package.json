@@ -12,6 +12,7 @@
     "@codemirror/legacy-modes": "^6.5.1",
     "@codemirror/state": "^6.5.2",
     "@codemirror/view": "^6.38.3",
+    "@kunlunxu/wf-core": "workspace:^",
     "@uiw/codemirror-theme-dracula": "^4.25.2",
     "prosemirror-commands": "^1.7.1",
     "prosemirror-history": "^1.4.1",
@@ -19,5 +20,7 @@
     "prosemirror-model": "^1.25.3",
     "prosemirror-state": "^1.4.3",
     "prosemirror-view": "^1.41.1"
-  }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js"
 }

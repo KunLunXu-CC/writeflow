@@ -1,2 +1,2 @@
-import '@/components/WriteFlow/styles/theme.scss';
-import '@/components/WriteFlow/styles/index.scss';
+import './index.scss';
+import './theme.scss';

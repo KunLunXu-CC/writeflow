@@ -1,10 +1,13 @@
 import clsx from 'clsx';
-import { BubbleMenuItemProps } from '.';
-import { Tooltip, Button } from '@heroui/react';
-import Icon from '@/components/Icon';
+import { Button, Tooltip } from '@heroui/react';
+import { BubbleMenuItemProps } from './types';
+import { Icon } from '..';
 
-export const BubbleMenuItem: React.FC<BubbleMenuItemProps> = (props) => {
+type BubbleMenuItemButtonProps = Omit<BubbleMenuItemProps, 'key'>;
+
+export const BubbleMenuItem: React.FC<BubbleMenuItemButtonProps> = (props) => {
   const { icon, onClick, tooltip, className } = props;
+
   return (
     <Tooltip
       radius="sm"
@@ -15,7 +18,7 @@ export const BubbleMenuItem: React.FC<BubbleMenuItemProps> = (props) => {
         variant="light"
         onPress={onClick}
         className={clsx(
-          'inline-flex justify-center items-center gap-1 min-w-0 size-8 p-0',
+          'inline-flex size-8 min-w-0 items-center justify-center gap-1 p-0',
           className,
         )}>
         <Icon

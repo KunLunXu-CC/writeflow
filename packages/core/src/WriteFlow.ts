@@ -1,7 +1,7 @@
 import { EditorView } from 'prosemirror-view';
 import { DOMParser, Node } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
-import { AnyCommands, AnyHelpers, WriteFlowOptions, WFEvents, THEME } from '../types';
+import { AnyCommands, AnyHelpers, WriteFlowOptions, WFEvents, THEME } from './types';
 import ExtensionManager from './ExtensionManager';
 import { EventEmitter } from './EventEmitter';
 

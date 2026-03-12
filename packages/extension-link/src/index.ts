@@ -1,7 +1,7 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkSpec, MarkType } from 'prosemirror-model';
 import { buildClickPlugin } from './buildClickPlugin';
-import { Mark } from '@/components/WriteFlow/core/Mark';
+import { Mark } from '@kunlunxu/wf-core';
 
 import './index.scss';
 

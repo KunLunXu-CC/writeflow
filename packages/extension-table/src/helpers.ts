@@ -1,6 +1,6 @@
 import { CellSelection } from 'prosemirror-tables';
 import { Node } from 'prosemirror-model';
-import { WFHelper } from '../../types';
+import { WFHelper } from '@kunlunxu/wf-core';
 export interface SelectedCell {
   node: Node;
   pos: number;

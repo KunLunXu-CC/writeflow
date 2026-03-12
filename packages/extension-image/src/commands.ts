@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { WFCommand } from '../../types';
+import { WFCommand } from '@kunlunxu/wf-core';
 import { UPLOAD_STATUS } from './types';
 import { readFileAsDataURL } from './utils';
 import { Attrs } from 'prosemirror-model';

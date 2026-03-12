@@ -1,7 +1,7 @@
 import { liftListItem, sinkListItem, splitListItem } from 'prosemirror-schema-list';
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 import { NodeSpec, NodeType } from 'prosemirror-model';
-import { PRIORITY_LEVEL } from '@/components/WriteFlow/types';
+import { PRIORITY_LEVEL } from '@kunlunxu/wf-core';
 
 /**
  * 列表项

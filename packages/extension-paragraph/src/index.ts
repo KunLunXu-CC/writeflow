@@ -1,4 +1,4 @@
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 import { nodes as basicNodes } from 'prosemirror-schema-basic';
 import { insertParagraphBelow, insertParagraphAbove } from './commands';
 import { NodeSpec } from 'prosemirror-model';

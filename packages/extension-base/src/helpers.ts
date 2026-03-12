@@ -1,4 +1,4 @@
-import { WFHelper } from '../../types';
+import { WFHelper } from '@kunlunxu/wf-core';
 
 /**
  * 是否位于文档的末尾

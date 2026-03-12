@@ -1,6 +1,5 @@
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node, PRIORITY_LEVEL } from '@kunlunxu/wf-core';
 import { NodeSpec, NodeType } from 'prosemirror-model';
-import { PRIORITY_LEVEL } from '@/components/WriteFlow/types';
 import { listItem, sinkListItem, liftListItem, splitListItem } from 'prosemirror-schema-list';
 
 /**

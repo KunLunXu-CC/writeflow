@@ -1,4 +1,4 @@
-import { WFCommand } from '../../types';
+import { WFCommand } from '@kunlunxu/wf-core';
 
 export interface InsertMarkdownOptions {
   markdownText: string;

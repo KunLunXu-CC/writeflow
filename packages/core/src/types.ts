@@ -1,10 +1,9 @@
-import { Extendable } from './core/Extendable';
-import type { WriteFlow } from './core/WriteFlow';
-import type { Node, NodeConfig } from './core/Node';
-import type { Mark, MarkConfig } from './core/Mark';
-import type { ExtendableConfig } from './core/Extendable';
+import { Extendable } from './Extendable';
+import type { WriteFlow } from './WriteFlow';
+import type { Node, NodeConfig } from './Node';
+import type { Mark, MarkConfig } from './Mark';
+import type { ExtendableConfig } from './Extendable';
 import { MarkType, NodeType, Schema, Node as PMNode } from 'prosemirror-model';
-import { EditorProps } from 'prosemirror-view';
 export { WriteFlow, ExtendableConfig, NodeConfig };
 
 export type Primitive = null | undefined | string | number | boolean | symbol | bigint;

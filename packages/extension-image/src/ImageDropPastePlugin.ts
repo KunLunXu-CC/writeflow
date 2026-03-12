@@ -1,5 +1,5 @@
 import { Plugin } from 'prosemirror-state';
-import { WriteFlow } from '../../types';
+import { WriteFlow } from '@kunlunxu/wf-core';
 import { EditorProps } from 'prosemirror-view';
 import { filterImageFiles } from './utils';
 

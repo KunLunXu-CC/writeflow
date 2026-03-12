@@ -1,11 +1,7 @@
-import { EXTENSIONS_TYPE } from '@/components/WriteFlow/types';
-import {
-  Extendable,
-  ExtendableConfig,
-} from '@/components/WriteFlow/core/Extendable';
+import { EXTENSIONS_TYPE } from './types';
+import { Extendable, ExtendableConfig } from './Extendable';
 
-export interface NodeConfig<Options = unknown>
-  extends ExtendableConfig<Options> {
+export interface NodeConfig<Options = unknown> extends ExtendableConfig<Options> {
   name: string;
 }
 
@@ -20,9 +16,7 @@ export class Node<Options = unknown> extends Extendable<Options> {
    * 创建一个新的 Node 实例
    * @param config - 节点配置对象或返回配置对象的函数
    */
-  static create<Options = unknown>(
-    config: NodeConfig<Options> | (() => NodeConfig<Options>),
-  ) {
+  static create<Options = unknown>(config: NodeConfig<Options> | (() => NodeConfig<Options>)) {
     const resolvedConfig = typeof config === 'function' ? config?.() : config;
     return new Node<Options>(resolvedConfig);
   }

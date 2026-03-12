@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google';
 import type { Metadata } from 'next';
-import Provider from '@/app/Provider';
+// import Provider from '@/app/Provider';
 import { ReactNode } from 'react';
 import '../global.tailwindcss.css';
 
@@ -21,7 +21,8 @@ export default function RootLayout({
       lang="en"
       className="light">
       <body className={inter.className}>
-        <Provider>{children}</Provider>
+        {/* <Provider>{children}</Provider> */}
+        {children}
       </body>
     </html>
   );

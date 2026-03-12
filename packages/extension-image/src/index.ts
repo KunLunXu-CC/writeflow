@@ -1,4 +1,4 @@
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 import { ImageDropPastePlugin } from './ImageDropPastePlugin';
 import { insertImageByFile, insertImage, setImageByUploadId } from './commands';
 import { NodeSpec } from 'prosemirror-model';

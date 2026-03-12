@@ -1,4 +1,4 @@
-import { Mark } from '@/components/WriteFlow/core/Mark';
+import { Mark } from '@kunlunxu/wf-core';
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkType, MarkSpec } from 'prosemirror-model';
 

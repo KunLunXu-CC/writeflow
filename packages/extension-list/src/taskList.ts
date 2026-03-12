@@ -1,7 +1,7 @@
 import { NodeSpec, NodeType } from 'prosemirror-model';
 import { bulletList } from 'prosemirror-schema-list';
 import { InputRule } from 'prosemirror-inputrules';
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 
 /**
  * 任务列表

@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it';
-import { WFHelper } from '../../types';
+import { WFHelper } from '@kunlunxu/wf-core';
 import { Slice } from 'prosemirror-model';
 import { DOMParser } from 'prosemirror-model';
 import { tasklist } from '@mdit/plugin-tasklist';

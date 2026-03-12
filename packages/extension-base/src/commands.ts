@@ -1,6 +1,6 @@
 import { redo as pmRedo, undo as pmUndo } from 'prosemirror-history';
 import { findWrapping } from 'prosemirror-transform';
-import { WFCommand } from '../../types';
+import { WFCommand } from '@kunlunxu/wf-core';
 import { NodeType, Attrs } from 'prosemirror-model';
 
 interface InsertWrappingOpts {

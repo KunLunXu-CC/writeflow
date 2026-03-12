@@ -1,4 +1,4 @@
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 import { textblockTypeInputRule } from 'prosemirror-inputrules';
 import { NodeSpec, NodeType } from 'prosemirror-model';
 import './index.scss';

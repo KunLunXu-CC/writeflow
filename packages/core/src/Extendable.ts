@@ -4,7 +4,7 @@ import {
   PRIORITY_LEVEL,
   EXTENSIONS_TYPE,
   ExtendableFunContext,
-} from '@/components/WriteFlow/types';
+} from './types';
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkSpec, NodeSpec } from 'prosemirror-model';
 import { Command, Plugin } from 'prosemirror-state';

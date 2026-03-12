@@ -4,7 +4,7 @@ import {
   AnyExtension,
   EXTENSIONS_TYPE,
   ExtendableFunContext,
-} from '../types';
+} from './types';
 import { pick, sortBy } from 'lodash-es';
 import { Plugin } from 'prosemirror-state';
 import { keymap } from 'prosemirror-keymap';
@@ -15,8 +15,8 @@ import { NodeViewConstructor } from 'prosemirror-view';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
 import { nodes as basicNodes } from 'prosemirror-schema-basic';
 import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
-import { getExtensionField } from '../helpers/getExtensionField';
-import { getSchemaTypeByName } from '../helpers/getSchemaTypeByName';
+import { getExtensionField } from './helpers/getExtensionField';
+import { getSchemaTypeByName } from './helpers/getSchemaTypeByName';
 
 /**
  * ExtensionManager 扩展管理器

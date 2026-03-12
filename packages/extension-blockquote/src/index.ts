@@ -1,6 +1,6 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { NodeSpec, NodeType } from 'prosemirror-model';
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 import './index.scss';
 
 /**

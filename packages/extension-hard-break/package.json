@@ -3,6 +3,9 @@
   "version": "0.1.1",
   "type": "module",
   "dependencies": {
+    "@kunlunxu/wf-core": "workspace:^",
     "prosemirror-model": "^1.25.3"
-  }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js"
 }

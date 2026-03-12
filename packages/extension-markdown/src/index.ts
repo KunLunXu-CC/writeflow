@@ -1,4 +1,4 @@
-import { Extendable } from '@/components/WriteFlow/core/Extendable';
+import { Extendable } from '@kunlunxu/wf-core';
 import { getSliceFromMarkdown } from './helpers';
 import { insertMarkdown, initDocFromMarkdown } from './commands';
 

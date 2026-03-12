@@ -1,4 +1,4 @@
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 import { baseTableNodes } from '.';
 import { NodeSpec } from 'prosemirror-model';
 

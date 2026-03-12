@@ -2,6 +2,8 @@
   "name": "@kunlunxu/wf-core",
   "version": "0.1.1",
   "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "dependencies": {
     "lodash-es": "^4.17.22",
     "prosemirror-commands": "^1.7.1",

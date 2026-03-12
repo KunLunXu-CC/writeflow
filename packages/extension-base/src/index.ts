@@ -1,4 +1,4 @@
-import { Extendable } from '@/components/WriteFlow/core/Extendable';
+import { Extendable } from '@kunlunxu/wf-core';
 import { gapCursor } from 'prosemirror-gapcursor';
 import { redo, undo, insertWrapping } from './commands';
 import { isAtEndOfDoc } from './helpers';

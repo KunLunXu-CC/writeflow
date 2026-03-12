@@ -1,5 +1,5 @@
 import { baseTableNodes } from '.';
-import { Node } from '@/components/WriteFlow/core/Node';
+import { Node } from '@kunlunxu/wf-core';
 import { InputRule } from 'prosemirror-inputrules';
 import { TextSelection } from 'prosemirror-state';
 import { goToNextCell, tableEditing, columnResizing } from 'prosemirror-tables';
