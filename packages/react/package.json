@@ -2,9 +2,31 @@
   "name": "@kunlunxu/wf-react",
   "version": "0.1.1",
   "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup --config ../../tsup.config.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@heroui/react": "^2.8.4",
     "@kunlunxu/wf-core": "workspace:^",
+    "prosemirror-state": "^1.4.3",
     "clsx": "^2.1.1",
     "next": "15.5.4",
     "react": "19.1.1",
@@ -12,7 +34,5 @@
   },
   "optionalDependencies": {
     "@kunlunxu/wf-extension-bubble-menu": "workspace:^"
-  },
-  "main": "dist/index.cjs",
-  "module": "dist/index.js"
+  }
 }

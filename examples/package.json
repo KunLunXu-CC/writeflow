@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 3001"
+    "start": "next start -p 3001",
+    "lint": "next lint"
   },
   "dependencies": {
     "@heroui/react": "^2.8.4",

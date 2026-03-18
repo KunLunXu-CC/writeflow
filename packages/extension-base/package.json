@@ -2,6 +2,24 @@
   "name": "@kunlunxu/wf-extension-base",
   "version": "0.1.1",
   "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "src"],
+  "sideEffects": ["**/*.css", "**/*.scss"],
+  "scripts": {
+    "build": "tsup --config ../../tsup.config.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@kunlunxu/wf-core": "workspace:^",
     "prosemirror-gapcursor": "^1.3.2",
@@ -9,7 +27,5 @@
     "prosemirror-model": "^1.25.3",
     "prosemirror-state": "^1.4.3",
     "prosemirror-transform": "^1.11.0"
-  },
-  "main": "dist/index.cjs",
-  "module": "dist/index.js"
+  }
 }

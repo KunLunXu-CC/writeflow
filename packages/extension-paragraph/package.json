@@ -2,12 +2,28 @@
   "name": "@kunlunxu/wf-extension-paragraph",
   "version": "0.1.1",
   "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": ["dist", "src"],
+  "sideEffects": ["**/*.css", "**/*.scss"],
+  "scripts": {
+    "build": "tsup --config ../../tsup.config.ts"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@kunlunxu/wf-core": "workspace:^",
     "prosemirror-model": "^1.25.3",
     "prosemirror-schema-basic": "^1.2.4",
     "prosemirror-state": "^1.4.3"
-  },
-  "main": "dist/index.cjs",
-  "module": "dist/index.js"
+  }
 }

@@ -15,6 +15,9 @@ node_modules
 
 # production
 build
+dist
+.turbo
+.cache
 
 # misc
 .DS_Store
