@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@kunlunxu/wf", "@kunlunxu/wf-examples"]
+  "ignore": ["@kunlunxu/wf-examples"]
 }
