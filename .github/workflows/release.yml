@@ -41,6 +41,9 @@ jobs:
         with:
           version: pnpm version-packages
           publish: pnpm release
+          # Keep the auto-generated release commit compliant with commitlint.
+          commit: 'feat(release): version packages'
+          title: 'feat(release): version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
