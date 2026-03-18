@@ -1,5 +1,3 @@
-@use './mixins';
-
 // 整体设置
 .wf-container {
   outline: none;
@@ -11,5 +9,11 @@
   font-family: var(--wf-font-family);
   line-height: var(--wf-line-height-default);
 
-  @include mixins.wf-reset-edge-spacing;
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
 }

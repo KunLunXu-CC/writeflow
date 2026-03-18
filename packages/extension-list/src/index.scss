@@ -1,5 +1,3 @@
-@use '../../styles/mixins';
-
 .wf-task-list,
 .wf-bullet-list,
 .wf-ordered-list {
@@ -43,7 +41,13 @@
 
 li.wf-list-item,
 li.wf-task-list-item {
-  @include mixins.wf-reset-edge-spacing;
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
 
   // 列表项内的段落和列表, 重置 margin 以避免嵌套时出现过大的间距
   p, ul, ol {

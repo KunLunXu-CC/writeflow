@@ -1,12 +1,16 @@
 
 
-@use '../../styles/mixins';
-
 .wf-blockquote {
   padding: 0.375em 0.75em;
   margin: var(--wf-block-gap-vertical) 0;
   background: hsl(var(--wf-color-text) / 4%);
   border-left: 0.25em solid hsl(var(--wf-color-primary));
 
-  @include mixins.wf-reset-edge-spacing;
+  > *:first-child {
+    margin-top: 0;
+  }
+
+  > *:last-child {
+    margin-bottom: 0;
+  }
 }
