@@ -7,19 +7,20 @@ description: 适用于搭建或修复基于 Turbo + tsup + Changesets 的 pnpm w
 
 ## 何时使用
 
-当用户提出以下诉求时触发本技能：
+当用户希望在 `pnpm workspace` 中新增构建与发布流程时被调用
 
-- 搭建 monorepo 的构建与发布流程
-- 迁移到 Turbo / Changesets
-- 批量发布多个包
-- 修复 pnpm workspace 下的发布流水线问题
+适用仓库特征：
 
-本技能适用于如下仓库结构：
-
+- 当前项目是一个 monorepo，使用 pnpm workspace 管理多个包
 - 可发布库包位于 `packages/*`
-- 存在演示应用（如 `examples`）但不参与发布
+- 可能存在演示应用（如 `examples`），但不参与正式发布流程
 
 ## 目标状态
+
+<!-- - 从零搭建 monorepo 的构建、版本管理与发布链路
+- 将现有仓库迁移到 `Turbo` / `Changesets`
+- 对 `packages/*` 下多个包进行统一构建与批量发布
+- 修复 workspace 中的构建顺序、包过滤、发布脚本或 CI 流水线问题 -->
 
 目标是将仓库规范到以下状态。
 
@@ -67,11 +68,9 @@ description: 适用于搭建或修复基于 Turbo + tsup + Changesets 的 pnpm w
 - Release 使用 `changesets/action@v1`
 - 发布前完成 npm 鉴权配置
 
-8. 忽略构建与缓存产物
-- `.gitignore` 包含：
-  - `dist`
-  - `.turbo`
-  - `**/.turbo`
+8. 忽略构建与缓存产物: 修改 `.gitignore` 包含：
+- `dist`
+- `.turbo`
 
 ## 执行流程
 
