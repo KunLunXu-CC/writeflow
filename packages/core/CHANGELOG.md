@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 1.0.3
+
+### Patch Changes
+
+- 03c623d: update style
+
 ## 1.0.2
 
 ### Patch Changes

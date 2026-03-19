@@ -1,5 +1,13 @@
 # @kunlunxu/wf-extension-list
 
+## 1.0.3
+
+### Patch Changes
+
+- 03c623d: update style
+- Updated dependencies [03c623d]
+  - @kunlunxu/wf-core@1.0.3
+
 ## 1.0.2
 
 ### Patch Changes
