@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 1.0.2
+
+### Patch Changes
+
+- 7ac673c: Link generated CSS back to package entry files so bundlers can load styles automatically when importing the library.
+
 ## 1.0.1
 
 ### Patch Changes
