@@ -1,4 +1,4 @@
-import { WriteFlow } from '@kunlunxu/wf-core';
+import type { WriteFlow } from '@kunlunxu/wf-core';
 import { createContext, useContext } from 'react';
 
 export const WriteFlowContext = createContext<WriteFlow | null>(null);

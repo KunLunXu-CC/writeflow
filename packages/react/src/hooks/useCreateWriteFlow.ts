@@ -1,5 +1,5 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
-import { WriteFlow, WriteFlowOptions } from '@kunlunxu/wf-core';
+import { WriteFlow, type WriteFlowOptions } from '@kunlunxu/wf-core';
 
 export type UseCreateWriteFlow = (opts?: Pick<WriteFlowOptions, 'initValue' | 'extensions'>) => {
   writeFlow: WriteFlow | null;

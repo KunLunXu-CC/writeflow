@@ -1,3 +1,4 @@
+import './styles';
 import { EditorView } from 'prosemirror-view';
 import { DOMParser, Node } from 'prosemirror-model';
 import { EditorState, Plugin } from 'prosemirror-state';
