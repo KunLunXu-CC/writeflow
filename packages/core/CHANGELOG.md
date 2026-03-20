@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 1.0.4
+
+### Patch Changes
+
+- a5fea20: update wf-react build config
+
 ## 1.0.3
 
 ### Patch Changes
