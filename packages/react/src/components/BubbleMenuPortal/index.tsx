@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import { buildBubbleMenuPlugin } from '@kunlunxu/wf-extension-bubble-menu';
 import { useWriteFlowContext } from '..';
 import { BubbleMenuPortalProps } from './types';
+export * from './types';
 
 const RANGE_ATTRIBUTE_NAME = 'data-range';
 
@@ -28,7 +29,7 @@ export const BubbleMenuPortal: React.FC<BubbleMenuPortalProps> = ({ children }) 
       element: portalElement,
     });
 
-    writeFlow.registerPlugin(bubbleMenuPluginRef.current);
+    writeFlow.registerPlugin(bubbleMenuPluginRef.current!);
 
     return () => {
       if (!bubbleMenuPluginRef.current) return;
