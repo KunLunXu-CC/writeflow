@@ -1,5 +1,14 @@
 # @kunlunxu/wf-react
 
+## 1.0.4
+
+### Patch Changes
+
+- a5fea20: update wf-react build config
+- Updated dependencies [a5fea20]
+  - @kunlunxu/wf-core@1.0.4
+  - @kunlunxu/wf-extension-bubble-menu@1.0.2
+
 ## 1.0.3
 
 ### Patch Changes
