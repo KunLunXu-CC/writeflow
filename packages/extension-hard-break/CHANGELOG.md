@@ -1,5 +1,13 @@
 # @kunlunxu/wf-extension-hard-break
 
+## 1.0.2
+
+### Patch Changes
+
+- a5fea20: update wf-react build config
+- Updated dependencies [a5fea20]
+  - @kunlunxu/wf-core@1.0.4
+
 ## 1.0.1
 
 ### Patch Changes
