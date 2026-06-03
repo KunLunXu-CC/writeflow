@@ -18,6 +18,9 @@
     "src"
   ],
   "sideEffects": [
+    "src/index.ts",
+    "dist/index.js",
+    "dist/index.cjs",
     "**/*.css",
     "**/*.scss"
   ],
