@@ -1,10 +1,12 @@
 import { cloneElement, useEffect, useRef, useState } from 'react';
-import { Plugin } from 'prosemirror-state';
 import { createPortal } from 'react-dom';
-import { buildBubbleMenuPlugin } from '@kunlunxu/wf-extension-bubble-menu';
-import { useWriteFlowContext } from '..';
-import { BubbleMenuPortalProps } from './types';
-export * from './types';
+import { Plugin } from 'prosemirror-state';
+import { useWriteFlowContext } from '@kunlunxu/wf-core';
+import { buildBubbleMenuPlugin } from './buildPlugin';
+
+export interface BubbleMenuPortalProps {
+  children: React.ReactElement;
+}
 
 const RANGE_ATTRIBUTE_NAME = 'data-range';
 
@@ -29,7 +31,7 @@ export const BubbleMenuPortal: React.FC<BubbleMenuPortalProps> = ({ children }) 
       element: portalElement,
     });
 
-    writeFlow.registerPlugin(bubbleMenuPluginRef.current!);
+    writeFlow.registerPlugin(bubbleMenuPluginRef.current);
 
     return () => {
       if (!bubbleMenuPluginRef.current) return;

@@ -154,11 +154,20 @@ export default class ExtensionManager {
   private createNodeViews = () => {
     this.nodeViews = this.extensions.reduce<Record<string, NodeViewConstructor>>(
       (acc, extension) => {
-        const addNodeView = getExtensionField(extension, 'addNodeView');
+        const NodeView = getExtensionField(extension, 'nodeView');
         const context = this.getContext(extension);
 
-        if (addNodeView) {
-          acc[extension.name] = addNodeView(context);
+        if (NodeView) {
+          acc[extension.name] = (node, view, getPos, decorations, innerDecorations) =>
+            new NodeView({
+              node,
+              view,
+              getPos,
+              context,
+              decorations,
+              innerDecorations,
+            });
+          return acc;
         }
 
         return acc;

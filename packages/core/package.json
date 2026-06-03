@@ -39,5 +39,13 @@
     "prosemirror-schema-basic": "^1.2.4",
     "prosemirror-state": "^1.4.3",
     "prosemirror-view": "^1.41.1"
+  },
+  "peerDependencies": {
+    "react": ">=19 <20",
+    "react-dom": ">=19 <20"
+  },
+  "devDependencies": {
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
   }
 }

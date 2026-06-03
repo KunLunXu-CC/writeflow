@@ -1,5 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from 'react';
-import { WriteFlow, type WriteFlowOptions } from '@kunlunxu/wf-core';
+import { WriteFlow } from '../WriteFlow';
+import type { WriteFlowOptions } from '../types';
 
 export type UseCreateWriteFlow = (opts?: Pick<WriteFlowOptions, 'initValue' | 'extensions'>) => {
   writeFlow: WriteFlow | null;
@@ -24,6 +25,7 @@ export const useCreateWriteFlow: UseCreateWriteFlow = (opts) => {
     setWriteFlow(newWriteFlow);
 
     return () => {
+      newWriteFlow.destroy();
       setWriteFlow(null);
     };
   }, [extensions]);

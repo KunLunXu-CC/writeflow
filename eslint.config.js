@@ -10,6 +10,7 @@ const eslintConfig = [
   ...compat.config({
     extends: ['next/core-web-vitals', 'next/typescript', 'prettier'],
     rules: {
+      '@next/next/no-html-link-for-pages': 'off',
       '@typescript-eslint/no-explicit-any': [1],
     },
   }),

@@ -1,5 +1,4 @@
-import { THEME } from '@/components/WriteFlow/types';
-import { useWriteFlowContext } from '@/components/WriteFlowContext';
+import { THEME, useWriteFlowContext } from '@kunlunxu/wf-core';
 import { Drawer, DrawerContent, DrawerBody, Button, useDisclosure, Textarea } from '@heroui/react';
 import { useCallback } from 'react';
 
@@ -29,7 +28,7 @@ export const Tools = () => {
         isIconOnly
         color="danger"
         onPress={onOpen}
-        aria-label="Like"
+        aria-label="打开工具"
         className="fixed bottom-4 right-4">
         T
       </Button>

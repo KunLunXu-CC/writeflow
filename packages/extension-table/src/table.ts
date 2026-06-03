@@ -3,7 +3,7 @@ import { Node } from '@kunlunxu/wf-core';
 import { InputRule } from 'prosemirror-inputrules';
 import { TextSelection } from 'prosemirror-state';
 import { goToNextCell, tableEditing, columnResizing } from 'prosemirror-tables';
-import { TableView } from './TableVIew';
+import { TableNodeView } from './TableNodeView';
 
 import { getTableSelectedCells } from './helpers';
 import {
@@ -22,12 +22,12 @@ const COL_COUNT_INPUT_RULE = 3;
 export const Table = Node.create({
   name: 'table',
 
+  nodeView: TableNodeView,
+
   addSchema: (): NodeSpec => baseTableNodes.table,
 
   // WARNING: 顺序很重要, 若把 tableEditing 放在前面, 调整宽度是会选中单元格
-  addPlugins: () => [columnResizing(), tableEditing()],
-
-  addNodeView: () => (node) => new TableView(node, 25),
+  addPlugins: () => [columnResizing(), tableEditing({ allowTableNodeSelection: true })],
 
   addInputRules: ({ schema }) => [
     new InputRule(/^\|-\s$/, (state, match, start, end) => {

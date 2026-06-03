@@ -48,7 +48,7 @@ export const CodeBlock = Node.create({
         getAttrs(dom) {
           // 从 class 属性中提取语言信息, class 可能包含类似 "language-js" 的值
           const classAttr = dom?.getAttribute('class') || '';
-          const { language } = classAttr.match(/language-(?<language>\w+)/)?.groups ?? {};
+          const language = classAttr.match(/language-(\w+)/)?.[1];
           return { language };
         },
       },
@@ -61,5 +61,5 @@ export const CodeBlock = Node.create({
     })),
   ],
 
-  addNodeView: () => (node, view, getPos) => new CodeBlockNodeView(node, view, getPos),
+  nodeView: CodeBlockNodeView,
 });

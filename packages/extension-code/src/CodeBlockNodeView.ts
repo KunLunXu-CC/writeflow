@@ -1,7 +1,7 @@
 // 参考: https://prosemirror.net/examples/codemirror/
 
+import { WFNodeView, type WFNodeViewOptions } from '@kunlunxu/wf-core';
 import { Node } from 'prosemirror-model';
-import { EditorView, NodeView } from 'prosemirror-view';
 import {
   ViewUpdate,
   drawSelection,
@@ -49,22 +49,16 @@ const getLanguageExtensions = (language: string = '') => {
   return result;
 };
 
-export class CodeBlockNodeView implements NodeView {
-  node: Node;
-  view: EditorView;
+export class CodeBlockNodeView extends WFNodeView {
   dom: HTMLElement;
   updating: boolean;
   cm: CodeMirrorView;
-  getPos: () => number | undefined;
 
-  constructor(node: Node, view: EditorView, getPos: () => number | undefined) {
-    // 存储初始值用于后续操作
-    this.node = node;
-    this.view = view;
-    this.getPos = getPos;
+  constructor(options: WFNodeViewOptions) {
+    super(options);
 
     // 获取语言扩展
-    const language = node.attrs.language;
+    const language = this.node.attrs.language;
     const languageExtensions = getLanguageExtensions(language);
 
     // 创建 CodeMirror 实例
