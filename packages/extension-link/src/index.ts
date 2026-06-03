@@ -5,7 +5,7 @@ import { Mark } from '@kunlunxu/wf-core';
 
 import './index.scss';
 
-const inputRegex = /\[(?<title>[^\]]+)\]\((?<href>https?:\/\/[^\s)]+)(?: "([^"]+)")?\)$/;
+const inputRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)(?: "([^"]+)")?\)$/;
 
 export const Link = Mark.create({
   name: 'link',
@@ -52,7 +52,7 @@ export const Link = Mark.create({
       if (linkMark) {
         tr.delete(start, end); // 删除整个匹配的链接文本
 
-        const { title, href } = (match as any).groups;
+        const [, title, href] = match;
 
         // 插入链接文本并添加 link mark
         const linkTextStart = tr.selection.from;

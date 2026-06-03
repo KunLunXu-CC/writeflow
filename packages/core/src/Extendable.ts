@@ -5,10 +5,10 @@ import {
   EXTENSIONS_TYPE,
   ExtendableFunContext,
 } from './types';
+import type { WFNodeViewClass } from './WFNodeView';
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkSpec, NodeSpec } from 'prosemirror-model';
 import { Command, Plugin } from 'prosemirror-state';
-import { NodeViewConstructor } from 'prosemirror-view';
 
 export interface ExtendableConfig<Options = unknown> {
   name: string;
@@ -98,13 +98,9 @@ export interface ExtendableConfig<Options = unknown> {
    * This function adds a node view to the editor.
    * @see https://tiptap.dev/docs/editor/guide/custom-extensions#node-views
    * @example
-   * addNodeView() {
-   *   return (node, view, getPos, decorations, innerDecorations) => {
-   *     return view.dom.appendChild(document.createElement('div'));
-   *   }
-   * },
+   * nodeView: MyNodeView
    */
-  addNodeView?: (context: ExtendableFunContext<Options>) => NodeViewConstructor;
+  nodeView?: WFNodeViewClass;
 
   /**
    * This function adds helpers to the editor.

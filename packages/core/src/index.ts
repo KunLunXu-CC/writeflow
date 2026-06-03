@@ -5,4 +5,7 @@ export * from './Mark';
 export * from './Extendable';
 export * from './ExtensionManager';
 export * from './EventEmitter';
+export * from './WFNodeView';
 export * from './helpers';
+export * from './components';
+export * from './hooks';

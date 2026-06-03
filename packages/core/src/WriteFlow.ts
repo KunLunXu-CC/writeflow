@@ -94,7 +94,15 @@ export class WriteFlow extends EventEmitter<WFEvents> {
   // }
 
   private createExtensionManager = () => {
-    this.extensionManager = new ExtensionManager(this.options.extensions || [], this);
+    this.extensionManager = new ExtensionManager(
+      this.options.extensions || [],
+      this,
+    );
+  };
+
+  public destroy = () => {
+    this.view?.destroy();
+    this.removeAllListeners();
   };
 
   /** 设置主题 */

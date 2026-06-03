@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 // import { RichBubbleMenu } from './RichBubbleMenu';
-import { useCreateWriteFlow, WriteFlowContext } from '@kunlunxu/wf-react';
+import { useCreateWriteFlow, WriteFlowContext } from '@kunlunxu/wf-core';
 
 import { Heading } from '@kunlunxu/wf-extension-heading';
 import { TaskList, TaskItem, ListItem, BulletList, OrderedList } from '@kunlunxu/wf-extension-list';
