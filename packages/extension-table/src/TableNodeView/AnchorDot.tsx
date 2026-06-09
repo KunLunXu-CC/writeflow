@@ -7,6 +7,8 @@ interface AnchorDotProps {
 }
 
 export const AnchorDot = memo(({ anchor, onClick }: AnchorDotProps) => {
+  const showStartPoint = anchor.type === 'col' ? anchor.colIndex === 0 : anchor.rowIndex === 0;
+
   const style = useMemo(
     () =>
       ({
@@ -31,7 +33,12 @@ export const AnchorDot = memo(({ anchor, onClick }: AnchorDotProps) => {
       style={style}
       onClick={handleClick}
       className={`wf-table-anchor-dot wf-table-anchor-dot-${anchor.type}`}
-    />
+    >
+      {showStartPoint ? (
+        <div className="wf-table-anchor-dot-point wf-table-anchor-dot-point-start" />
+      ) : null}
+      <div className="wf-table-anchor-dot-point wf-table-anchor-dot-point-end" />
+    </div>
   );
 });
 
