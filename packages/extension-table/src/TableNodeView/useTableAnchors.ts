@@ -40,6 +40,8 @@ export function useTableAnchors(
             x: cellRect.left - wrapperRect.left,
             y: tableTop,
             width: cellRect.width,
+            tableWidth: tableRect.width,
+            tableHeight: tableRect.height,
             type: 'col',
             colIndex: index,
           });
@@ -56,6 +58,8 @@ export function useTableAnchors(
           x: tableRect.left - wrapperRect.left,
           y: rowRect.top - wrapperRect.top,
           height: rowRect.height,
+          tableWidth: tableRect.width,
+          tableHeight: tableRect.height,
           type: 'row',
           rowIndex: index,
         });

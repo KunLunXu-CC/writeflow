@@ -16,8 +16,10 @@ export const AnchorDot = memo(({ anchor, onClick }: AnchorDotProps) => {
         '--wf-table-anchor-y': `${anchor.y}px`,
         '--wf-table-anchor-width': `${anchor.width ?? 0}px`,
         '--wf-table-anchor-height': `${anchor.height ?? 0}px`,
+        '--wf-table-anchor-table-width': `${anchor.tableWidth}px`,
+        '--wf-table-anchor-table-height': `${anchor.tableHeight}px`,
       }) as CSSProperties,
-    [anchor.height, anchor.width, anchor.x, anchor.y],
+    [anchor.height, anchor.tableHeight, anchor.tableWidth, anchor.width, anchor.x, anchor.y],
   );
 
   const handleClick = useCallback(

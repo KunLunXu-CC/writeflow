@@ -6,6 +6,8 @@ export interface AnchorPoint {
   y: number;
   width?: number;
   height?: number;
+  tableWidth: number;
+  tableHeight: number;
   type: 'col' | 'row';
   colIndex?: number;
   rowIndex?: number;

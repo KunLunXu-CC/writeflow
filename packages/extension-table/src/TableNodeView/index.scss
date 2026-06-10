@@ -13,17 +13,19 @@
 .wf-table-anchor-dot-point {
   position: absolute;
   display: block;
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: hsl(var(--wf-color-text) / 22%);
   transition: background 0.15s;
 }
 
 .wf-table-anchor-dot-col {
-  width: var(--wf-table-anchor-width);
   height: 10px;
   transform: translateY(-100%);
+  width: var(--wf-table-anchor-width);
+  border-top: 1px solid hsl(var(--wf-color-border));
+  border-left: 1px solid hsl(var(--wf-color-border));
 
   .wf-table-anchor-dot-point {
     bottom: 100%;
@@ -43,6 +45,8 @@
   width: 10px;
   height: var(--wf-table-anchor-height);
   transform: translateX(-100%);
+  border-top: 1px solid hsl(var(--wf-color-border));
+  border-left: 1px solid hsl(var(--wf-color-border));
 
   .wf-table-anchor-dot-point {
     right: 100%;
