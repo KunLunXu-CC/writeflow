@@ -1,83 +1,52 @@
-.wf-table-anchor {
-  position: relative;
-  width: 100%;
-}
-
-.wf-table-anchor-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.wf-table-anchor-dot-point {
-  position: absolute;
-  display: block;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: hsl(var(--wf-color-text) / 22%);
-  transition: background 0.15s;
-}
-
-.wf-table-anchor-dot-col {
-  height: 10px;
-  transform: translateY(-100%);
-  width: var(--wf-table-anchor-width);
-  border-top: 1px solid hsl(var(--wf-color-border));
-  border-left: 1px solid hsl(var(--wf-color-border));
-
-  .wf-table-anchor-dot-point {
-    bottom: 100%;
-    transform: translate(-50%, 50%);
+// #region 表格 
+.wf-table {
+  margin: var(--wf-block-gap-vertical) 0;
+  
+  table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 1px solid hsl(var(--wf-color-border));
   }
 
-  .wf-table-anchor-dot-point-start {
-    left: 0;
-  }
+  th, td {
+    position: relative;
+    padding: 0.375em 0.625em;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid hsl(var(--wf-color-border));
 
-  .wf-table-anchor-dot-point-end {
-    left: 100%;
-  }
-}
-
-.wf-table-anchor-dot-row {
-  width: 10px;
-  height: var(--wf-table-anchor-height);
-  transform: translateX(-100%);
-  border-top: 1px solid hsl(var(--wf-color-border));
-  border-left: 1px solid hsl(var(--wf-color-border));
-
-  .wf-table-anchor-dot-point {
-    right: 100%;
-    transform: translate(-50%, -50%);
-  }
-
-  .wf-table-anchor-dot-point-start {
-    top: 0;
-  }
-
-  .wf-table-anchor-dot-point-end {
-    top: 100%;
-  }
-}
-
-.wf-table-anchor-dot {
-  position: absolute;
-  top: var(--wf-table-anchor-y);
-  left: var(--wf-table-anchor-x);
-  z-index: 2;
-  display: block;
-  background: hsl(var(--wf-color-text) / 10%);
-  cursor: pointer;
-  pointer-events: auto;
-  transition: background 0.15s;
-
-  &:hover {
-    background: hsl(var(--wf-color-text) / 14%);
-
-    .wf-table-anchor-dot-point {
-      background: hsl(var(--wf-color-text) / 38%);
+    > *:first-child {
+      margin-top: 0;
     }
+
+    > *:last-child {
+      margin-bottom: 0;
+    }
+    
+    // 如果后面跟着拖拽锚点, 则需要移除当前元素的 margin-bottom
+    > *:has(~ .column-resize-handle) {
+      margin-bottom: 0;
+    }
+  }
+
+  // 表格选中样式 
+  .selectedCell {
+    background-color: hsl(var(--wf-color-primary) / 20%);
+
+    *::selection {
+      background: none;
+    }
+  }
+
+  // 表格列宽调整
+  .column-resize-handle {
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    width: 0.25em;
+    right: -0.125em;
+    cursor: col-resize;
+    background-color: hsl(var(--wf-color-primary));
   }
 }

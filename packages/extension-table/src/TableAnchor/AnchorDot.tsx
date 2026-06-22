@@ -1,13 +1,12 @@
-import { memo, useCallback, useMemo, type CSSProperties, type MouseEvent } from 'react';
-import type { AnchorPoint, TableAnchorProps } from './types';
+import { memo, useMemo, type CSSProperties } from 'react';
+import type { TableAnchorItem } from './types';
 
 interface AnchorDotProps {
-  anchor: AnchorPoint;
-  onClick?: TableAnchorProps['onAnchorClick'];
+  anchor: TableAnchorItem;
 }
 
-export const AnchorDot = memo(({ anchor, onClick }: AnchorDotProps) => {
-  const showStartPoint = anchor.type === 'col' ? anchor.colIndex === 0 : anchor.rowIndex === 0;
+export const AnchorDot = memo(({ anchor }: AnchorDotProps) => {
+  const showStartPoint = anchor.isFirst;
 
   const style = useMemo(
     () =>
@@ -19,23 +18,13 @@ export const AnchorDot = memo(({ anchor, onClick }: AnchorDotProps) => {
         '--wf-table-anchor-table-width': `${anchor.tableWidth}px`,
         '--wf-table-anchor-table-height': `${anchor.tableHeight}px`,
       }) as CSSProperties,
-    [anchor.height, anchor.tableHeight, anchor.tableWidth, anchor.width, anchor.x, anchor.y],
-  );
-
-  const handleClick = useCallback(
-    (event: MouseEvent<HTMLDivElement>) => {
-      event.stopPropagation();
-      onClick?.(anchor, event);
-    },
-    [anchor, onClick],
+    [anchor],
   );
 
   return (
     <div
       style={style}
-      onClick={handleClick}
-      className={`wf-table-anchor-dot wf-table-anchor-dot-${anchor.type}`}
-    >
+      className={`wf-table-anchor-dot wf-table-anchor-dot-${anchor.type}`}>
       {showStartPoint ? (
         <div className="wf-table-anchor-dot-point wf-table-anchor-dot-point-start" />
       ) : null}

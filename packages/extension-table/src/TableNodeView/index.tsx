@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import { WFNodeView, type WFNodeViewProps } from '@kunlunxu/wf-core';
 import { updateColumnsOnResize } from 'prosemirror-tables';
-import { TableAnchor } from './TableAnchor';
+import { TableAnchor } from '../TableAnchor';
 import './index.scss';
 
 export const DEFAULT_CELL_MIN_WIDTH = 100;
@@ -27,7 +27,7 @@ export const TableNodeViewComponent = ({ node, nodeView }: WFNodeViewProps) => {
   }, [node, nodeView]);
 
   return (
-    <TableAnchor tableRef={tableRef}>
+    <TableAnchor>
       <table ref={tableRef}>
         <colgroup ref={colgroupRef} />
         <tbody ref={contentRef} />

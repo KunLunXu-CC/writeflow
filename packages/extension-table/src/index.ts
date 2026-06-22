@@ -1,5 +1,4 @@
 import { tableNodes } from 'prosemirror-tables';
-import './index.scss';
 
 export * from './cell';
 export * from './header';
