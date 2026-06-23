@@ -5,8 +5,9 @@
   table {
     width: 100%;
     table-layout: fixed;
-    border-collapse: collapse;
-    border: 1px solid hsl(var(--wf-color-border));
+    border: 0;
+    border-spacing: 0;
+    border-collapse: separate;
   }
 
   th, td {
@@ -14,7 +15,12 @@
     padding: 0.375em 0.625em;
     text-align: left;
     vertical-align: top;
-    border: 1px solid hsl(var(--wf-color-border));
+    border-top: 1px solid hsl(var(--wf-color-border));
+    border-left: 1px solid hsl(var(--wf-color-border));
+
+    &:last-child {
+      border-right: 1px solid hsl(var(--wf-color-border));
+    }
 
     > *:first-child {
       margin-top: 0;
@@ -28,6 +34,11 @@
     > *:has(~ .column-resize-handle) {
       margin-bottom: 0;
     }
+  }
+
+  tr:last-child > th,
+  tr:last-child > td {
+    border-bottom: 1px solid hsl(var(--wf-color-border));
   }
 
   // 表格选中样式 

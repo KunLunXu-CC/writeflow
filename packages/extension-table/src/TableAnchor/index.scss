@@ -3,81 +3,64 @@
   width: 100%;
 }
 
-.wf-table-anchor-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.wf-table-anchor-dot-point {
-  position: absolute;
-  display: block;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: hsl(var(--wf-color-text) / 22%);
-  transition: background 0.15s;
-}
-
-.wf-table-anchor-dot-col {
-  width: var(--wf-table-anchor-width);
-  height: 10px;
-  transform: translateY(-100%);
-  border-top: 1px solid hsl(var(--wf-color-border));
-  border-left: 1px solid hsl(var(--wf-color-border));
-
-  .wf-table-anchor-dot-point {
-    bottom: calc(100% + 4px);
-    transform: translate(-50%, 50%);
-  }
-
-  .wf-table-anchor-dot-point-start {
-    left: 0;
-  }
-
-  .wf-table-anchor-dot-point-end {
-    left: 100%;
-  }
-}
-
-.wf-table-anchor-dot-row {
-  width: 10px;
-  height: var(--wf-table-anchor-height);
-  transform: translateX(-100%);
-  border-top: 1px solid hsl(var(--wf-color-border));
-  border-left: 1px solid hsl(var(--wf-color-border));
-
-  .wf-table-anchor-dot-point {
-    right: 100%;
-    transform: translate(-50%, -50%);
-  }
-
-  .wf-table-anchor-dot-point-start {
-    top: 0;
-  }
-
-  .wf-table-anchor-dot-point-end {
-    top: 100%;
-  }
-}
-
-.wf-table-anchor-dot {
+// 锚点标记
+.wf-table-anchor-marker {
   position: absolute;
   top: var(--wf-table-anchor-y);
   left: var(--wf-table-anchor-x);
-  z-index: 2;
-  display: block;
-  background: hsl(var(--wf-color-text) / 10%);
-  cursor: pointer;
+  z-index: 1;
   pointer-events: auto;
-  transition: background 0.15s;
+  border-top: 1px solid hsl(var(--wf-color-border));
+  border-left: 1px solid hsl(var(--wf-color-border));
 
-  &:hover {
-    background: hsl(var(--wf-color-text) / 14%);
+  &.wf-table-anchor-marker-first {
+    border-top-left-radius: 4px;
+  }
 
-    .wf-table-anchor-dot-point {
-      background: hsl(var(--wf-color-text) / 38%);
+  &.wf-table-anchor-marker-col {
+    height: 10px;
+    width: var(--wf-table-anchor-width);
+    transform: translateY(-100%);
+
+    &.wf-table-anchor-marker-last {
+      border-top-right-radius: 4px;
+      border-right: 1px solid hsl(var(--wf-color-border));
     }
+  }
+
+  &.wf-table-anchor-marker-row {
+    width: 10px;
+    height: var(--wf-table-anchor-height);
+    transform: translateX(-100%);
+  
+    &.wf-table-anchor-marker-last {
+      border-bottom-left-radius: 4px;
+      border-bottom: 1px solid hsl(var(--wf-color-border));
+    }
+  }
+}
+
+// 锚点圆点
+.wf-table-anchor-dot {
+  z-index: 1;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: auto;
+  background: hsl(0deg 80% 50% / 50%);
+
+  &.wf-table-anchor-dot-col {
+    top: 0;
+    left: 0;
+
+    // transform: translate(-50%, -50%);
+  }
+
+  &.wf-table-anchor-dot-row {
+    top: 0;
+    left: 0;
+
+    // transform: translate(-50%, -50%);
   }
 }

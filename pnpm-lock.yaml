@@ -428,6 +428,9 @@ importers:
       '@kunlunxu/wf-core':
         specifier: workspace:^
         version: link:../core
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       prosemirror-inputrules:
         specifier: ^1.5.0
         version: 1.5.1
@@ -443,6 +446,12 @@ importers:
       prosemirror-view:
         specifier: ^1.41.1
         version: 1.41.7
+      react:
+        specifier: '>=19 <20'
+        version: 19.1.1
+      react-dom:
+        specifier: '>=19 <20'
+        version: 19.1.1(react@19.1.1)
 
 packages:
 
