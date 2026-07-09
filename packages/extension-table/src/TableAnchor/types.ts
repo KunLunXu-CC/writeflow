@@ -7,8 +7,6 @@ export type TableAnchorItem = {
   height: number;
   tableWidth: number;
   tableHeight: number;
-  isFirst: boolean;
-  isLast: boolean;
 } & (
   | {
       type: 'col';

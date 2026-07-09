@@ -1,14 +1,12 @@
 import { memo, useMemo, type CSSProperties } from 'react';
+import { Plus } from 'lucide-react';
 import type { TableAnchorItem } from './types';
-import clsx from 'clsx';
 
 interface AnchorMarkerProps {
   anchor: TableAnchorItem;
 }
 
 export const AnchorMarker = memo(({ anchor }: AnchorMarkerProps) => {
-  console.log('%c [ anchor ]-9', 'font-size:13px; background:pink; color:#bf2c9f;', anchor);
-
   const style = useMemo(
     () =>
       ({
@@ -25,21 +23,16 @@ export const AnchorMarker = memo(({ anchor }: AnchorMarkerProps) => {
   return (
     <div
       style={style}
-      className={clsx(`wf-table-anchor-marker wf-table-anchor-marker-${anchor.type}`, {
-        'wf-table-anchor-marker-first': anchor.isFirst,
-        'wf-table-anchor-marker-last': anchor.isLast,
-      })}>
+      className={`wf-table-anchor-marker wf-table-anchor-marker-${anchor.type}`}>
       <div
         style={style}
-        className={clsx(`wf-table-anchor-dot wf-table-anchor-dot-${anchor.type}`, {
-          'wf-table-anchor-dot-first': anchor.isFirst,
-          'wf-table-anchor-dot-last': anchor.isLast,
-        })}
-      />
+        className={`wf-table-anchor-dot wf-table-anchor-dot-${anchor.type}`}>
+        <div className="wf-table-anchor-dot-inner">
+          <Plus />
+        </div>
+      </div>
     </div>
   );
 });
 
 AnchorMarker.displayName = 'AnchorMarker';
-
-//

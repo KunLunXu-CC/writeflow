@@ -1,3 +1,7 @@
+$table-anchor-radius: 4px;
+$table-anchor-dot-size: 20px;
+$table-anchor-hover-line-width: 1px;
+
 .wf-table-anchor {
   position: relative;
   width: 100%;
@@ -13,28 +17,28 @@
   border-top: 1px solid hsl(var(--wf-color-border));
   border-left: 1px solid hsl(var(--wf-color-border));
 
-  &.wf-table-anchor-marker-first {
-    border-top-left-radius: 4px;
-  }
-
   &.wf-table-anchor-marker-col {
-    height: 10px;
+    height: $table-anchor-dot-size * 0.5;
     width: var(--wf-table-anchor-width);
     transform: translateY(-100%);
 
-    &.wf-table-anchor-marker-last {
-      border-top-right-radius: 4px;
+    &:first-of-type {
+      border-top-left-radius: $table-anchor-radius;
+    }
+
+    &:nth-last-child(2 of .wf-table-anchor-marker-col) {
+      border-top-right-radius: $table-anchor-radius;
       border-right: 1px solid hsl(var(--wf-color-border));
     }
   }
 
   &.wf-table-anchor-marker-row {
-    width: 10px;
+    width: $table-anchor-dot-size * 0.5;
     height: var(--wf-table-anchor-height);
     transform: translateX(-100%);
   
-    &.wf-table-anchor-marker-last {
-      border-bottom-left-radius: 4px;
+    &:nth-last-child(2 of .wf-table-anchor-marker-row) {
+      border-bottom-left-radius: $table-anchor-radius;
       border-bottom: 1px solid hsl(var(--wf-color-border));
     }
   }
@@ -44,23 +48,77 @@
 .wf-table-anchor-dot {
   z-index: 1;
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: $table-anchor-dot-size;
+  height: $table-anchor-dot-size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   border-radius: 50%;
   pointer-events: auto;
-  background: hsl(0deg 80% 50% / 50%);
+  background: hsl(var(--wf-color-primary) / 50%);
+  color: hsl(var(--wf-color-primary));
 
-  &.wf-table-anchor-dot-col {
-    top: 0;
-    left: 0;
-
-    // transform: translate(-50%, -50%);
+  &::before {
+    content: '';
+    display: block;
+    width: $table-anchor-dot-size * 0.15;
+    height: $table-anchor-dot-size * 0.15;
+    border-radius: 50%;
+    background: #000;
   }
 
-  &.wf-table-anchor-dot-row {
-    top: 0;
-    left: 0;
+  // 锚点圆点内部图标
+  .wf-table-anchor-dot-inner {
+    inset: 0;
+    position: absolute;
+    border-radius: 50%;
+    background: hsl(var(--wf-color-primary) / 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    // transform: translate(-50%, -50%);
+    svg {
+      width: $table-anchor-dot-size * 0.8;
+      height: $table-anchor-dot-size * 0.8;
+    }
+  }
+
+  // 行和列的锚点圆点 hover 效果
+  &.wf-table-anchor-dot-col {
+    top: $table-anchor-hover-line-width * -0.5;
+    left: $table-anchor-hover-line-width * -0.5;
+    transform: translate(-50%, -80%);
+
+    // hover 垂直线
+    &:hover::after {
+      content: '';
+      left: 50%;
+      position: absolute;
+      top: $table-anchor-dot-size;
+      width: $table-anchor-hover-line-width;
+      height: calc(var(--wf-table-anchor-table-height) + #{$table-anchor-dot-size * 0.28});
+      transform: translateX(-50%);
+      background: hsl(var(--wf-color-primary) / 50%);
+    }
+  }
+
+  // 行和列的锚点圆点 hover 效果
+  &.wf-table-anchor-dot-row {
+    top: $table-anchor-hover-line-width * -0.5;
+    left: $table-anchor-hover-line-width * -0.5;
+    transform: translate(-80%, -50%);
+
+    // hover 水平线
+    &:hover::after {
+      content: '';
+      top: 50%;
+      position: absolute;
+      left: $table-anchor-dot-size;
+      height: $table-anchor-hover-line-width;
+      width: calc(var(--wf-table-anchor-table-width) + #{$table-anchor-dot-size * 0.28});
+      transform: translateY(-50%);
+      background: hsl(var(--wf-color-primary) / 50%);
+    }
   }
 }

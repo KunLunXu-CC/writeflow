@@ -51,8 +51,6 @@ const computeAnchors = (wrapper: HTMLDivElement): TableAnchorItem[] => {
         tableHeight,
 
         type: 'col',
-        isFirst: colIndex === 0,
-        isLast: colIndex === cells.length - 1,
 
         y: 0,
         x: cellRect.left - tableLeft,
@@ -61,6 +59,20 @@ const computeAnchors = (wrapper: HTMLDivElement): TableAnchorItem[] => {
         height: cellRect.height,
       });
     }
+
+    anchors.push({
+      colIndex: cells.length,
+      tableWidth,
+      tableHeight,
+
+      type: 'col',
+
+      y: 0,
+      x: tableWidth,
+
+      width: 0,
+      height: 0,
+    });
   }
 
   // 行: 根据每行位置计算行锚点
@@ -74,14 +86,28 @@ const computeAnchors = (wrapper: HTMLDivElement): TableAnchorItem[] => {
       tableHeight,
 
       type: 'row',
-      isFirst: rowIndex === 0,
-      isLast: rowIndex === rows.length - 1,
 
       x: 0,
       y: rowRect.top - tableTop,
 
       width: rowRect.width,
       height: rowRect.height,
+    });
+  }
+
+  if (rows.length > 0) {
+    anchors.push({
+      rowIndex: rows.length,
+      tableWidth,
+      tableHeight,
+
+      type: 'row',
+
+      x: 0,
+      y: tableHeight,
+
+      width: 0,
+      height: 0,
     });
   }
 
