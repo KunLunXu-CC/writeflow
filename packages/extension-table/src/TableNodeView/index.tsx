@@ -1,15 +1,16 @@
 import { useLayoutEffect, useRef } from 'react';
-import { WFNodeView, type WFNodeViewProps } from '@kunlunxu/wf-core';
+import { WFNodeView, type WFNodeViewProps, type WriteFlow } from '@kunlunxu/wf-core';
 import { updateColumnsOnResize } from 'prosemirror-tables';
 import { TableAnchor } from '../TableAnchor';
 import './index.scss';
 
 export const DEFAULT_CELL_MIN_WIDTH = 100;
 
-export const TableNodeViewComponent = ({ node, nodeView }: WFNodeViewProps) => {
+export const TableNodeViewComponent = ({ getPos, node, nodeView }: WFNodeViewProps) => {
   const tableRef = useRef<HTMLTableElement>(null);
   const colgroupRef = useRef<HTMLTableColElement>(null);
   const contentRef = useRef<HTMLTableSectionElement>(null);
+  const tableNodeView = nodeView as TableNodeView;
 
   useLayoutEffect(() => {
     const table = tableRef.current;
@@ -27,7 +28,9 @@ export const TableNodeViewComponent = ({ node, nodeView }: WFNodeViewProps) => {
   }, [node, nodeView]);
 
   return (
-    <TableAnchor>
+    <TableAnchor
+      getPos={getPos}
+      writeFlow={tableNodeView.writeFlow}>
       <table ref={tableRef}>
         <colgroup ref={colgroupRef} />
         <tbody ref={contentRef} />
@@ -38,4 +41,8 @@ export const TableNodeViewComponent = ({ node, nodeView }: WFNodeViewProps) => {
 
 export class TableNodeView extends WFNodeView {
   public static component = TableNodeViewComponent;
+
+  public get writeFlow(): WriteFlow {
+    return this.context.writeFlow;
+  }
 }

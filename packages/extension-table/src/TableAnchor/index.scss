@@ -2,27 +2,29 @@ $table-anchor-radius: 4px;
 $table-anchor-dot-size: 20px;
 $table-anchor-hover-line-width: 1px;
 
-.wf-table-anchor {
-  position: relative;
-  width: 100%;
-}
-
 // 锚点标记
 .wf-table-anchor-marker {
+  z-index: 1;
+  opacity: 0;
   position: absolute;
   top: var(--wf-table-anchor-y);
   left: var(--wf-table-anchor-x);
-  z-index: 1;
-  pointer-events: auto;
+  cursor: pointer;
   border-top: 1px solid hsl(var(--wf-color-border));
   border-left: 1px solid hsl(var(--wf-color-border));
+  transition: background,opacity 0.4s;
+  background: hsl(var(--wf-color-border) / 30%);
+  
+  &:hover {
+    background: hsl(var(--wf-color-border) / 80%);
+  }
 
   &.wf-table-anchor-marker-col {
     height: $table-anchor-dot-size * 0.5;
     width: var(--wf-table-anchor-width);
     transform: translateY(-100%);
 
-    &:first-of-type {
+    &:nth-child(1 of .wf-table-anchor-marker-col) {
       border-top-left-radius: $table-anchor-radius;
     }
 
@@ -30,45 +32,58 @@ $table-anchor-hover-line-width: 1px;
       border-top-right-radius: $table-anchor-radius;
       border-right: 1px solid hsl(var(--wf-color-border));
     }
+
+    &:nth-last-child(1 of .wf-table-anchor-marker-col) {
+      border: 0;
+    }
   }
 
   &.wf-table-anchor-marker-row {
     width: $table-anchor-dot-size * 0.5;
     height: var(--wf-table-anchor-height);
     transform: translateX(-100%);
-  
+
+    &:nth-child(1 of .wf-table-anchor-marker-row) {
+      border-top-left-radius: $table-anchor-radius;
+    }
+
     &:nth-last-child(2 of .wf-table-anchor-marker-row) {
       border-bottom-left-radius: $table-anchor-radius;
       border-bottom: 1px solid hsl(var(--wf-color-border));
     }
+
+    &:nth-last-child(1 of .wf-table-anchor-marker-row) {
+      border: 0;
+    }
   }
 }
 
-// 锚点圆点
+// 顶部圆点
 .wf-table-anchor-dot {
-  z-index: 1;
   position: absolute;
+  top: $table-anchor-hover-line-width * -0.5;
+  left: $table-anchor-hover-line-width * -0.5;
+  cursor: pointer;
   width: $table-anchor-dot-size;
   height: $table-anchor-dot-size;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  border: 0;
   border-radius: 50%;
-  pointer-events: auto;
-  background: hsl(var(--wf-color-primary) / 50%);
   color: hsl(var(--wf-color-primary));
 
+  // 初始小圆点
   &::before {
     content: '';
     display: block;
     width: $table-anchor-dot-size * 0.15;
     height: $table-anchor-dot-size * 0.15;
     border-radius: 50%;
-    background: #000;
+    background: hsl(var(--wf-color-border));
   }
 
-  // 锚点圆点内部图标
+  // 大圆点: + 号
   .wf-table-anchor-dot-inner {
     inset: 0;
     position: absolute;
@@ -77,6 +92,8 @@ $table-anchor-hover-line-width: 1px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transform: scale(0);
+    transition: transform 0.4s;
 
     svg {
       width: $table-anchor-dot-size * 0.8;
@@ -84,41 +101,52 @@ $table-anchor-hover-line-width: 1px;
     }
   }
 
+  // 大圆点: hover 放大
+  &:hover .wf-table-anchor-dot-inner {
+    transform: scale(1);
+  }
+
+
   // 行和列的锚点圆点 hover 效果
   &.wf-table-anchor-dot-col {
-    top: $table-anchor-hover-line-width * -0.5;
-    left: $table-anchor-hover-line-width * -0.5;
     transform: translate(-50%, -80%);
 
     // hover 垂直线
     &:hover::after {
-      content: '';
       left: 50%;
-      position: absolute;
       top: $table-anchor-dot-size;
       width: $table-anchor-hover-line-width;
       height: calc(var(--wf-table-anchor-table-height) + #{$table-anchor-dot-size * 0.28});
       transform: translateX(-50%);
-      background: hsl(var(--wf-color-primary) / 50%);
     }
   }
 
   // 行和列的锚点圆点 hover 效果
   &.wf-table-anchor-dot-row {
-    top: $table-anchor-hover-line-width * -0.5;
-    left: $table-anchor-hover-line-width * -0.5;
     transform: translate(-80%, -50%);
 
     // hover 水平线
     &:hover::after {
-      content: '';
       top: 50%;
-      position: absolute;
       left: $table-anchor-dot-size;
       height: $table-anchor-hover-line-width;
       width: calc(var(--wf-table-anchor-table-width) + #{$table-anchor-dot-size * 0.28});
       transform: translateY(-50%);
-      background: hsl(var(--wf-color-primary) / 50%);
     }
+  }
+
+  &:hover::after {
+    content: '';
+    position: absolute;
+    background: hsl(var(--wf-color-primary) / 50%);
+  }
+}
+
+.wf-table-anchor {
+  position: relative;
+  width: 100%;
+
+  &:hover .wf-table-anchor-marker{
+    opacity: 1;
   }
 }

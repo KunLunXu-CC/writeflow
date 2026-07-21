@@ -1,7 +1,9 @@
 import {
   splitCell,
   mergeCells,
+  addRowBefore,
   addRowAfter,
+  addColumnBefore,
   addColumnAfter,
   deleteRow,
   deleteColumn,
@@ -32,7 +34,19 @@ export const splitTableCell: WFCommand = ({ writeFlow }) => {
 };
 
 /**
- * 插入行
+ * 在当前行前插入行
+ * @param {object} content - 命令上下文
+ * @param {object} content.writeFlow - 编辑器实例
+ * @returns 插入行信息
+ */
+export const addTableRowBefore: WFCommand = ({ writeFlow }) => {
+  const { dispatch, state } = writeFlow;
+
+  return addRowBefore(state, dispatch);
+};
+
+/**
+ * 在当前行后插入行
  * @param {object} content - 命令上下文
  * @param {object} content.writeFlow - 编辑器实例
  * @returns 插入行信息
@@ -44,7 +58,19 @@ export const addTableRowAfter: WFCommand = ({ writeFlow }) => {
 };
 
 /**
- * 插入列
+ * 在当前列前插入列
+ * @param {object} content - 命令上下文
+ * @param {object} content.writeFlow - 编辑器实例
+ * @returns 插入列信息
+ */
+export const addTableColumnBefore: WFCommand = ({ writeFlow }) => {
+  const { dispatch, state } = writeFlow;
+
+  return addColumnBefore(state, dispatch);
+};
+
+/**
+ * 在当前列后插入列
  * @param {object} content - 命令上下文
  * @param {object} content.writeFlow - 编辑器实例
  * @returns 插入列信息

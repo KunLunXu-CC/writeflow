@@ -10,8 +10,10 @@ import {
   deleteTableRow,
   splitTableCell,
   mergeTableCells,
+  addTableRowBefore,
   addTableRowAfter,
   deleteTableColumn,
+  addTableColumnBefore,
   addTableColumnAfter,
 } from './commands';
 import { NodeSpec } from 'prosemirror-model';
@@ -51,7 +53,9 @@ export const Table = Node.create({
     splitTableCell: () => splitTableCell({ writeFlow, extension }),
     mergeTableCells: () => mergeTableCells({ writeFlow, extension }),
 
+    addTableRowBefore: () => addTableRowBefore({ writeFlow, extension }),
     addTableRowAfter: () => addTableRowAfter({ writeFlow, extension }),
+    addTableColumnBefore: () => addTableColumnBefore({ writeFlow, extension }),
     addTableColumnAfter: () => addTableColumnAfter({ writeFlow, extension }),
 
     deleteTableRow: () => deleteTableRow({ writeFlow, extension }),

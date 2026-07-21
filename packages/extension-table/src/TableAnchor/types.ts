@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { WriteFlow } from '@kunlunxu/wf-core';
 
 export type TableAnchorItem = {
   x: number;
@@ -22,4 +23,6 @@ export type TableAnchorItem = {
 
 export interface TableAnchorProps {
   children: ReactNode;
+  getPos: () => number | undefined;
+  writeFlow: WriteFlow;
 }
