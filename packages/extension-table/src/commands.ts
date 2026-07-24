@@ -7,8 +7,24 @@ import {
   addColumnAfter,
   deleteRow,
   deleteColumn,
+  CellSelection,
+  TableMap,
+  selectionCell,
 } from 'prosemirror-tables';
+import type { Selection } from 'prosemirror-state';
 import { WFCommand } from '@kunlunxu/wf-core';
+import { clamp } from './TableAnchor/utils';
+import {
+  getTableCellSelectionByIndex,
+  getTableSelectionByIndex,
+  getTableSelectionContext,
+} from './helpers';
+
+export interface SelectTableCellsOptions {
+  rowIndex?: number;
+  colIndex?: number;
+  tablePos?: number;
+}
 
 /**
  * 合并选中的单元格
@@ -103,4 +119,76 @@ export const deleteTableColumn: WFCommand = ({ writeFlow }) => {
   const { dispatch, state } = writeFlow;
 
   return deleteColumn(state, dispatch);
+};
+
+/**
+ * 根据行列索引选中表格单元格；只传行或列时选中整行或整列，未传索引时选中当前单元格
+ */
+export const selectTableCells: WFCommand<SelectTableCellsOptions> = (
+  { writeFlow, extension },
+  options = {},
+) => {
+  const { dispatch, state } = writeFlow;
+  const tableContext = getTableSelectionContext(
+    { writeFlow, extension },
+    { tablePos: options.tablePos },
+  );
+
+  if (!tableContext) {
+    return false;
+  }
+
+  const tableMap = TableMap.get(tableContext.tableNode);
+  const hasRowIndex = options.rowIndex !== undefined;
+  const hasColIndex = options.colIndex !== undefined;
+  const row = hasRowIndex ? clamp(options.rowIndex!, tableMap.height - 1) : 0;
+  const col = hasColIndex ? clamp(options.colIndex!, tableMap.width - 1) : 0;
+  let selection: Selection;
+
+  if (hasRowIndex && hasColIndex) {
+    selection = getTableCellSelectionByIndex({
+      row,
+      col,
+      tableMap,
+      doc: state.doc,
+      tableNode: tableContext.tableNode,
+      tableStart: tableContext.tableStart,
+    });
+  } else if (hasRowIndex) {
+    selection = getTableSelectionByIndex({
+      row,
+      tableMap,
+      col: 0,
+      type: 'row',
+      doc: state.doc,
+      tableStart: tableContext.tableStart,
+      tableNode: tableContext.tableNode,
+    });
+  } else if (hasColIndex) {
+    selection = getTableSelectionByIndex({
+      col,
+      row: 0,
+      tableMap,
+      type: 'col',
+      doc: state.doc,
+      tableStart: tableContext.tableStart,
+      tableNode: tableContext.tableNode,
+    });
+  } else {
+    selection =
+      options.tablePos === undefined
+        ? CellSelection.create(state.doc, selectionCell(state).pos)
+        : getTableCellSelectionByIndex({
+            row: 0,
+            col: 0,
+            tableMap,
+            doc: state.doc,
+            tableNode: tableContext.tableNode,
+            tableStart: tableContext.tableStart,
+          });
+  }
+
+  dispatch(state.tr.setSelection(selection));
+
+  return true;
 };

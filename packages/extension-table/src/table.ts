@@ -15,6 +15,7 @@ import {
   deleteTableColumn,
   addTableColumnBefore,
   addTableColumnAfter,
+  selectTableCells,
 } from './commands';
 import { NodeSpec } from 'prosemirror-model';
 
@@ -60,6 +61,8 @@ export const Table = Node.create({
 
     deleteTableRow: () => deleteTableRow({ writeFlow, extension }),
     deleteTableColumn: () => deleteTableColumn({ writeFlow, extension }),
+
+    selectTableCells: (options) => selectTableCells({ writeFlow, extension }, options),
   }),
 
   addHelpers: ({ writeFlow, extension }) => ({
