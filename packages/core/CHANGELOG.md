@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 2.0.0
+
+### Major Changes
+
+- 转型 React
+
 ## 1.0.4
 
 ### Patch Changes

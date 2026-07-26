@@ -1,5 +1,16 @@
 # @kunlunxu/wf-extension-horizontal-rule
 
+## 2.0.0
+
+### Major Changes
+
+- 转型 React
+
+### Patch Changes
+
+- Updated dependencies
+  - @kunlunxu/wf-core@2.0.0
+
 ## 1.0.4
 
 ### Patch Changes
