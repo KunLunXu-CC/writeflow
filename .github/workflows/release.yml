@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      # 允许 GitHub Actions 申请 OIDC 身份令牌，用于 npm Trusted Publishing
+      id-token: write
       pull-requests: write
 
     steps:
@@ -24,26 +26,22 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
+          # 指定发布目标，并生成 npm CLI 使用的 Registry 配置
+          registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Setup npm auth
-        run: |
-          cat << 'EOF' > "$HOME/.npmrc"
-          //registry.npmjs.org/:_authToken=${NPM_TOKEN}
-          EOF
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Setup npm # npm 的 OIDC Trusted Publishing 由 npm CLI 实现, 需要发布时需要使用 npm 来执行命令
+        run: npm install --global npm@^11.15.0
 
       - name: Create release PR or publish
         uses: changesets/action@v1
         with:
           version: pnpm version-packages
           publish: pnpm release
-          # Keep the auto-generated release commit compliant with commitlint.
+          # 确保自动生成的发布提交符合 commitlint 规则
           commit: 'chore(release): version packages'
           title: 'chore(release): version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
