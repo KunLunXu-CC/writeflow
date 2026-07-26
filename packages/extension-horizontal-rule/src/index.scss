@@ -13,3 +13,7 @@
     border-color: hsl(var(--wf-color-primary));
   }
 }
+
+.wf-container:has(.wf-horizontal-rule-wrapper.ProseMirror-selectednode) {
+  caret-color: transparent;
+}
