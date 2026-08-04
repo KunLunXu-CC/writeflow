@@ -11,29 +11,20 @@
 pnpm dev
 ```
 
-## 构建
-
-使用 Turbo 仅构建库（`packages/*`）：
-
-```bash
-pnpm build:packages
-```
-
 ## 版本管理与发布
 
 本仓库使用 Changesets 进行版本管理和发布。
 
+> 只需要执行下面两天 npm script, 然后将修改内容提交就行
+
 ```bash
-# 为包变更创建 changeset
+# 1. 为包变更创建 changeset
 pnpm changeset
 
-# 应用版本号变更
+# 2. 应用版本号变更
 pnpm version-packages
 
-# 发布包
-pnpm release
-
-# 推送代码, 将自动触发构建、发布 npm 包
+# 3. 推送代码, 将自动触发构建、发布 npm 包
 ```
 
 > 下面是一些解释
@@ -59,3 +50,11 @@ Changesets 会管理可发布包的版本号变更。
 
 - `.github/workflows/ci.yml`
 - `.github/workflows/release.yml`
+
+## 构建
+
+使用 Turbo 仅构建库（`packages/*`）：
+
+```bash
+pnpm build:packages
+```

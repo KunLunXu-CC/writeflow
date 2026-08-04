@@ -1,4 +1,5 @@
 import { createElement, type ComponentType } from 'react';
+import { flushSync } from 'react-dom';
 import { createRoot, type Root } from 'react-dom/client';
 import type { Node as PMNode } from 'prosemirror-model';
 import type {
@@ -69,7 +70,10 @@ export class WFNodeView implements NodeView {
 
     const props = this.getProps();
     this.root ??= createRoot(this.dom);
-    this.root.render(createElement(component, props));
+
+    flushSync(() => {
+      this.root?.render(createElement(component, props));
+    });
   };
 
   public update(node: PMNode): boolean {
@@ -117,6 +121,14 @@ export class WFNodeView implements NodeView {
   }
 
   public destroy(): void {
-    this.root?.unmount();
+    const root = this.root;
+
+    if (!root) {
+      return;
+    }
+
+    queueMicrotask(() => {
+      this.root?.unmount();
+    });
   }
 }

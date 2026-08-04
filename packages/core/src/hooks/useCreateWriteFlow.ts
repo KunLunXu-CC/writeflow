@@ -16,16 +16,30 @@ export const useCreateWriteFlow: UseCreateWriteFlow = (opts) => {
   useEffect(() => {
     if (!writeFlowDomRef.current) return;
 
-    const newWriteFlow = new WriteFlow({
-      extensions,
-      initValue: initValueRef.current,
-      element: writeFlowDomRef.current,
+    let newWriteFlow: WriteFlow | null = null;
+    let destroyed = false;
+
+    queueMicrotask(() => {
+      if (!writeFlowDomRef.current || destroyed) return;
+
+      newWriteFlow = new WriteFlow({
+        extensions,
+        initValue: initValueRef.current,
+        element: writeFlowDomRef.current,
+      });
+
+      if (destroyed) {
+        newWriteFlow.destroy();
+        newWriteFlow = null;
+        return;
+      }
+
+      setWriteFlow(newWriteFlow);
     });
 
-    setWriteFlow(newWriteFlow);
-
     return () => {
-      newWriteFlow.destroy();
+      destroyed = true;
+      newWriteFlow?.destroy();
       setWriteFlow(null);
     };
   }, [extensions]);

@@ -1,5 +1,13 @@
 # @kunlunxu/wf-extension-list
 
+## 3.0.1
+
+### Patch Changes
+
+- 缺陷修复
+- Updated dependencies
+  - @kunlunxu/wf-core@3.0.1
+
 ## 3.0.0
 
 ### Major Changes
