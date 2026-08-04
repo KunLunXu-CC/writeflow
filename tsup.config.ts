@@ -72,7 +72,10 @@ export default defineConfig({
   clean: true,
   outDir: 'dist',
   esbuildPlugins: [sassPlugin()],
+  esbuildOptions: (options) => {
+    options.jsx = 'automatic';
+  },
   onSuccess: async () => {
-    await linkEntryCss();  // Re-link the emitted CSS from the package entry so consumers get styles via normal bundler CSS handling.
+    await linkEntryCss(); // Re-link the emitted CSS from the package entry so consumers get styles via normal bundler CSS handling.
   },
 });
