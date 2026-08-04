@@ -1,5 +1,16 @@
 # @kunlunxu/wf-extension-markdown
 
+## 3.0.0
+
+### Major Changes
+
+- db29fef: 调整构建
+
+### Patch Changes
+
+- Updated dependencies [db29fef]
+  - @kunlunxu/wf-core@3.0.0
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,6 +1,6 @@
 {
   "name": "@kunlunxu/wf-extension-markdown",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "repository": "github:KunLunXu-CC/writeflow",
   "type": "module",
   "main": "dist/index.cjs",

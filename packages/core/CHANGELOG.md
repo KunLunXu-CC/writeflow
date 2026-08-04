@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 3.0.0
+
+### Major Changes
+
+- db29fef: 调整构建
+
 ## 2.0.0
 
 ### Major Changes
