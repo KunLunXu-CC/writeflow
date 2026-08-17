@@ -47,6 +47,7 @@ export const Rich: FC<EditorProps> = (props: EditorProps) => {
   const { className, children } = props;
   const { writeFlow, writeFlowDomRef } = useCreateWriteFlow({
     extensions,
+    placeholder: '开始写点什么...',
   });
 
   return (

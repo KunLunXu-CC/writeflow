@@ -2,16 +2,23 @@ import { RefObject, useEffect, useRef, useState } from 'react';
 import { WriteFlow } from '../WriteFlow';
 import type { WriteFlowOptions } from '../types';
 
-export type UseCreateWriteFlow = (opts?: Pick<WriteFlowOptions, 'initValue' | 'extensions'>) => {
+export type UseCreateWriteFlow = (
+  opts?: Pick<WriteFlowOptions, 'initValue' | 'extensions' | 'theme' | 'placeholder'>,
+) => {
   writeFlow: WriteFlow | null;
   writeFlowDomRef: RefObject<HTMLDivElement | null>;
 };
 
 export const useCreateWriteFlow: UseCreateWriteFlow = (opts) => {
-  const { initValue, extensions } = opts || {};
+  const { initValue, extensions, theme, placeholder } = opts || {};
   const initValueRef = useRef(initValue);
+  const themeRef = useRef(theme);
+  const placeholderRef = useRef(placeholder);
   const writeFlowDomRef = useRef<HTMLDivElement | null>(null);
   const [writeFlow, setWriteFlow] = useState<WriteFlow | null>(null);
+
+  themeRef.current = theme;
+  placeholderRef.current = placeholder;
 
   useEffect(() => {
     if (!writeFlowDomRef.current) return;
@@ -25,6 +32,8 @@ export const useCreateWriteFlow: UseCreateWriteFlow = (opts) => {
       newWriteFlow = new WriteFlow({
         extensions,
         initValue: initValueRef.current,
+        theme: themeRef.current,
+        placeholder: placeholderRef.current,
         element: writeFlowDomRef.current,
       });
 
@@ -43,6 +52,14 @@ export const useCreateWriteFlow: UseCreateWriteFlow = (opts) => {
       setWriteFlow(null);
     };
   }, [extensions]);
+
+  useEffect(() => {
+    writeFlow?.setTheme(theme);
+  }, [theme, writeFlow]);
+
+  useEffect(() => {
+    writeFlow?.setPlaceholder(placeholder);
+  }, [placeholder, writeFlow]);
 
   return { writeFlow, writeFlowDomRef };
 };

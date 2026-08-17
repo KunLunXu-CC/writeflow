@@ -84,11 +84,14 @@ export interface WriteFlowValue {
   attrs?: Record<string, any>;
 }
 
+export type WriteFlowPlaceholder = string | ((context: { writeFlow: WriteFlow }) => string);
+
 export interface WriteFlowOptions {
   element: Element;
   theme?: THEME;
   extensions?: AnyExtension[];
   initValue?: WriteFlowValue; // 初始内容, 字符串格式的 JSON
+  placeholder?: WriteFlowPlaceholder;
 }
 
 /** 事件 */

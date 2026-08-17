@@ -5,6 +5,7 @@ import { EditorState, Plugin } from 'prosemirror-state';
 import { AnyCommands, AnyHelpers, WriteFlowOptions, WFEvents, THEME } from './types';
 import ExtensionManager from './ExtensionManager';
 import { EventEmitter } from './EventEmitter';
+import { buildPlaceholderPlugin } from './buildPlaceholderPlugin';
 
 export class WriteFlow extends EventEmitter<WFEvents> {
   private options!: WriteFlowOptions;
@@ -74,7 +75,10 @@ export class WriteFlow extends EventEmitter<WFEvents> {
    * 创建编辑器状态
    */
   private createState = (): EditorState => {
-    const plugins = this.extensionManager.plugins;
+    const plugins = [
+      ...this.extensionManager.plugins,
+      buildPlaceholderPlugin({ getPlaceholder: this.getPlaceholder }),
+    ];
     const schema = this.extensionManager.schema;
 
     if (!plugins || !schema) {
@@ -117,6 +121,31 @@ export class WriteFlow extends EventEmitter<WFEvents> {
 
     // 2. 添加新的主题 class
     this.view.dom.classList.add(`wf-${theme}`);
+  };
+
+  /** 获取占位提示文案 */
+  private getPlaceholder = () => {
+    const { placeholder } = this.options;
+
+    if (typeof placeholder === 'function') {
+      return placeholder({ writeFlow: this });
+    }
+
+    return placeholder;
+  };
+
+  /** 设置占位提示文案 */
+  public setPlaceholder = (placeholder: WriteFlowOptions['placeholder']) => {
+    if (this.options.placeholder === placeholder) {
+      return;
+    }
+
+    this.setOptions({
+      ...this.options,
+      placeholder,
+    });
+
+    this.view?.dispatch(this.state.tr);
   };
 
   /**
