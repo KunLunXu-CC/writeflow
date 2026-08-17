@@ -15,7 +15,7 @@ pnpm dev
 
 本仓库使用 Changesets 进行版本管理和发布。
 
-> 只需要执行下面两天 npm script, 然后将修改内容提交就行
+> 只需要执行下面两条 npm script, 然后将修改内容提交就行
 
 ```bash
 # 1. 为包变更创建 changeset
