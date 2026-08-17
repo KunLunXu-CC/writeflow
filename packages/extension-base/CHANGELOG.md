@@ -1,5 +1,13 @@
 # @kunlunxu/wf-extension-base
 
+## 3.0.2
+
+### Patch Changes
+
+- 新增 placeholder
+- Updated dependencies
+  - @kunlunxu/wf-core@3.0.2
+
 ## 3.0.1
 
 ### Patch Changes
