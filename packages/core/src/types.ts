@@ -92,6 +92,7 @@ export interface WriteFlowOptions {
   extensions?: AnyExtension[];
   initValue?: WriteFlowValue; // 初始内容, 字符串格式的 JSON
   placeholder?: WriteFlowPlaceholder;
+  readOnly?: boolean; /** 是否只读, 默认可编辑 */
 }
 
 /** 事件 */

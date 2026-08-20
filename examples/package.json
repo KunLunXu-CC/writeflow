@@ -23,6 +23,7 @@
     "@kunlunxu/wf-extension-link": "workspace:^",
     "@kunlunxu/wf-extension-list": "workspace:^",
     "@kunlunxu/wf-extension-markdown": "workspace:^",
+    "@kunlunxu/wf-extension-mention": "workspace:^",
     "@kunlunxu/wf-extension-paragraph": "workspace:^",
     "@kunlunxu/wf-extension-table": "workspace:^",
     "next": "15.5.4",

@@ -51,6 +51,7 @@ export class WriteFlow extends EventEmitter<WFEvents> {
       attributes: {
         class: 'wf-container',
       },
+      editable: () => !this.isReadOnly,
       state: this.createState(),
     });
 
@@ -148,6 +149,20 @@ export class WriteFlow extends EventEmitter<WFEvents> {
     this.view?.dispatch(this.state.tr);
   };
 
+  /** 设置编辑器是否只读 */
+  public setReadOnly = (readOnly = true) => {
+    if (this.options.readOnly === readOnly) {
+      return;
+    }
+
+    this.options = {
+      ...this.options,
+      readOnly,
+    };
+    this.view?.setProps({ editable: () => !this.options.readOnly });
+    this.view?.dispatch(this.state.tr);
+  };
+
   /**
    * 注册 PM 插件
    *
@@ -210,6 +225,10 @@ export class WriteFlow extends EventEmitter<WFEvents> {
 
   public get schema(): EditorState['schema'] {
     return this.state.schema;
+  }
+
+  public get isReadOnly() {
+    return Boolean(this.options.readOnly);
   }
 
   public get dispatch(): EditorView['dispatch'] {

@@ -137,6 +137,9 @@ importers:
       '@kunlunxu/wf-extension-markdown':
         specifier: workspace:^
         version: link:../packages/extension-markdown
+      '@kunlunxu/wf-extension-mention':
+        specifier: workspace:^
+        version: link:../packages/extension-mention
       '@kunlunxu/wf-extension-paragraph':
         specifier: workspace:^
         version: link:../packages/extension-paragraph
@@ -410,6 +413,28 @@ importers:
       prosemirror-model:
         specifier: ^1.25.3
         version: 1.25.4
+
+  packages/extension-mention:
+    dependencies:
+      '@kunlunxu/wf-core':
+        specifier: workspace:^
+        version: link:../core
+      prosemirror-model:
+        specifier: ^1.25.3
+        version: 1.25.4
+      prosemirror-state:
+        specifier: ^1.4.3
+        version: 1.4.4
+      prosemirror-view:
+        specifier: ^1.41.1
+        version: 1.41.7
+    devDependencies:
+      react:
+        specifier: 19.1.1
+        version: 19.1.1
+      react-dom:
+        specifier: 19.1.1
+        version: 19.1.1(react@19.1.1)
 
   packages/extension-paragraph:
     dependencies:
