@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 3.0.4
+
+### Patch Changes
+
+- add resolveUrl
+
 ## 3.0.3
 
 ### Patch Changes

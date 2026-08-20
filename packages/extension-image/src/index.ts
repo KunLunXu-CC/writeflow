@@ -6,6 +6,8 @@ import './index.scss';
 
 export interface ImageExtensionOptions {
   upload?: (args: { file: File }) => Promise<{ url: string }>;
+  /** 将节点中持久化的图片地址转换为仅用于展示的地址 */
+  resolveUrl?: (src: string) => string;
 }
 
 /**
@@ -16,7 +18,7 @@ export const Image = Node.create<ImageExtensionOptions>({
   name: 'image',
 
   // 决定了如果渲染节点
-  addSchema: (): NodeSpec => ({
+  addSchema: ({ extension }): NodeSpec => ({
     group: 'block',
     // 定义节点属性
     attrs: {
@@ -52,11 +54,12 @@ export const Image = Node.create<ImageExtensionOptions>({
     ],
     toDOM: (node) => {
       const { src, ...restAttrs } = node.attrs;
+      const displaySrc = extension.options?.resolveUrl?.(src) ?? src;
 
       return [
         'div',
         { ...restAttrs, class: 'wf-image-wrapper' },
-        ['img', { src, class: 'wf-image' }],
+        ['img', { src: displaySrc, class: 'wf-image' }],
         ['div', { class: 'wf-image-mask' }],
       ];
     },
