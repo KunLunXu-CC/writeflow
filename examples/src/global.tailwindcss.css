@@ -1,5 +1,3 @@
-/* heroui 暂不支持 https://github.com/heroui-inc/heroui/issues/5164 */
-
 @import "tailwindcss";
 @plugin '../hero.ts';
-@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';

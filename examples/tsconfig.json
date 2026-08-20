@@ -21,6 +21,9 @@
       "@/*": [
         "./src/*"
       ],
+      "@kunlunxu/wf-extension-markdown/core": [
+        "../packages/extension-markdown/src/core.ts"
+      ],
       "@kunlunxu/wf-*": [
         "../packages/*/src/index.ts",
         "../packages/*/dist"
