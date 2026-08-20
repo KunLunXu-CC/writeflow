@@ -16,6 +16,7 @@ import {
   addTableColumnBefore,
   addTableColumnAfter,
   selectTableCells,
+  deleteEmptySelectedTableRowOrColumn,
 } from './commands';
 import { NodeSpec } from 'prosemirror-model';
 
@@ -72,6 +73,10 @@ export const Table = Node.create({
   addKeymap: () => ({
     Tab: goToNextCell(1),
     'Shift-Tab': goToNextCell(-1),
+    Backspace: deleteEmptySelectedTableRowOrColumn,
+    'Mod-Backspace': deleteEmptySelectedTableRowOrColumn,
+    Delete: deleteEmptySelectedTableRowOrColumn,
+    'Mod-Delete': deleteEmptySelectedTableRowOrColumn,
 
     // Tab: () => {
     //   if (this.editor.commands.goToNextCell()) {
@@ -85,10 +90,6 @@ export const Table = Node.create({
     //   return this.editor.chain().addRowAfter().goToNextCell().run()
     // },
     // 'Shift-Tab': () => this.editor.commands.goToPreviousCell(),
-    // Backspace: deleteTableWhenAllCellsSelected,
-    // 'Mod-Backspace': deleteTableWhenAllCellsSelected,
-    // Delete: deleteTableWhenAllCellsSelected,
-    // 'Mod-Delete': deleteTableWhenAllCellsSelected,
   }),
 
   // addHelpers: () => {

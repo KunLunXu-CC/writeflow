@@ -7,11 +7,12 @@ import {
   addColumnAfter,
   deleteRow,
   deleteColumn,
+  deleteTable,
   CellSelection,
   TableMap,
   selectionCell,
 } from 'prosemirror-tables';
-import type { Selection } from 'prosemirror-state';
+import type { Command, Selection } from 'prosemirror-state';
 import { WFCommand } from '@kunlunxu/wf-core';
 import { clamp } from './TableAnchor/utils';
 import {
@@ -119,6 +120,52 @@ export const deleteTableColumn: WFCommand = ({ writeFlow }) => {
   const { dispatch, state } = writeFlow;
 
   return deleteColumn(state, dispatch);
+};
+
+/**
+ * 判断整行或整列选区中的单元格是否都为空。
+ * 空单元格必须只包含一个空文本块，图片等非文本内容不会被视为空内容。
+ */
+const areSelectedTableCellsEmpty = (selection: CellSelection) => {
+  let isEmpty = true;
+
+  selection.forEachCell((cell) => {
+    const content = cell.firstChild;
+
+    if (cell.childCount !== 1 || !content?.isTextblock || content.childCount !== 0) {
+      isEmpty = false;
+    }
+  });
+
+  return isEmpty;
+};
+
+/**
+ * 删除内容为空的整行或整列选区。
+ * 仅剩一行或一列时删除整张表，其他整表选区交给后续删除逻辑处理。
+ */
+export const deleteEmptySelectedTableRowOrColumn: Command = (state, dispatch) => {
+  const { selection } = state;
+
+  if (!(selection instanceof CellSelection)) {
+    return false;
+  }
+
+  const isRowSelection = selection.isRowSelection();
+  const isColSelection = selection.isColSelection();
+
+  if ((!isRowSelection && !isColSelection) || !areSelectedTableCellsEmpty(selection)) {
+    return false;
+  }
+
+  if (isRowSelection && isColSelection) {
+    const table = selection.$anchorCell.node(-1);
+    const tableMap = TableMap.get(table);
+
+    return tableMap.height === 1 || tableMap.width === 1 ? deleteTable(state, dispatch) : false;
+  }
+
+  return isRowSelection ? deleteRow(state, dispatch) : deleteColumn(state, dispatch);
 };
 
 /**
