@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 3.0.3
+
+### Patch Changes
+
+- add markdown-convert
+
 ## 3.0.2
 
 ### Patch Changes
