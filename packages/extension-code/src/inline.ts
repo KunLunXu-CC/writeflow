@@ -12,7 +12,8 @@ export const InlineCode = Mark.create({
 
     code: true,
 
-    exitable: true,
+    // 光标位于行内代码末尾时，后续输入不再继承 inline_code mark
+    inclusive: false,
 
     toDOM() {
       return ['code', { class: 'wf-inline-code' }, 0];
