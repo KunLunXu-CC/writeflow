@@ -1,11 +1,20 @@
 import { defineConfig } from 'tsup';
 import { sassPlugin } from 'esbuild-sass-plugin';
+import { existsSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const configDir = dirname(fileURLToPath(import.meta.url));
 const cssFilename = 'index.css';
+const entry = ['src/index.ts'];
+
+// 支持包按需提供纯函数子入口，例如 extension-markdown 的 /core 转换入口。
+const coreEntry = resolve(process.cwd(), 'src/core.ts');
+if (existsSync(coreEntry)) {
+  entry.push('src/core.ts');
+}
+
 // We rewrite built entry files in onSuccess, so the original JS sourcemap comment becomes stale.
 const JS_SOURCE_MAP_COMMENT_PATTERN = /\n\/\/# sourceMappingURL=.*$/;
 
@@ -65,7 +74,7 @@ const linkEntryCss = async (cwd = process.cwd()) => {
 
 export default defineConfig({
   tsconfig: resolve(configDir, 'tsconfig.build.json'),
-  entry: ['src/index.ts'],
+  entry,
   format: ['esm', 'cjs'],
   dts: true,
   sourcemap: true,

@@ -1,24 +1,11 @@
-import MarkdownIt from 'markdown-it';
 import { WFHelper } from '@kunlunxu/wf-core';
 import { Slice } from 'prosemirror-model';
 import { DOMParser } from 'prosemirror-model';
-import { tasklist } from '@mdit/plugin-tasklist';
-
-const markdownIt = new MarkdownIt().use(tasklist, {
-  containerClass: 'task-list',
-});
+import { renderMarkdownToHtml } from './markdown';
 
 export interface ParserMarkdownToDocOptions {
   markdownText: string;
 }
-
-/**
- * 预处理 markdown 文本, 以确保 Markdown-it 能正确解析:
- * - 任务列表项必须以 '[ ] '、'[x] ' 或 '[X] ' 开头, 处理为标准的以 '- ' 开头的 taskList, 以确保正确识别任务列表项的格式;
- */
-const preprocessMarkdown = (markdown: string): string => {
-  return markdown.replace(/^([ \t]*?)(\[ \]|\[x\]|\[X\])/gm, '$1- $2');
-};
 
 /** 将 MD 转为 ProseMirror Slice */
 export const getSliceFromMarkdown: WFHelper<Slice | null, { markdownText: string }> = (
@@ -33,8 +20,7 @@ export const getSliceFromMarkdown: WFHelper<Slice | null, { markdownText: string
   const { schema } = writeFlow;
 
   // 1. Markdown -> HTML
-  const processedMarkdown = preprocessMarkdown(markdownText);
-  const html = markdownIt.render(processedMarkdown);
+  const html = renderMarkdownToHtml(markdownText);
 
   // 2. HTML -> DOM
   const tempDiv = document.createElement('div');
@@ -46,7 +32,6 @@ export const getSliceFromMarkdown: WFHelper<Slice | null, { markdownText: string
   //   html,
   //   slice,
   //   markdownText,
-  //   processedMarkdown,
   // });
   return slice;
 };

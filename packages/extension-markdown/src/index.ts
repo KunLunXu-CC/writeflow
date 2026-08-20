@@ -17,3 +17,5 @@ export const Markdown = Extendable.create({
     initDocFromMarkdown: initDocFromMarkdown.bind(null, { writeFlow, extension }),
   }),
 });
+
+export * from './toWriteFlow';

@@ -2,10 +2,9 @@ import {
   AnyHelpers,
   AnyCommands,
   AnyExtension,
-  EXTENSIONS_TYPE,
   ExtendableFunContext,
 } from './types';
-import { pick, sortBy } from 'lodash-es';
+import { sortBy } from 'lodash-es';
 import { Plugin } from 'prosemirror-state';
 import { keymap } from 'prosemirror-keymap';
 import { history } from 'prosemirror-history';
@@ -13,10 +12,10 @@ import type { WriteFlow } from './WriteFlow.js';
 import { baseKeymap } from 'prosemirror-commands';
 import { NodeViewConstructor } from 'prosemirror-view';
 import { InputRule, inputRules } from 'prosemirror-inputrules';
-import { nodes as basicNodes } from 'prosemirror-schema-basic';
-import { MarkSpec, NodeSpec, Schema } from 'prosemirror-model';
+import { Schema } from 'prosemirror-model';
 import { getExtensionField } from './helpers/getExtensionField';
 import { getSchemaTypeByName } from './helpers/getSchemaTypeByName';
+import { createWriteFlowSchema } from './createSchema';
 
 /**
  * ExtensionManager 扩展管理器
@@ -73,39 +72,10 @@ export default class ExtensionManager {
    * returns 返回一个包含所有扩展的 schema 对象
    */
   private createSchema = () => {
-    const { nodes, marks } = this.extensions.reduce<{
-      nodes: Record<string, NodeSpec>;
-      marks: Record<string, MarkSpec>;
-    }>(
-      (acc, extension) => {
-        const addSchema = getExtensionField(extension, 'addSchema');
-
-        if (!addSchema) {
-          return acc;
-        }
-
-        const context = this.getContext(extension);
-
-        switch (extension.type) {
-          case EXTENSIONS_TYPE.NODE:
-            acc.nodes[extension.name] = addSchema(context) as NodeSpec;
-            break;
-          case EXTENSIONS_TYPE.MARK:
-            acc.marks[extension.name] = addSchema(context) as MarkSpec;
-            break;
-          default:
-            break;
-        }
-
-        return acc;
-      },
-      {
-        marks: {},
-        nodes: pick(basicNodes, ['doc', 'text', 'paragraph']), // 基础必要节点
-      },
-    );
-
-    this.schema = new Schema({ nodes, marks });
+    this.schema = createWriteFlowSchema({
+      extensions: this.extensions,
+      writeFlow: this.writeFlow,
+    });
   };
 
   /**
