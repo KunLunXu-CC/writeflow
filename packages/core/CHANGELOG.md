@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 3.0.5
+
+### Patch Changes
+
+- 表格支持删除
+
 ## 3.0.4
 
 ### Patch Changes

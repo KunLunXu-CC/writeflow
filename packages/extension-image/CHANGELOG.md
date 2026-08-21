@@ -1,5 +1,13 @@
 # @kunlunxu/wf-extension-image
 
+## 3.1.1
+
+### Patch Changes
+
+- 表格支持删除
+- Updated dependencies
+  - @kunlunxu/wf-core@3.0.5
+
 ## 3.1.0
 
 ### Minor Changes

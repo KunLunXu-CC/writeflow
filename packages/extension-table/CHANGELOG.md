@@ -1,5 +1,15 @@
 # @kunlunxu/wf-extension-table
 
+## 3.0.5
+
+### Patch Changes
+
+- 0ed9b82: 修复删除列后列定义未同步更新，导致表格无法继续自适应容器宽度的问题。
+- 5398e68: 支持通过删除键移除内容为空的整表、整行或整列选区，在删除结构后统一将选区收敛为相邻位置的文本光标。
+- 表格支持删除
+- Updated dependencies
+  - @kunlunxu/wf-core@3.0.5
+
 ## 3.0.4
 
 ### Patch Changes
