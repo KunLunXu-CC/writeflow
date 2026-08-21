@@ -10,9 +10,12 @@ import {
   deleteTable,
   CellSelection,
   TableMap,
+  isInTable,
+  selectedRect,
   selectionCell,
 } from 'prosemirror-tables';
-import type { Command, Selection } from 'prosemirror-state';
+import { TextSelection } from 'prosemirror-state';
+import type { Selection } from 'prosemirror-state';
 import { WFCommand } from '@kunlunxu/wf-core';
 import { clamp } from './TableAnchor/utils';
 import {
@@ -104,10 +107,22 @@ export const addTableColumnAfter: WFCommand = ({ writeFlow }) => {
  * @param {object} content.writeFlow - 编辑器实例
  * @returns 删除行信息
  */
-export const deleteTableRow: WFCommand = ({ writeFlow }) => {
+export const deleteTableRow: WFCommand<undefined, boolean> = ({ writeFlow }) => {
   const { dispatch, state } = writeFlow;
 
-  return deleteRow(state, dispatch);
+  if (!isInTable(state)) {
+    return false;
+  }
+
+  const rect = selectedRect(state);
+  const isAllRowsSelected = rect.top === 0 && rect.bottom === rect.map.height; // 判断是否选中了整表的所有行
+  const command = isAllRowsSelected ? deleteTable : deleteRow;
+
+  // 将删除事务映射后的选区收敛到最近的文本光标。
+  return command(state, (transaction) => {
+    transaction.setSelection(TextSelection.near(transaction.selection.$from, 1));
+    dispatch(transaction);
+  });
 };
 
 /**
@@ -116,10 +131,22 @@ export const deleteTableRow: WFCommand = ({ writeFlow }) => {
  * @param {object} content.writeFlow - 编辑器实例
  * @returns 删除列信息
  */
-export const deleteTableColumn: WFCommand = ({ writeFlow }) => {
+export const deleteTableColumn: WFCommand<undefined, boolean> = ({ writeFlow }) => {
   const { dispatch, state } = writeFlow;
 
-  return deleteColumn(state, dispatch);
+  if (!isInTable(state)) {
+    return false;
+  }
+
+  const rect = selectedRect(state);
+  const isAllColumnsSelected = rect.left === 0 && rect.right === rect.map.width; // 判断是否选中了整表的所有列
+  const command = isAllColumnsSelected ? deleteTable : deleteColumn;
+
+  // 将删除事务映射后的选区收敛到最近的文本光标。
+  return command(state, (transaction) => {
+    transaction.setSelection(TextSelection.near(transaction.selection.$from, 1));
+    dispatch(transaction);
+  });
 };
 
 /**
@@ -141,10 +168,13 @@ const areSelectedTableCellsEmpty = (selection: CellSelection) => {
 };
 
 /**
- * 删除内容为空的整行或整列选区。
- * 仅剩一行或一列时删除整张表，其他整表选区交给后续删除逻辑处理。
+ * 删除内容为空的整表、整行或整列选区。
  */
-export const deleteEmptySelectedTableRowOrColumn: Command = (state, dispatch) => {
+export const deleteEmptySelectedTableStructure: WFCommand<undefined, boolean> = ({
+  writeFlow,
+  extension,
+}) => {
+  const { state } = writeFlow;
   const { selection } = state;
 
   if (!(selection instanceof CellSelection)) {
@@ -158,14 +188,9 @@ export const deleteEmptySelectedTableRowOrColumn: Command = (state, dispatch) =>
     return false;
   }
 
-  if (isRowSelection && isColSelection) {
-    const table = selection.$anchorCell.node(-1);
-    const tableMap = TableMap.get(table);
-
-    return tableMap.height === 1 || tableMap.width === 1 ? deleteTable(state, dispatch) : false;
-  }
-
-  return isRowSelection ? deleteRow(state, dispatch) : deleteColumn(state, dispatch);
+  return isRowSelection
+    ? deleteTableRow({ writeFlow, extension })
+    : deleteTableColumn({ writeFlow, extension });
 };
 
 /**

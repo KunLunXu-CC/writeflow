@@ -16,7 +16,7 @@ import {
   addTableColumnBefore,
   addTableColumnAfter,
   selectTableCells,
-  deleteEmptySelectedTableRowOrColumn,
+  deleteEmptySelectedTableStructure,
 } from './commands';
 import { NodeSpec } from 'prosemirror-model';
 
@@ -70,13 +70,13 @@ export const Table = Node.create({
     getTableSelectedCells: () => getTableSelectedCells({ writeFlow, extension }),
   }),
 
-  addKeymap: () => ({
+  addKeymap: ({ writeFlow, extension }) => ({
     Tab: goToNextCell(1),
     'Shift-Tab': goToNextCell(-1),
-    Backspace: deleteEmptySelectedTableRowOrColumn,
-    'Mod-Backspace': deleteEmptySelectedTableRowOrColumn,
-    Delete: deleteEmptySelectedTableRowOrColumn,
-    'Mod-Delete': deleteEmptySelectedTableRowOrColumn,
+    Backspace: () => deleteEmptySelectedTableStructure({ writeFlow, extension }),
+    'Mod-Backspace': () => deleteEmptySelectedTableStructure({ writeFlow, extension }),
+    Delete: () => deleteEmptySelectedTableStructure({ writeFlow, extension }),
+    'Mod-Delete': () => deleteEmptySelectedTableStructure({ writeFlow, extension }),
 
     // Tab: () => {
     //   if (this.editor.commands.goToNextCell()) {
