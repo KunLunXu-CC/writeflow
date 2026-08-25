@@ -1,7 +1,6 @@
 import { WFHelper } from '@kunlunxu/wf-core';
 import { Slice } from 'prosemirror-model';
-import { DOMParser } from 'prosemirror-model';
-import { renderMarkdownToHtml } from './markdown';
+import { markdownToProseMirrorNode } from './toWriteFlow';
 
 export interface ParserMarkdownToDocOptions {
   markdownText: string;
@@ -18,20 +17,7 @@ export const getSliceFromMarkdown: WFHelper<Slice | null, { markdownText: string
 
   const { markdownText } = opts;
   const { schema } = writeFlow;
+  const doc = markdownToProseMirrorNode({ markdownText, schema });
 
-  // 1. Markdown -> HTML
-  const html = renderMarkdownToHtml(markdownText);
-
-  // 2. HTML -> DOM
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = html;
-
-  // 3. DOM -> ProseMirror Slice (自动根据 schema 匹配)
-  const slice = DOMParser.fromSchema(schema).parseSlice(tempDiv);
-  // console.log('%c [ getSliceFromMarkdown ]-96', 'font-size:13px; background:pink; color:#bf2c9f;', {
-  //   html,
-  //   slice,
-  //   markdownText,
-  // });
-  return slice;
+  return Slice.maxOpen(doc.content);
 };

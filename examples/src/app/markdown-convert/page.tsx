@@ -25,15 +25,21 @@ const MarkdownConvertPanel = () => {
       return;
     }
 
+    if (!writeFlow) {
+      setMessage('编辑器未就绪');
+      return;
+    }
+
     setInput(
       markdownToWriteFlowJSON({
         markdownText: input,
+        schema: writeFlow.schema,
         space: 2,
       }),
     );
     setInputMode('json');
     setMessage('已转换为 JSON');
-  }, [input, inputMode]);
+  }, [input, inputMode, writeFlow]);
 
   const handleApplyJson = useCallback(() => {
     if (!writeFlow) {

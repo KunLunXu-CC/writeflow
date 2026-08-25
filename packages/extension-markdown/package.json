@@ -33,6 +33,7 @@
     "@kunlunxu/wf-core": "workspace:^",
     "@mdit/plugin-tasklist": "^0.22.3",
     "markdown-it": "^14.1.0",
+    "prosemirror-markdown": "^1.13.2",
     "prosemirror-model": "^1.25.3"
   }
 }

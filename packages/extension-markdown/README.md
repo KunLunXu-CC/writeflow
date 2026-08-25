@@ -1,8 +1,8 @@
 # @kunlunxu/wf-extension-markdown
 
-Markdown 导入扩展，支持在浏览器中插入 Markdown，也支持将历史 Markdown 批量转换为 WriteFlow JSON。
+Markdown 转换扩展，支持 Markdown 与 ProseMirror 文档之间的双向转换，也支持在浏览器中插入 Markdown 和批量转换 WriteFlow JSON。
 
-本包只负责 Markdown 到 WriteFlow 的单向导入，不提供 WriteFlow JSON 到 Markdown 的导出。
+底层基于官方 `prosemirror-markdown`，转换时直接使用目标 WriteFlow schema，不经过 HTML 或 DOM。
 
 ## 注册
 
@@ -41,7 +41,7 @@ const slice = writeFlow.helpers.getSliceFromMarkdown({
 });
 ```
 
-`getSliceFromMarkdown()` 的处理链路是 Markdown → HTML → DOM → 当前 schema 的 ProseMirror Slice，因此只能在浏览器 DOM 环境中使用。
+`getSliceFromMarkdown()` 的处理链路是 Markdown → markdown-it Token → 当前 schema 的 ProseMirror Slice。
 
 ## 转换函数
 
@@ -62,6 +62,37 @@ import { markdownToWriteFlowValue } from '@kunlunxu/wf-extension-markdown/core';
 
 const value = markdownToWriteFlowValue({
   markdownText: '# 标题',
+});
+```
+
+Node 端不传 `schema` 时会使用包内置的纯转换 schema，不会加载 DOM 或 CSS。如果需要严格匹配某个编辑器实例，也可以显式传入该编辑器的 schema。
+
+如需直接得到经过 schema 校验的 ProseMirror `Node`：
+
+```ts
+import { markdownToProseMirrorNode } from '@kunlunxu/wf-extension-markdown/core';
+
+const doc = markdownToProseMirrorNode({
+  markdownText: '# 标题',
+});
+```
+
+## ProseMirror Node 转 Markdown
+
+```ts
+import { proseMirrorNodeToMarkdown } from '@kunlunxu/wf-extension-markdown/core';
+
+const markdown = proseMirrorNodeToMarkdown({
+  node: writeFlow.state.doc,
+});
+```
+
+默认使用严格模式。如果文档包含未注册序列化规则的自定义节点或 mark，会抛出错误，避免静默丢失数据。确认允许忽略未知结构时可以传入 `strict: false`：
+
+```ts
+const markdown = proseMirrorNodeToMarkdown({
+  node: writeFlow.state.doc,
+  strict: false,
 });
 ```
 
@@ -97,7 +128,7 @@ await writeFile('./writeflow-docs.json', JSON.stringify(result, null, 2), 'utf8'
 [ ] 未完成
 ```
 
-当前不会生成 `strong` / `em` mark，因为 WriteFlow 暂未提供对应扩展。
+如果 schema 注册了 `strong` / `em` mark，会保留对应格式；否则保留内部文本。
 
 其他转换细节：
 
@@ -106,8 +137,8 @@ await writeFile('./writeflow-docs.json', JSON.stringify(result, null, 2), 'utf8'
 - 链接写入 `link` mark，并保留 `href` 和 `title`。
 - Markdown hard break 转为 `hard_break`；soft break 转为文本换行符 `\n`。
 - 独立图片段落转为块级 `image`；段落、标题或表格单元格里的图片退化为 alt 文本。
-- `strong` 和 `em` token 会被忽略格式，但保留内部文本。
-- 空文档和空容器会补一个空段落，保证 schema 有有效块内容。
+- 解析结果由目标 schema 创建和校验，缺少对应节点时会尽量降级为文本或扁平内容。
+- 序列化表格时，第一行会作为 Markdown 表头输出；Markdown 无法完整表达跨行、跨列和单元格块结构。
 
 ## 快捷键、换行和退出
 
@@ -115,6 +146,5 @@ await writeFile('./writeflow-docs.json', JSON.stringify(result, null, 2), 'utf8'
 
 ## 当前限制
 
-- 浏览器端 `getSliceFromMarkdown()` 依赖 `document`，Node 环境应使用 `@kunlunxu/wf-extension-markdown/core`。
 - `initDocFromMarkdown()` 会直接替换整个文档，不保留旧选区内容。
-- 解析结果包含当前 schema 未注册的节点或 mark 时，浏览器 DOM 解析可能丢弃相应结构或格式。
+- 默认序列化器遇到未知节点或 mark 会抛出错误；可使用 `strict: false` 仅渲染已知内容。
