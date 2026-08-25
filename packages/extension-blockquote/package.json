@@ -1,6 +1,6 @@
 {
   "name": "@kunlunxu/wf-extension-blockquote",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "repository": "github:KunLunXu-CC/writeflow",
   "type": "module",
   "main": "dist/index.cjs",

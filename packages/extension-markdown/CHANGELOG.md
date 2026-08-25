@@ -1,5 +1,13 @@
 # @kunlunxu/wf-extension-markdown
 
+## 3.0.6
+
+### Patch Changes
+
+- 支持 Markdown 与 WriteFlow 双向转换
+- Updated dependencies
+  - @kunlunxu/wf-core@3.0.6
+
 ## 3.0.5
 
 ### Patch Changes
