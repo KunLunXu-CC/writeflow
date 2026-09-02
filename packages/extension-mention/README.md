@@ -59,7 +59,7 @@ const Mention = createMention({
 | `command`            | 自定义选中候选后的插入逻辑                   |
 | `allowSpaces`        | 查询是否允许空格，默认不允许                 |
 | `allowToIncludeChar` | 查询是否允许再次出现唤起字符，默认不允许     |
-| `allowedPrefixes`    | 唤起字符前允许的字符，默认仅空格或文本块开头 |
+| `allowedPrefixes`    | 唤起字符前允许的字符，默认仅普通空格、不换行空格或文本块开头 |
 | `minQueryLength`     | 达到指定查询长度后才加载候选                 |
 | `container`          | 面板挂载容器，默认 `document.body`           |
 | `pluginKey`          | 自定义 ProseMirror PluginKey                 |

@@ -14,7 +14,7 @@ import type {
 } from './types';
 
 const DEFAULT_CHAR = '@';
-const DEFAULT_ALLOWED_PREFIXES = [' '];
+const DEFAULT_ALLOWED_PREFIXES = [' ', '\u00a0'];
 
 type NormalizedSuggestion<Item extends MentionItem> = Omit<
   MentionSuggestionOptions<Item>,
