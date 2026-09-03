@@ -1,6 +1,7 @@
 import { Mark } from '@kunlunxu/wf-core';
 import { InputRule } from 'prosemirror-inputrules';
 import { MarkType, MarkSpec } from 'prosemirror-model';
+import { toggleInlineCode } from './commands';
 
 const inputRegex = /`([^`]+)`$/;
 
@@ -24,6 +25,14 @@ export const InlineCode = Mark.create({
         tag: 'code:not(pre > code)', // 匹配非 pre 内的 code 标签, 即行内代码
       },
     ],
+  }),
+
+  addCommands: ({ writeFlow, extension }) => ({
+    toggleInlineCode: () => toggleInlineCode({ writeFlow, extension }),
+  }),
+
+  addKeymap: ({ writeFlow }) => ({
+    '`': () => writeFlow.commands.toggleInlineCode(),
   }),
 
   addInputRules: ({ type }) => [
