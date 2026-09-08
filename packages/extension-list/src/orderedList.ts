@@ -1,6 +1,7 @@
 import { Node } from '@kunlunxu/wf-core';
 import { NodeSpec, NodeType } from 'prosemirror-model';
 import { InputRule } from 'prosemirror-inputrules';
+import { convertList } from './commands';
 
 /**
  * 有序列表
@@ -39,10 +40,26 @@ export const OrderedList = Node.create({
     ],
   }),
 
-  addCommands: ({ writeFlow, type }) => ({
+  addCommands: ({ writeFlow, extension, type }) => ({
     insertOrderedList: (opts: { end?: number; start?: number; order?: number } = {}) => {
       const { end, start, order } = opts;
-      writeFlow.commands.insertWrapping({
+
+      if (
+        convertList(
+          { writeFlow, extension },
+          {
+            end,
+            start,
+            listAttrs: { order },
+            listType: type as NodeType,
+            itemType: writeFlow.schema.nodes.list_item,
+          },
+        )
+      ) {
+        return true;
+      }
+
+      return writeFlow.commands.insertWrapping({
         end,
         start,
         nodeType: type as NodeType,
@@ -52,11 +69,12 @@ export const OrderedList = Node.create({
   }),
 
   addInputRules: ({ writeFlow }) => [
-    new InputRule(/^(\d+)\.\s$/, (state, match, start, end) => {
+    new InputRule(/^(\d+)\.\s$/, (_state, match, start, end) => {
+      const order = +match[1];
       writeFlow.commands.insertOrderedList({
         end,
         start,
-        order: +match[1],
+        order,
       });
       return writeFlow.state.tr;
     }),

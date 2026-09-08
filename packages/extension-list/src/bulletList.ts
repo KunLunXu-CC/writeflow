@@ -1,6 +1,7 @@
 import { InputRule } from 'prosemirror-inputrules';
 import { Node } from '@kunlunxu/wf-core';
 import { NodeSpec, NodeType } from 'prosemirror-model';
+import { convertList } from './commands';
 
 /**
  * 无序列表
@@ -24,10 +25,25 @@ export const BulletList = Node.create({
       },
     ],
   }),
-  addCommands: ({ writeFlow, type }) => ({
+  addCommands: ({ writeFlow, extension, type }) => ({
     insertBulletList: (opts: { end?: number; start?: number } = {}) => {
       const { end, start } = opts;
-      writeFlow.commands.insertWrapping({
+
+      if (
+        convertList(
+          { writeFlow, extension },
+          {
+            end,
+            start,
+            listType: type as NodeType,
+            itemType: writeFlow.schema.nodes.list_item,
+          },
+        )
+      ) {
+        return true;
+      }
+
+      return writeFlow.commands.insertWrapping({
         end,
         start,
         nodeType: type as NodeType,
@@ -35,7 +51,7 @@ export const BulletList = Node.create({
     },
   }),
   addInputRules: ({ writeFlow }) => [
-    new InputRule(/^\s*([-+*])\s$/, (state, match, start, end) => {
+    new InputRule(/^\s*([-+*])\s$/, (_state, _match, start, end) => {
       writeFlow.commands.insertBulletList({ end, start });
       return writeFlow.state.tr;
     }),
