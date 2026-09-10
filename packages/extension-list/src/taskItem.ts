@@ -1,6 +1,7 @@
 import { Node, PRIORITY_LEVEL } from '@kunlunxu/wf-core';
 import { NodeSpec, NodeType } from 'prosemirror-model';
 import { listItem, sinkListItem, liftListItem, splitListItem } from 'prosemirror-schema-list';
+import { buildTaskItemClickPlugin } from './buildTaskItemClickPlugin';
 
 /**
  * 任务列表项
@@ -54,4 +55,6 @@ export const TaskItem = Node.create({
     Tab: sinkListItem(type as NodeType), // 按 tab 键, 会下沉列表项
     'Shift-Tab': liftListItem(type as NodeType), // 按 shift + tab 键, 会上移列表项
   }),
+
+  addPlugins: () => [buildTaskItemClickPlugin()],
 });
