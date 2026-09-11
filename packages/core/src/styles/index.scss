@@ -8,6 +8,8 @@
   font-size: var(--wf-text-base);
   font-family: var(--wf-font-family);
   line-height: var(--wf-line-height-default);
+  white-space: pre-wrap;
+  white-space: break-spaces;
 
   > *:first-child {
     margin-top: 0;
