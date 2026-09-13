@@ -1,5 +1,11 @@
 # @kunlunxu/wf-core
 
+## 3.0.7
+
+### Patch Changes
+
+- 修复部分 bug
+
 ## 3.0.6
 
 ### Patch Changes

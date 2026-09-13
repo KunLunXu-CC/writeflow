@@ -1,6 +1,6 @@
 {
   "name": "@kunlunxu/wf-extension-code",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "repository": "github:KunLunXu-CC/writeflow",
   "type": "module",
   "main": "dist/index.cjs",
