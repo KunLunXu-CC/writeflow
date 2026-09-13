@@ -1,5 +1,16 @@
 # @kunlunxu/wf-extension-image
 
+## 3.2.0
+
+### Minor Changes
+
+- 更新部分缺陷
+
+### Patch Changes
+
+- Updated dependencies
+  - @kunlunxu/wf-core@3.1.0
+
 ## 3.1.3
 
 ### Patch Changes
