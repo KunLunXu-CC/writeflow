@@ -1,6 +1,6 @@
 import { FC, ReactNode } from 'react';
 // import { RichBubbleMenu } from './RichBubbleMenu';
-import { useCreateWriteFlow, WriteFlowContext } from '@kunlunxu/wf-core';
+import { type WriteFlowValue, useCreateWriteFlow, WriteFlowContext } from '@kunlunxu/wf-core';
 
 import { Heading } from '@kunlunxu/wf-extension-heading';
 import { TaskList, TaskItem, ListItem, BulletList, OrderedList } from '@kunlunxu/wf-extension-list';
@@ -24,6 +24,7 @@ interface EditorProps {
   className?: string;
   children?: ReactNode;
   readOnly?: boolean;
+  initValue?: WriteFlowValue;
 }
 
 const mentionItems: MentionItem[] = [
@@ -112,9 +113,10 @@ const extensions = [
 ];
 
 export const Rich: FC<EditorProps> = (props: EditorProps) => {
-  const { className, children, readOnly } = props;
+  const { className, children, readOnly, initValue } = props;
   const { writeFlow, writeFlowDomRef } = useCreateWriteFlow({
     extensions,
+    initValue,
     placeholder: '开始写点什么...',
     readOnly,
   });
