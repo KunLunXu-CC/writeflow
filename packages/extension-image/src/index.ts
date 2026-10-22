@@ -2,6 +2,7 @@ import { Node } from '@kunlunxu/wf-core';
 import { ImageDropPastePlugin } from './ImageDropPastePlugin';
 import { insertImageByFile, insertImage, setImageByUploadId } from './commands';
 import { NodeSpec } from 'prosemirror-model';
+import { ImageNodeView } from './ImageNodeView';
 import './index.scss';
 
 export interface ImageExtensionOptions {
@@ -16,6 +17,8 @@ export interface ImageExtensionOptions {
  */
 export const Image = Node.create<ImageExtensionOptions>({
   name: 'image',
+
+  nodeView: ImageNodeView,
 
   // 决定了如果渲染节点
   addSchema: ({ extension }): NodeSpec => ({
@@ -42,24 +45,54 @@ export const Image = Node.create<ImageExtensionOptions>({
         default: null,
         validate: 'string|null',
       },
+      width: {
+        default: null,
+        validate: 'number|null',
+      },
+      align: {
+        default: 'left',
+        validate: 'string',
+      },
     },
     parseDOM: [
       {
         tag: 'img[src]',
         getAttrs: (dom) => {
-          const { src, alt, title } = dom as HTMLImageElement;
-          return { src, alt, title };
+          const image = dom as HTMLImageElement;
+          const widthAttr = image.getAttribute('width');
+          const width = widthAttr ? Number.parseInt(widthAttr, 10) : null;
+
+          return {
+            src: image.src,
+            alt: image.alt || null,
+            title: image.title || null,
+            width: Number.isFinite(width) ? width : null,
+          };
         },
       },
     ],
     toDOM: (node) => {
-      const { src, ...restAttrs } = node.attrs;
-      const displaySrc = extension.options?.resolveUrl?.(src) ?? src;
+      const { src, alt, title, width, status, align } = node.attrs;
+      const displaySrc =
+        typeof src === 'string' ? (extension.options?.resolveUrl?.(src) ?? src) : '';
 
       return [
         'div',
-        { ...restAttrs, class: 'wf-image-wrapper' },
-        ['img', { src: displaySrc, class: 'wf-image' }],
+        {
+          class: 'wf-image-wrapper',
+          'data-align': align,
+          'data-upload-status': status,
+        },
+        [
+          'img',
+          {
+            src: displaySrc,
+            alt: alt ?? '',
+            title,
+            width,
+            class: 'wf-image',
+          },
+        ],
         ['div', { class: 'wf-image-mask' }],
       ];
     },

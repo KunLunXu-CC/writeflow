@@ -30,9 +30,11 @@
   },
   "dependencies": {
     "@kunlunxu/wf-core": "workspace:^",
+    "lucide-react": "^1.23.0",
     "prosemirror-model": "^1.25.3",
     "prosemirror-state": "^1.4.3",
     "prosemirror-view": "^1.41.1",
+    "re-resizable": "^6.11.2",
     "uuid": "^13.0.0"
   },
   "peerDependencies": {

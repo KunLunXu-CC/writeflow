@@ -29,8 +29,12 @@ const extensions = [Image];
 | `title`    | 图片标题数据                                  |
 | `uploadId` | 上传过程中的临时唯一标识                      |
 | `status`   | `upload_ing`、`upload_done` 或 `upload_error` |
+| `width`    | 图片展示宽度，单位为像素                      |
+| `align`    | 图片对齐方式：`left`、`center` 或 `right`     |
 
-当前 DOM 渲染会把 `src` 放到 `<img>`，其他属性放到外层 wrapper；`alt` 和 `title` 当前不会传给内部 `<img>`。
+当前 DOM 渲染会把 `src`、`alt`、`title` 和 `width` 放到 `<img>`，上传状态仅用于外层 wrapper 的界面样式。
+
+编辑器内的图片通过 React NodeView 渲染。鼠标悬停或选中图片时，右下角工具栏提供居左、居中、居右和调整大小操作。拖动调整大小按钮时保持图片宽高比，松开后把最终宽度写入节点的 `attrs.width`。只读模式下不会显示工具栏。
 
 ## Commands
 

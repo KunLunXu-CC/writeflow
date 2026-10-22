@@ -1,13 +1,33 @@
+[data-wf-node-view='image'] {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+}
 
 .wf-image-wrapper {
   --radius: 4px;
 
   position: relative;
   width: fit-content;
-  vertical-align: top; // 解决幽灵空白
-  display: inline-block;
+  display: block;
+
+  &[data-align='left'] {
+    margin-right: auto;
+  }
+
+  &[data-align='center'] {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  &[data-align='right'] {
+    margin-left: auto;
+  }
 
   .wf-image {
+    display: block;
+    width: 100%;
+    height: auto;
     border-radius: var(--radius);
   }
 
@@ -17,7 +37,7 @@
   }
 
   // 上传中状态
-  &[status="upload_ing"] .wf-image-mask {
+  &[data-upload-status='upload_ing'] .wf-image-mask {
     inset: 0;
     position: absolute;
     border-radius: var(--radius);
@@ -26,12 +46,60 @@
   }
 
   // 选中状态
-  &.ProseMirror-selectednode .wf-image-mask {
+  [data-wf-node-view='image'].ProseMirror-selectednode & .wf-image-mask {
     inset: 0;
     position: absolute;
     border-radius: var(--radius);
     border: 1px solid hsl(var(--wf-color-primary));
     background-color: hsl(var(--wf-color-primary) / 10%);
+  }
+
+  .wf-image-toolbar {
+    display: flex;
+    gap: 1px;
+    padding: 2px;
+    border: 1px solid hsl(var(--wf-color-border) / 12%);
+    border-radius: 6px;
+    background: hsl(var(--wf-color-text) / 88%);
+    box-shadow: 0 4px 16px hsl(var(--wf-color-text) / 24%);
+    backdrop-filter: blur(8px);
+  }
+
+  .wf-image-toolbar-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 4px;
+    color: hsl(var(--wf-color-text-quaternary));
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 160ms ease;
+
+    &:hover,
+    &.is-active {
+      color: hsl(var(--wf-color-primary));
+      background: hsl(var(--wf-color-primary) / 14%);
+    }
+  }
+
+  .wf-image-resize-handle-wrapper {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+
+  .wf-image-resize-handle {
+    cursor: nwse-resize;
+  }
+
+  &:hover .wf-image-resize-handle-wrapper,
+  [data-wf-node-view='image'].ProseMirror-selectednode & .wf-image-resize-handle-wrapper {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .wf-image-status {
