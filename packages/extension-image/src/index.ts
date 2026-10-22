@@ -86,11 +86,11 @@ export const Image = Node.create<ImageExtensionOptions>({
         [
           'img',
           {
-            src: displaySrc,
-            alt: alt ?? '',
             title,
             width,
+            alt: alt ?? '',
             class: 'wf-image',
+            src: displaySrc || null,
           },
         ],
         ['div', { class: 'wf-image-mask' }],

@@ -122,10 +122,10 @@ export const ImageNodeViewComponent = ({ node, nodeView }: WFNodeViewProps) => {
       data-upload-status={node.attrs.status}
       enable={imageNodeView.view.editable ? RESIZE_DIRECTIONS : false}>
       <img
-        src={displaySrc}
         className="wf-image"
         alt={node.attrs.alt}
         title={node.attrs.title}
+        src={displaySrc || void 0}
       />
       <div className="wf-image-mask" />
     </Resizable>
