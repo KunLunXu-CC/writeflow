@@ -12,9 +12,11 @@ $table-anchor-hover-line-width: 1px;
   cursor: pointer;
   border-top: 1px solid hsl(var(--wf-color-border));
   border-left: 1px solid hsl(var(--wf-color-border));
-  transition: background,opacity 0.4s;
+  transition:
+    background,
+    opacity 0.4s;
   background: hsl(var(--wf-color-border) / 30%);
-  
+
   &:hover {
     background: hsl(var(--wf-color-border) / 80%);
   }
@@ -106,7 +108,6 @@ $table-anchor-hover-line-width: 1px;
     transform: scale(1);
   }
 
-
   // 行和列的锚点圆点 hover 效果
   &.wf-table-anchor-dot-col {
     transform: translate(-50%, -80%);
@@ -146,7 +147,11 @@ $table-anchor-hover-line-width: 1px;
   position: relative;
   width: 100%;
 
-  &:hover .wf-table-anchor-marker{
+  &:hover .wf-table-anchor-marker {
     opacity: 1;
   }
+}
+
+.wf-container[contenteditable='false'] .wf-table-anchor-marker {
+  display: none;
 }

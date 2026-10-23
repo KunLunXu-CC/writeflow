@@ -16,6 +16,10 @@ export const TableAnchor = ({ children, getPos, writeFlow }: TableAnchorProps) =
 
   const handleMarkerClick = useCallback(
     (anchor: TableAnchorItem) => {
+      if (writeFlow.isReadOnly) {
+        return;
+      }
+
       const { view } = writeFlow;
       const tablePos = getPos();
 
@@ -36,6 +40,10 @@ export const TableAnchor = ({ children, getPos, writeFlow }: TableAnchorProps) =
 
   const handleDotClick = useCallback(
     (anchor: TableAnchorItem) => {
+      if (writeFlow.isReadOnly) {
+        return;
+      }
+
       const { view } = writeFlow;
       const tableContext = getTableContext(view.state.doc, getPos);
 
