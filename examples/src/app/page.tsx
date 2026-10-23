@@ -1,8 +1,8 @@
 'use client';
-import { Rich } from './Rich';
+import { RichEditor } from '@/components/RichEditor';
 
 export default function Home() {
   return (
-    <Rich className="h-screen w-screen overflow-auto p-10 [&_.wf-container]:pb-20 has-[.wf-dark]:bg-[#292c34]" />
+    <RichEditor className="h-screen w-screen overflow-auto p-10 [&_.wf-container]:pb-20 has-[.wf-dark]:bg-[#292c34]" />
   );
 }

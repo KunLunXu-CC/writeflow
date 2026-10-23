@@ -20,7 +20,7 @@ import {
   type MentionSuggestionRenderProps,
 } from '@kunlunxu/wf-extension-mention';
 
-interface EditorProps {
+interface RichEditorProps {
   className?: string;
   children?: ReactNode;
   readOnly?: boolean;
@@ -111,7 +111,7 @@ const extensions = [
   MentionExtension,
 ];
 
-export const Rich: FC<EditorProps> = (props: EditorProps) => {
+export const RichEditor: FC<RichEditorProps> = (props: RichEditorProps) => {
   const { className, children, readOnly } = props;
   const { writeFlow, writeFlowDomRef } = useCreateWriteFlow({
     extensions,

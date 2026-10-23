@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { Button, ButtonGroup, Card, CardBody, Chip, Textarea } from '@heroui/react';
 import { type WriteFlowValue, useWriteFlowContext } from '@kunlunxu/wf-core';
 import { markdownToWriteFlowJSON } from '@kunlunxu/wf-extension-markdown/core';
-import { Rich } from '../Rich';
+import { RichEditor } from '@/components/RichEditor';
 
 const defaultMarkdown = `# 标题
 
@@ -137,9 +137,9 @@ const MarkdownConvertPanel = () => {
 export default function MarkdownConvertPage() {
   return (
     <main className="grid min-h-screen grid-cols-2 bg-white">
-      <Rich className="h-screen min-w-0 overflow-auto p-10 [&_.wf-container]:pb-20 has-[.wf-dark]:bg-[#292c34]">
+      <RichEditor className="h-screen min-w-0 overflow-auto p-10 [&_.wf-container]:pb-20 has-[.wf-dark]:bg-[#292c34]">
         <MarkdownConvertPanel />
-      </Rich>
+      </RichEditor>
     </main>
   );
 }
