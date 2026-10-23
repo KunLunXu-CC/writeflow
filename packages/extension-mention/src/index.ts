@@ -1,6 +1,6 @@
 import { Node } from '@kunlunxu/wf-core';
 import type { NodeSpec } from 'prosemirror-model';
-import { buildMentionPlugin } from './suggestion';
+import { buildMentionPlugin } from './buildMentionPlugin';
 import type { MentionItem, MentionOptions } from './types';
 import './index.scss';
 

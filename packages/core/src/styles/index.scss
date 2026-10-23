@@ -8,6 +8,8 @@
   font-size: var(--wf-text-base);
   font-family: var(--wf-font-family);
   line-height: var(--wf-line-height-default);
+  white-space: pre-wrap;
+  white-space: break-spaces;
 
   > *:first-child {
     margin-top: 0;
@@ -25,4 +27,11 @@
   height: 0;
   pointer-events: none;
   user-select: none;
+}
+
+// 避免行尾原子节点后的光标占位图片影响行内布局
+img.ProseMirror-separator {
+  margin: 0;
+  border: 0;
+  display: inline;
 }

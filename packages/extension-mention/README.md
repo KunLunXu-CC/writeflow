@@ -49,21 +49,21 @@ const Mention = createMention({
 
 ## 配置能力
 
-| 配置                 | 作用                                         |
-| -------------------- | -------------------------------------------- |
-| `suggestions`        | 配置多个唤起字符                             |
-| `suggestion`         | 单个唤起字符的兼容写法                       |
-| `char`               | 唤起字符，默认 `@`                           |
-| `items`              | 同步数组或异步候选函数                       |
-| `render`             | React 候选面板组件                           |
-| `command`            | 自定义选中候选后的插入逻辑                   |
-| `allowSpaces`        | 查询是否允许空格，默认不允许                 |
-| `allowToIncludeChar` | 查询是否允许再次出现唤起字符，默认不允许     |
-| `allowedPrefixes`    | 唤起字符前允许的字符，默认仅空格或文本块开头 |
-| `minQueryLength`     | 达到指定查询长度后才加载候选                 |
-| `container`          | 面板挂载容器，默认 `document.body`           |
-| `pluginKey`          | 自定义 ProseMirror PluginKey                 |
-| `renderText`         | 自定义 Mention 节点显示文字                  |
+| 配置                 | 作用                                                          |
+| -------------------- | ------------------------------------------------------------- |
+| `suggestions`        | 配置多个唤起字符                                              |
+| `suggestion`         | 单个唤起字符的兼容写法                                        |
+| `char`               | 唤起字符，默认 `@`                                            |
+| `items`              | 同步数组或异步候选函数                                        |
+| `render`             | React 候选面板组件                                            |
+| `command`            | 自定义选中候选后的插入逻辑                                    |
+| `allowSpaces`        | 查询是否允许空格，默认不允许                                  |
+| `allowToIncludeChar` | 查询是否允许再次出现唤起字符，默认不允许                      |
+| `allowedPrefixes`    | 唤起字符前允许的字符，默认允许空格、文本块开头或 Mention 节点 |
+| `minQueryLength`     | 达到指定查询长度后才加载候选                                  |
+| `container`          | 面板挂载容器，默认 `document.body`                            |
+| `pluginKey`          | 自定义 ProseMirror PluginKey                                  |
+| `renderText`         | 自定义 Mention 节点显示文字                                   |
 
 异步 `items` 会收到 `AbortSignal`。查询变化、面板关闭或插件销毁时会中止上一请求，调用方应把该 signal 继续传给请求库。
 
@@ -89,7 +89,7 @@ const Mention = createMention({
 2. 在 Mention 后自动插入一个普通空格。
 3. 关闭候选状态。
 
-因此选中候选后可以直接继续输入，不需要额外按方向键退出 Mention。
+选中候选后可以立即输入下一个唤起字符，连续插入多个 Mention。如果手动删除自动插入的空格，也支持让下一个 Mention 直接紧邻当前 Mention。
 
 Mention 节点不可直接编辑，也不可单独选择；在其相邻位置使用 `Backspace` 或 `Delete` 时由 core 基础删除行为处理。
 

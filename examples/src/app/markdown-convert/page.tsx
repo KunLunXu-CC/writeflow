@@ -1,144 +1,93 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import { Button, ButtonGroup, Card, CardBody, Chip, Textarea } from '@heroui/react';
-import { type WriteFlowValue, useWriteFlowContext } from '@kunlunxu/wf-core';
-import { markdownToWriteFlowJSON } from '@kunlunxu/wf-extension-markdown/core';
+import { useEffect, useRef } from 'react';
+import { useWriteFlowContext } from '@kunlunxu/wf-core';
+import { markdownToWriteFlowValue } from '@kunlunxu/wf-extension-markdown/core';
 import { RichEditor } from '@/components/RichEditor';
 
-const defaultMarkdown = `# 标题
+const defaultMarkdown = [
+  '```js',
+  '// 使用 Set 数组去重',
+  'function unique(arr) {',
+  '  return [...new Set(arr)];',
+  '}',
+  '',
+  'const arr = [1, 2, 2, 3, 3, 4];',
+  'console.log(unique(arr)); // [1, 2, 3, 4]',
+  '```',
+  '',
+  '时间复杂度：`O(n)`，空间复杂度：`O(n)`。',
+].join('\n');
+const initialValue = markdownToWriteFlowValue({ markdownText: defaultMarkdown });
 
-正文 [链接](https://example.com) 和 \`code\`
-
-[x] 已完成
-[ ] 未完成`;
-
-const MarkdownConvertPanel = () => {
+const MarkdownInitDiagnostics = () => {
   const writeFlow = useWriteFlowContext();
-  const [input, setInput] = useState(defaultMarkdown);
-  const [inputMode, setInputMode] = useState<'markdown' | 'json'>('markdown');
-  const [message, setMessage] = useState('');
+  const initialized = useRef(false);
 
-  const handleConvertMarkdown = useCallback(() => {
-    if (inputMode === 'json') {
-      setMessage('当前已经是 JSON，可直接应用');
+  useEffect(() => {
+    if (!writeFlow || initialized.current) {
       return;
     }
 
-    if (!writeFlow) {
-      setMessage('编辑器未就绪');
-      return;
-    }
+    initialized.current = true;
+    const doc = writeFlow.schema.nodeFromJSON(initialValue);
+    const getCodeBlocks = (target: typeof doc) => {
+      const codeBlocks: Array<{
+        position: number;
+        language: string | null;
+        text: string;
+        endsWithNewline: boolean;
+      }> = [];
 
-    setInput(
-      markdownToWriteFlowJSON({
-        markdownText: input,
-        schema: writeFlow.schema,
-        space: 2,
-      }),
-    );
-    setInputMode('json');
-    setMessage('已转换为 JSON');
-  }, [input, inputMode, writeFlow]);
+      target.descendants((node, position) => {
+        if (node.type.name === 'code_block') {
+          codeBlocks.push({
+            position,
+            language: node.attrs.language,
+            text: JSON.stringify(node.textContent),
+            endsWithNewline: node.textContent.endsWith('\n'),
+          });
+        }
+      });
 
-  const handleApplyJson = useCallback(() => {
-    if (!writeFlow) {
-      setMessage('编辑器未就绪');
-      return;
-    }
+      return codeBlocks;
+    };
 
-    try {
-      const value = JSON.parse(input) as WriteFlowValue;
-      const doc = writeFlow.schema.nodeFromJSON(value);
-      const tr = writeFlow.state.tr
-        .replaceWith(0, writeFlow.state.doc.content.size, doc.content)
-        .scrollIntoView();
+    console.group('Markdown 自动初始化');
+    console.log('Markdown 原文', JSON.stringify(defaultMarkdown));
+    console.log('转换后的 code_block', getCodeBlocks(doc));
+    console.log('初始化后的 code_block', getCodeBlocks(writeFlow.view.state.doc));
+    console.groupEnd();
 
-      writeFlow.dispatch(tr);
-      writeFlow.view.focus();
-      setMessage('已应用到编辑器');
-    } catch (error) {
-      setMessage(error instanceof Error ? `JSON 无效：${error.message}` : 'JSON 无效');
-    }
-  }, [input, writeFlow]);
+    requestAnimationFrame(() => {
+      const renderedCodeBlocks = Array.from(
+        writeFlow.view.dom.querySelectorAll<HTMLElement>('.wf-code-block'),
+      ).map((element) => {
+        const lines = Array.from(element.querySelectorAll<HTMLElement>('.cm-line'));
+        const editor = element.querySelector<HTMLElement>('.cm-editor');
 
-  const handleResetMarkdown = useCallback(() => {
-    setInput(defaultMarkdown);
-    setInputMode('markdown');
-    setMessage('');
-  }, []);
+        return {
+          renderedLineCount: lines.length,
+          lastLineText: JSON.stringify(lines.at(-1)?.textContent ?? ''),
+          paddingBottom: editor ? getComputedStyle(editor).paddingBottom : null,
+        };
+      });
 
-  return (
-    <Card
-      shadow="none"
-      radius="none"
-      className="h-screen w-full min-w-0 rounded-none border-l border-black/10 bg-default-50"
-    >
-      <CardBody className="flex h-full min-h-0 flex-col gap-4 p-6">
-        <div className="flex min-w-0 items-center justify-between gap-3">
-          <Chip
-            size="sm"
-            variant="flat"
-            color={message ? 'success' : 'default'}
-            className="min-w-0 shrink overflow-hidden"
-          >
-            {message || (inputMode === 'json' ? '当前：JSON' : '当前：Markdown')}
-          </Chip>
-          <ButtonGroup
-            size="sm"
-            radius="sm"
-            className="shrink-0"
-          >
-            <Button
-              color="primary"
-              variant="solid"
-              isDisabled={inputMode === 'json'}
-              onPress={handleConvertMarkdown}
-            >
-              转 JSON
-            </Button>
-            <Button
-              color="primary"
-              variant="solid"
-              isDisabled={inputMode !== 'json'}
-              onPress={handleApplyJson}
-            >
-              应用到编辑器
-            </Button>
-            <Button
-              variant="bordered"
-              onPress={handleResetMarkdown}
-            >
-              重置
-            </Button>
-          </ButtonGroup>
-        </div>
-        <Textarea
-          value={input}
-          minRows={24}
-          variant="bordered"
-          label={inputMode === 'json' ? 'WriteFlow JSON' : 'Markdown'}
-          labelPlacement="outside"
-          classNames={{
-            base: 'min-h-0 w-full flex-1',
-            inputWrapper: 'h-full bg-white',
-            input: 'h-full resize-none font-mono text-sm leading-6',
-          }}
-          onValueChange={(value) => {
-            setInput(value);
-            setMessage('');
-          }}
-        />
-      </CardBody>
-    </Card>
-  );
+      console.log('渲染后的代码块', renderedCodeBlocks);
+    });
+  }, [writeFlow]);
+
+  return null;
 };
 
 export default function MarkdownConvertPage() {
   return (
-    <main className="grid min-h-screen grid-cols-2 bg-white">
-      <RichEditor className="h-screen min-w-0 overflow-auto p-10 [&_.wf-container]:pb-20 has-[.wf-dark]:bg-[#292c34]">
-        <MarkdownConvertPanel />
+    <main className="min-h-screen bg-white">
+      <RichEditor
+        initValue={initialValue}
+        className="min-h-screen overflow-auto p-10 [&_.wf-container]:pb-20 has-[.wf-dark]:bg-[#292c34]"
+      >
+        <MarkdownInitDiagnostics />
       </RichEditor>
     </main>
   );

@@ -66,7 +66,11 @@ export interface MentionSuggestionOptions<Item extends MentionItem = MentionItem
   allowSpaces?: boolean;
   /** 是否允许候选查询中包含唤起字符 */
   allowToIncludeChar?: boolean;
-  /** 唤起字符前允许出现的字符, 传 null 表示不限制 */
+  /**
+   * 唤起字符前允许出现的字符，用于避免在邮箱或普通文本中误触发候选面板。
+   * 默认允许普通空格和不换行空格；传入 null 表示不限制前置字符。
+   * 唤起字符位于文本块开头时始终允许触发，不受此配置限制。
+   */
   allowedPrefixes?: string[] | null;
   /** 查询长度达到该值后才调用 items, 默认是 0 */
   minQueryLength?: number;

@@ -1,5 +1,24 @@
 # @kunlunxu/wf-extension-code
 
+## 3.1.0
+
+### Minor Changes
+
+- 更新部分缺陷
+
+### Patch Changes
+
+- Updated dependencies
+  - @kunlunxu/wf-core@3.1.0
+
+## 3.0.7
+
+### Patch Changes
+
+- 修复部分 bug
+- Updated dependencies
+  - @kunlunxu/wf-core@3.0.7
+
 ## 3.0.6
 
 ### Patch Changes
